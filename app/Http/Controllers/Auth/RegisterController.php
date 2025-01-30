@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
@@ -48,10 +50,13 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        Log::info('Validator data: ', $data); // Add logging
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
+            'date_of_birth' => ['required', 'date'],
+            'phone_number' => ['required', 'string', 'max:15'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
     }
 
@@ -63,10 +68,19 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        Log::info('Create user data: ', $data); // Add logging
+        $currentYear = date('Y');
+        $lastUser = User::whereYear('created_at', $currentYear)->orderBy('id', 'desc')->first();
+        $sequenceNumber = $lastUser ? intval(substr($lastUser->unique_id, -4)) + 1 : 1;
+        $uniqueId = sprintf('USR-%s-%04d', $currentYear, $sequenceNumber);
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'date_of_birth' => $data['date_of_birth'],
+            'phone_number' => $data['phone_number'],
+            'unique_id' => $uniqueId, // Generate a unique ID for the user
         ]);
     }
 }

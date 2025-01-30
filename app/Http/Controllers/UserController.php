@@ -50,11 +50,19 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
-            'roles' => 'required'
+            'roles' => 'required',
+            'date_of_birth' => 'required|date',
+            'phone_number' => 'required|string|max:15',
         ]);
     
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
+
+        $currentYear = date('Y');
+        $lastUser = User::whereYear('created_at', $currentYear)->orderBy('id', 'desc')->first();
+        $sequenceNumber = $lastUser ? intval(substr($lastUser->unique_id, -4)) + 1 : 1;
+        $uniqueId = sprintf('USR-%s-%04d', $currentYear, $sequenceNumber);
+        $input['unique_id'] = $uniqueId;
     
         $user = User::create($input);
         $user->assignRole($request->input('roles'));

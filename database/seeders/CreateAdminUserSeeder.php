@@ -15,10 +15,18 @@ class CreateAdminUserSeeder extends Seeder
      */
     public function run(): void
     {
+        $currentYear = date('Y');
+        $lastUser = User::whereYear('created_at', $currentYear)->orderBy('id', 'desc')->first();
+        $sequenceNumber = $lastUser ? intval(substr($lastUser->unique_id, -4)) + 1 : 1;
+        $uniqueId = sprintf('USR-%s-%04d', $currentYear, $sequenceNumber);
+
         $user = User::create([
-            'name' => 'Jay Surve', 
+            'name' => 'Parmar Viral', 
             'email' => 'admin@gmail.com',
-            'password' => bcrypt('123456')
+            'password' => bcrypt('123456'),
+            'date_of_birth' => '1990-01-01', // Add date_of_birth
+            'phone_number' => '9876543210', // Add phone_number
+            'unique_id' => $uniqueId, // Add unique_id
         ]);
         
         $role = Role::create(['name' => 'Admin']);

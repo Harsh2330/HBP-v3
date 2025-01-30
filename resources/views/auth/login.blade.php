@@ -1,39 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Login</title>
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-</head>
-<body>
-    <div class="container">
-        <!-- Left Section (Logo & Text) -->
-        <div class="left-section">
-            <img src="{{ asset('images/df.jpg') }}" alt="Logo">
-            <h1>Home BAsed PAlliaive Care </h1>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- ===== CSS ===== -->
+        <link rel="stylesheet" href="/css/styles.css">
+
+        <!-- ===== BOX ICONS ===== -->
+        <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+
+        <title>Login form responsive</title>  
+        <style>
+            .shape1 {
+                background-color:rgb(229, 196, 6); /* Change to desired color */
+            }
+            .shape2 {
+                background-color:rgb(228, 209, 4); /* Change to desired color */
+            }
+        </style>
+    </head>
+    <body>
+        <div class="l-form">
+            <div class="shape1"></div>
+            <div class="shape2"></div>
+
+            <div class="form">
+                <img src="/image/patients.jpg" alt="" class="form__img" style="width: 650px; height: auto; margin-top: -1rem;">
+
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
+                    <h1 class="form__title">Login</h1>
+
+                    <div class="form__div form__div-one">
+                        <div class="form__icon">
+                            <i class='bx bx-user-circle'></i>
+                        </div>
+
+                        <div class="form__div-input">
+                            <label for="login" class="form__label">Email or Unique ID</label>
+                            <input class="form__input" type="text" name="login" :value="old('login')" required autofocus>
+                            @error('login')
+                                <span class="error">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="form__div">
+                        <div class="form__icon">
+                            <i class='bx bx-lock' ></i>
+                        </div>
+
+                        <div class="form__div-input">
+                            <label for="password" class="form__label">Password</label>
+                            <input type="password" class="form__input" id="password" name="password" required autocomplete="current-password">
+                            @error('password')
+                                <span class="error">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <a href="{{ route('password.request') }}" class="form__forgot">Forgot Password?</a>
+
+                    <button type="submit" class="form__button">
+                        Log in
+                    </button>
+                    <p class="form__text">Don't have an account?</p>
+                    <a href="{{ route('register') }}" class="form__button form__button--signup">
+                        Sign up
+                    </a>
+                </form>
+            </div>
+
         </div>
-
-        <!-- Right Section (Login Form) -->
-        <div class="right-section">
-            <h2>Login</h2>
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
-                <label for="email">Your Email</label>
-                <input type="email" name="email" id="email" placeholder="Enter your email" required>
-
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password" placeholder="Enter your password" required>
-
-                <div class="options">
-                    <a href="{{ route('password.request') }}">Forgot password?</a>
-                </div>
-
-                <button type="submit">Login</button>
-            </form>
-        </div>
-    </div>
-
-    <script src="{{ asset('js/script.js') }}"></script>
-</body>
+        
+        <!-- ===== MAIN JS ===== -->
+        <script src="/js/main.js"></script>
+    </body>
 </html>

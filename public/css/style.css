@@ -1,0 +1,217 @@
+/* Reset and Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(to right, #e6e6fa, #d8bfd8);
+    background-image: url('image.jpg'), url('pattern.png');
+    background-size: cover, 200px 200px;
+    background-repeat: no-repeat, repeat;
+    background-position: center;
+}
+
+a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+a:hover {
+    color: #ffffff;
+}
+
+a:active {
+    color: #ffd700; /* Change color to yellow when clicked */
+}
+
+/* Header and Navigation */
+header {
+    background-color: #caa902;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 1rem;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #072f93;
+}
+
+/* Main Content */
+main {
+    padding: 2rem;
+}
+
+.logo {
+    width: 250px; /* Made the logo smaller */
+    height: auto;
+    margin-top: -1rem;
+}
+
+.patient-image {
+    width: 750px; /* Made the patient image smaller */
+    height: auto;
+    float: right;
+    margin-left: 2rem;
+}
+
+.limited-width {
+    max-width: 800px;
+    height: 500px;
+    margin: 0 auto;
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: #333;
+    text-align: justify;
+    padding: 1rem;
+       
+    background-color: #f9f9f900;
+    border-radius: 8px;
+    overflow-y: auto;
+}
+
+.limited-width1 {
+    max-width: 650px;
+    height: 300px;
+    margin: 0 auto;
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: #333;
+    text-align: justify;
+    padding: 1rem;
+       
+    background-color: #f9f9f900;
+    border-radius: 8px;
+    overflow-y: auto;
+}
+
+.hero {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: rgba(171, 153, 17, 0.8);
+    color: #fff;
+    margin-bottom: 2rem;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.hero h2 {
+    margin: 0 0 1rem;
+}
+
+.hero p {
+    margin: 0 0 2rem;
+}
+
+.hero button {
+    background-color: #d8bfd8;
+    border: none;
+    padding: 1rem 2rem;
+    color: #4b0082;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.hero button:hover {
+    background-color: #e6e6fa;
+}
+
+/* Footer Section */
+footer {
+    background-color: #caa907;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    box-shadow: 0 -4px 8px rgba(240, 236, 17, 0.1);
+}
+
+footer ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+footer ul li a {
+    color: #fff;
+    transition: color 0.3s ease;
+}
+
+footer ul li a:hover {
+    color: #ffd700;
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .logo, .doctor-image, .patient-image {
+        max-width: 100%;
+        position: static;
+        transform: none;
+        margin: 0 auto;
+        display: block;
+    }
+
+    .limited-width {
+        max-width: 100%;
+        padding: 0 1rem;
+    }
+
+    nav a {
+        display: block;
+        margin: 0.5rem 0;
+    }
+
+    header, footer {
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .hero {
+        padding: 2rem 1rem;
+    }
+
+    .hero h2 {
+        font-size: 1.5rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .hero button {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+    }
+}
