@@ -35,9 +35,9 @@
                                     <h3>Patient Information</h3>
                                     <div class="form-group">
                                         <label for="patient_id">Patient</label>
-                                        <select name="patient_id" id="patient_id" class="form-control">
+                                        <select name="patient_id" id="patient_id" class="form-control custom-select">
                                             @foreach($patients as $patient)
-                                                <option value="{{ $patient->id }}" data-unique-id="{{ $patient->unique_id }}">{{ $patient->first_name }} {{ $patient->middle_name }} {{ $patient->last_name }}</option>
+                                                <option value="{{ $patient->id }}" data-unique-id="{{ $patient->unique_id }}">{{ $patient->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -53,19 +53,27 @@
                                     <div class="form-group">
                                         <label for="doctor_id">Doctor</label>
                                         <select name="doctor_id" id="doctor_id" class="form-control" required>
+                                            @php
+                                                $doctors = \App\Models\User::where('unique_id', 'like', 'DOC%')->get();
+                                            @endphp
                                             @foreach($doctors as $doctor)
-                                                <option value="{{ $doctor->id }}">{{ $doctor->first_name }} {{ $doctor->middle_name }} {{ $doctor->last_name }}</option>
+                                                <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
+                                    
                                     <div class="form-group">
                                         <label for="nurse_id">Nurse</label>
                                         <select name="nurse_id" id="nurse_id" class="form-control" required>
+                                            @php
+                                                $nurses = \App\Models\User::where('unique_id', 'like', 'NUR%')->get();
+                                            @endphp
                                             @foreach($nurses as $nurse)
-                                                <option value="{{ $nurse->id }}">{{ $nurse->first_name }} {{ $nurse->middle_name }} {{ $nurse->last_name }}</option>
+                                                <option value="{{ $nurse->id }}">{{ $nurse->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
+                                
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">Submit</button>

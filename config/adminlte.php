@@ -317,21 +317,32 @@ return [
         ],
         ['header' => 'account_settings'],
             [
-                'text' => 'Dashboard',
-                'url' => 'home',
-                'icon' => 'fas fa-fw fa-tachometer-alt',
+            'text' => 'Dashboard',
+            'url' => 'home',
+            'icon' => 'fas fa-fw fa-tachometer-alt',
             ],
             [
-                'text' => 'Roles',
-                'url' => 'roles',
-                'icon' => 'fas fa-fw fa-users',
-                
+            'text' => 'Roles',
+            'url' => 'roles',
+            'icon' => 'fas fa-fw fa-users',
+            
             ],
             [
-                'text' => 'Manage Users',
-                'url' => 'users',
-                'icon' => 'fas fa-fw fa-user',
-                
+            'text' => 'Manage Users',
+            'url' => 'users',
+            'icon' => 'fas fa-fw fa-user',
+            
+            ],
+        ['header' => 'PATIENT MANAGEMENT'],
+            [
+            'text' => 'Patients',
+            'url' => 'admin/patient',
+            'icon' => 'fas fa-fw fa-procedures',
+            ],
+            [
+            'text' => 'Appointments',
+            'url' => 'appointments',
+            'icon' => 'fas fa-fw fa-calendar-check',
             ],
             
        
