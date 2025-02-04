@@ -322,30 +322,30 @@ return [
             'icon' => 'fas fa-fw fa-tachometer-alt',
             ],
             [
-                'text' => 'Roles',
-                'url' => 'roles',
-                'icon' => 'fas fa-fw fa-users',
-                'permission' => 'role-list',
+            'text' => 'Roles',
+            'url' => 'roles',
+            'icon' => 'fas fa-fw fa-user-shield',
+            'permission' => 'role-list',
             ],
             [
-                'text' => 'Manage Users',
-                'url' => 'users',
-                'icon' => 'fas fa-fw fa-user',
-                'permission' => 'user-list',
+            'text' => 'Manage Users',
+            'url' => 'users',
+            'icon' => 'fas fa-fw fa-users-cog',
+            'permission' => 'user-list',
             ],
             [
-                'text' => 'Medical visit',
-                'url' => 'medical_visit',
-                'icon' => 'fas fa-fw fa-user',
-                'permission' => 'medical-visit-list',
+            'text' => 'Appointments',
+            'url' => 'medical_visit',
+            'icon' => 'fas fa-fw fa-calendar-alt',
+            'permission' => 'medical-visit-list',
             ],
             [
-                'text' => 'Request for vist',
-                'url' => 'request_for_visit',
-                'icon' => 'fas fa-fw fa-user',
-                'permission' => 'medical-visit-list',
+            'text' => 'Request for visit',
+            'url' => 'request_for_visit',
+            'icon' => 'fas fa-fw fa-calendar-check',
+            'permission' => 'medical-visit-list',
             ],
-        ['header' => 'PATIENT MANAGEMENT'],
+
             [
             'text' => 'Patients',
             'url' => 'admin/patient',
@@ -353,11 +353,10 @@ return [
             'permission' => 'patient-list',
             ],
             [
-            'text' => 'Appointments',
-            'url' => 'appointments',
-            'icon' => 'fas fa-fw fa-calendar-check',
-            ],
             
+            'url' => 'appointments',
+            
+            ],
        
     ],
 
