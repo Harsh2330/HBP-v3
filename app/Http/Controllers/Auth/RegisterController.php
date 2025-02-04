@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Models\Role; // Add this line
 
 class RegisterController extends Controller
 {
@@ -74,7 +75,7 @@ class RegisterController extends Controller
         $sequenceNumber = $lastUser ? intval(substr($lastUser->unique_id, -4)) + 1 : 1;
         $uniqueId = sprintf('USR-%s-%04d', $currentYear, $sequenceNumber);
 
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -82,5 +83,10 @@ class RegisterController extends Controller
             'phone_number' => $data['phone_number'],
             'unique_id' => $uniqueId, // Generate a unique ID for the user
         ]);
+
+        $userRole = Role::where('name', 'User')->first(); // Get the User role
+        $user->assignRole($userRole); // Assign the User role to the new user
+
+        return $user;
     }
 }
