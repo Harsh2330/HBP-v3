@@ -1,30 +1,6 @@
 @include('layouts.nav')
 <head>
     <link rel="stylesheet" href="/css/index3.css">
-    <style>
-        @keyframes float {
-            0% {
-                transform: translatey(1px);
-            }
-            50% {
-                transform: translatey(-10px);
-            }
-            100% {
-                transform: translatey(0px);
-            }
-        }
-
-        /* Ensure animated images stay behind the footer */
-        .info-section img {
-            position: relative;
-            z-index: 1;
-        }
-
-        footer {
-            position: relative;
-            z-index: 2;
-        }
-    </style>
 </head>
 <div class="container">
     <section class="info-section">
@@ -98,7 +74,7 @@
                         <h3>Dr.Tarun Machhi</h3>
                         <p>rapist</p>
                     </div>
-
+                    
                    
                 </div>
             </section>
