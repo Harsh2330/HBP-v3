@@ -11,6 +11,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\MedicalVisitController;
 use App\Http\Controllers\RequestForVisitController;
 use App\Http\Controllers\AdminDashboardController; // Add this import
+use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\DoctorDashboardController;
+use App\Http\Controllers\NurseDashboardController;
 
 Route::get('/', function () {
     return view('Homepage.welcome');
@@ -33,6 +36,10 @@ Route::group(['middleware' => ['auth']], function() {
     Route::patch('/medical_visit/{id}/reject', [MedicalVisitController::class, 'reject'])->name('medical_visit.reject');
     Route::patch('/medical_visit/{id}/update_status', [MedicalVisitController::class, 'updateStatus'])->name('medical_visit.update_status');
     Route::delete('/medical_visit/{id}', [MedicalVisitController::class, 'destroy'])->name('medical_visit.destroy');
+    
+    Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
+    Route::get('/doctor/dashboard', [DoctorDashboardController::class, 'index'])->name('doctor.dashboard');
+    Route::get('/nurse/dashboard', [NurseDashboardController::class, 'index'])->name('nurse.dashboard');
 });
 
 // Admin routes

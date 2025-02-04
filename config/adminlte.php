@@ -316,10 +316,29 @@ return [
             'text' => 'search',
         ],
         ['header' => 'account_settings'],
-            [
-            'text' => 'Dashboard',
-            'url' => 'home',
+        [
+            'text' => 'Admin Dashboard',
+            'url' => 'admin/dashboard',
             'icon' => 'fas fa-fw fa-tachometer-alt',
+            'permission' => 'admin-dashboard',
+            ],
+            [
+            'text' => 'Doctor Dashboard',
+            'url' => 'doctor/dashboard',
+            'icon' => 'fas fa-fw fa-stethoscope',
+            'permission' => 'doctor-dashboard',
+            ],
+            [
+            'text' => 'Nurse Dashboard',
+            'url' => 'nurse/dashboard',
+            'icon' => 'fas fa-fw fa-user-nurse',
+            'permission' => 'nurse-dashboard',
+            ],
+            [
+            'text' => 'User Dashboard',
+            'url' => 'user/dashboard',
+            'icon' => 'fas fa-fw fa-user',
+            'permission' => 'user-dashboard',
             ],
             [
             'text' => 'Roles',
@@ -357,6 +376,7 @@ return [
             'url' => 'appointments',
             
             ],
+            
        
     ],
 
