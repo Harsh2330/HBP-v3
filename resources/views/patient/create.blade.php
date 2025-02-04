@@ -104,10 +104,10 @@
                                         <!-- Add other relationships as needed -->
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="password">Password</label>
-                                    <input type="password" name="password" class="form-control" required>
-                                </div>
+                                    <input type="password" name="password" class="form-control" >
+                                </div> -->
                                 <input type="hidden" name="full_name" id="full_name">
                                 <button type="submit" class="btn btn-primary">Save</button>
                             </form>
