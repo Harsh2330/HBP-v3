@@ -33,11 +33,14 @@
                                 @csrf
                                 <div class="patient-details">
                                     <h3>Patient Information</h3>
+                                    @php
+                                        $patients = \App\Models\Patient::where('user_unique_id', auth()->user()->id)->get();
+                                    @endphp
                                     <div class="form-group">
                                         <label for="patient_id">Patient</label>
                                         <select name="patient_id" id="patient_id" class="form-control custom-select">
                                             @foreach($patients as $patient)
-                                                <option value="{{ $patient->id }}" data-unique-id="{{ $patient->unique_id }}">{{ $patient->name }}</option>
+                                                <option value="{{ $patient->id }}" data-unique-id="{{ $patient->unique_id }}">{{ $patient->full_name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -53,24 +56,14 @@
                                     <div class="form-group">
                                         <label for="doctor_id">Doctor</label>
                                         <select name="doctor_id" id="doctor_id" class="form-control" required>
-                                            @php
-                                                $doctors = \App\Models\User::where('unique_id', 'like', 'DOC%')->get();
-                                            @endphp
-                                            @foreach($doctors as $doctor)
-                                                <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
-                                            @endforeach
+                                            <!-- Options will be populated by JavaScript -->
                                         </select>
                                     </div>
                                     
                                     <div class="form-group">
                                         <label for="nurse_id">Nurse</label>
                                         <select name="nurse_id" id="nurse_id" class="form-control" required>
-                                            @php
-                                                $nurses = \App\Models\User::where('unique_id', 'like', 'NUR%')->get();
-                                            @endphp
-                                            @foreach($nurses as $nurse)
-                                                <option value="{{ $nurse->id }}">{{ $nurse->name }}</option>
-                                            @endforeach
+                                            <!-- Options will be populated by JavaScript -->
                                         </select>
                                     </div>
                                 
@@ -92,6 +85,27 @@ document.getElementById('patient_id').addEventListener('change', function() {
     var selectedOption = this.options[this.selectedIndex];
     var uniqueId = selectedOption.getAttribute('data-unique-id');
     document.getElementById('unique_id').value = uniqueId;
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetchUsersWithRole('doctor', 'doctor_id');
+    fetchUsersWithRole('nurse', 'nurse_id');
+
+    function fetchUsersWithRole(role, id) {
+        fetch(`/api/users-with-role/${role}`)
+            .then(response => response.json())
+            .then(data => {
+                const userSelect = document.getElementById(id);
+                userSelect.innerHTML = '';
+                data.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = user.name;
+                    userSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching users with role:', error));
+    }
 });
 </script>
 @endsection

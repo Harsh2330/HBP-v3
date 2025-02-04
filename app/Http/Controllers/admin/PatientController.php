@@ -9,9 +9,18 @@ use App\Models\Patient; // Change to Patient model
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; // Add this import
 use Illuminate\Support\Facades\Log; // Add this import
+use Illuminate\Support\Facades\Auth; // Add this import
 
 class PatientController extends Controller
 {         
+    function __construct()
+    {
+        $this->middleware('permission:patient-list|patient-create|patient-edit|patient-delete', ['only' => ['index','show']]);
+        $this->middleware('permission:patient-create', ['only' => ['create','store']]);
+        $this->middleware('permission:patient-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:patient-delete', ['only' => ['destroy']]);
+    }
+
     public function index(Request $request)
     {
         $search = $request->input('search');
@@ -55,9 +64,10 @@ class PatientController extends Controller
     {
         $data = $request->all();
         $data['full_name'] = $request->input('Full_name');
-        $user = \Illuminate\Support\Facades\Auth::user();
+        $user = Auth::user();
         if ($user) {
-            $data['user_unique_id'] = $user->unique_id;
+            $data['user_unique_id'] = $user->id; // Fetch the id field from the User table
+            
             // Generate a unique ID for the patient
             $currentYear = date('Y');
             $latestPatient = Patient::whereYear('created_at', $currentYear)->orderBy('id', 'desc')->first();
@@ -76,7 +86,7 @@ class PatientController extends Controller
         $data = $request->all();
         $data['full_name'] = $request->input('Full_name');
         $user = User::findOrFail($request->input('user_id'));
-        $data['user_unique_id'] = $user->unique_id;
+        $data['user_unique_id'] = $user->id; // Fetch the id field from the User table
         $data['pat_unique_id'] = $patient->pat_unique_id;
         $patient->update($data);
         return redirect()->route('admin.patient.show', $id);

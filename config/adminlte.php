@@ -335,7 +335,7 @@ return [
             ],
             [
                 'text' => 'Medical visit',
-                'url' => 'medical_visit/create',
+                'url' => 'medical_visit',
                 'icon' => 'fas fa-fw fa-user',
                 'permission' => 'medical-visit-list',
             ],
@@ -344,6 +344,7 @@ return [
             'text' => 'Patients',
             'url' => 'admin/patient',
             'icon' => 'fas fa-fw fa-procedures',
+            'permission' => 'patient-list',
             ],
             [
             'text' => 'Appointments',
