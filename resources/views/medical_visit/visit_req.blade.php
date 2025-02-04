@@ -52,22 +52,21 @@
                                         <th style="font-size: 1.1em;">Visit Date</th> <!-- Changed font size -->
                                         <th style="font-size: 1.1em;">Doctor</th> <!-- Changed font size -->
                                         <th style="font-size: 1.1em;">Nurse</th> <!-- Changed font size -->
-                                        <th style="font-size: 1.1em;">Appointment Status</th> <!-- Changed font size -->
+                                        <th style="font-size: 1.1em;">Diagnosis</th> <!-- Changed font size -->
                                         <th style="font-size: 1.1em;">Medical Status</th> <!-- Changed font size -->
                                         <th style="font-size: 1.1em;">Actions</th> <!-- Changed font size -->
+                                        <th style="font-size: 1.1em;">Admin Actions</th> <!-- New column for admin actions -->
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($medicalVisits as $visit)
                                     <tr>
                                         <td style="padding: 10px;">{{ $visit->patient->unique_id }}</td> <!-- Added padding -->
-                                        <td style="padding: 10px;">{{ $visit->patient->name }} </td> <!-- Added padding -->
+                                        <td style="padding: 10px;">{{ $visit->patient->first_name }} {{ $visit->patient->middle_name}} {{ $visit->patient->last_name}}</td> <!-- Added padding -->
                                         <td style="padding: 10px;">{{ $visit->visit_date }}</td> <!-- Added padding -->
-                                        <td style="padding: 10px;">{{ $visit->doctor->name }}</td> <!-- Added padding -->
-                                        <td style="padding: 10px;">{{ $visit->nurse->name}}</td> <!-- Added padding -->
-                                        <!-- <td style="padding: 10px;">{{ $visit->simplified_diagnosis }}</td> -->
-                                        <td style="padding: 10px;">{{ $visit->is_approved }}</td>
-                                        
+                                        <td style="padding: 10px;">{{ $visit->doctor_name }}</td> <!-- Added padding -->
+                                        <td style="padding: 10px;">{{ $visit->nurse_name }}</td> <!-- Added padding -->
+                                        <td style="padding: 10px;">{{ $visit->simplified_diagnosis }}</td> <!-- Added padding -->
                                         <td style="padding: 10px;">
                                             <form action="{{ route('medical_visit.update_status', $visit->id) }}" method="POST" style="display:inline;">
                                                 @csrf
@@ -78,7 +77,7 @@
                                                     <option value="Cancelled" {{ $visit->medical_status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
                                                 </select>
                                             </form>
-                                        </td> 
+                                        </td> <!-- Display medical status -->
                                         
                                         <td style="padding: 10px;">
                                             <a href="{{ route('medical_visit.show', $visit->id) }}" class="btn btn-info">View Visit</a>
@@ -89,10 +88,24 @@
                                                 <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this visit?')">Delete</button>
                                             </form>
                                         </td>
+                                        <td style="padding: 10px;">
+                                            @if(Auth::user()->isAdmin())
+                                                <form action="{{ route('medical_visit.approve', $visit->id) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit" class="btn btn-success">Approve</button>
+                                                </form>
+                                                <form action="{{ route('medical_visit.reject', $visit->id) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit" class="btn btn-warning">Reject</button>
+                                                </form>
+                                            @endif
+                                        </td> <!-- Admin actions -->
                                     </tr>
                                     @endforeach
                                     <tr>
-                                        <td colspan="8">
+                                        <td colspan="9">
                                             <a href="{{ route('medical_visit.create') }}" class="btn btn-success">Add New Visit</a>
                                         </td>
                                     </tr>

@@ -119,4 +119,24 @@ class MedicalVisitController extends Controller
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit deleted successfully.');
     }
+
+    // Approve a specific medical visit
+    public function approve($id)
+    {
+        $visit = MedicalVisit::findOrFail($id);
+        $visit->medical_status = 'Approved';
+        $visit->save();
+
+        return redirect()->route('medical_visit.index')->with('success', 'Medical visit approved successfully.');
+    }
+
+    // Reject a specific medical visit
+    public function reject($id)
+    {
+        $visit = MedicalVisit::findOrFail($id);
+        $visit->medical_status = 'Rejected';
+        $visit->save();
+
+        return redirect()->route('medical_visit.index')->with('success', 'Medical visit rejected successfully.');
+    }
 }

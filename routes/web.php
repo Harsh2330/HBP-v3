@@ -9,6 +9,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\MedicalVisitController;
+use App\Http\Controllers\RequestForVisitController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,6 +27,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('medical_visit/{id}/edit', [MedicalVisitController::class, 'edit'])->name('medical_visit.edit');
     Route::patch('medical_visit/{id}', [MedicalVisitController::class, 'update'])->name('medical_visit.update');
     Route::patch('/medical_visit/{id}/approve', [MedicalVisitController::class, 'approve'])->name('medical_visit.approve');
+    Route::patch('/medical_visit/{id}/reject', [MedicalVisitController::class, 'reject'])->name('medical_visit.reject');
     Route::patch('/medical_visit/{id}/update_status', [MedicalVisitController::class, 'updateStatus'])->name('medical_visit.update_status');
     Route::delete('/medical_visit/{id}', [MedicalVisitController::class, 'destroy'])->name('medical_visit.destroy');
 });
@@ -61,3 +63,11 @@ Route::prefix('patient')->name('patient.')->middleware(['auth'])->group(function
 
 // API route to fetch users with a specified role
 Route::get('/api/users-with-role/{role}', [UserController::class, 'getUsersWithRole']);
+
+// Add the route for request_for_visit
+Route::get('/request_for_visit', [RequestForVisitController::class, 'index'])->name('request_for_visit');
+Route::get('/request-for-visit/create', [RequestForVisitController::class, 'create'])->name('request_for_visit.create');
+Route::post('/request-for-visit/store', [RequestForVisitController::class, 'store'])->name('request_for_visit.store');
+Route::post('/request-for-visit/{id}/approve', [RequestForVisitController::class, 'approve'])->name('approve.visit');
+
+Route::resource('request_for_visit', RequestForVisitController::class);

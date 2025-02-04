@@ -339,6 +339,12 @@ return [
                 'icon' => 'fas fa-fw fa-user',
                 'permission' => 'medical-visit-list',
             ],
+            [
+                'text' => 'Request for vist',
+                'url' => 'request_for_visit',
+                'icon' => 'fas fa-fw fa-user',
+                'permission' => 'medical-visit-list',
+            ],
         ['header' => 'PATIENT MANAGEMENT'],
             [
             'text' => 'Patients',

@@ -29,6 +29,7 @@ class CreateMedicalVisitsTable extends Migration
             $table->text('doctor_notes')->nullable()->default(null);
             $table->text('nurse_observations')->nullable()->default(null);
             $table->string('medical_status')->default('todo'); // New field added
+            $table->string('is_approved')->default("pending"); // New field added
             $table->timestamps();
 
             $table->foreign('patient_id')->references('id')->on('users')->onDelete('cascade');
