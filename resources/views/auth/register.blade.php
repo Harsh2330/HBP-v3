@@ -10,6 +10,12 @@
         <!-- ===== BOX ICONS ===== -->
         <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
 
+        <!-- jQuery UI CSS -->
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+        <!-- Flatpickr CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
         <title>Registration Page</title>  
         <style>
             .shape1 {
@@ -55,15 +61,15 @@
 
                         <div class="form__div-input">
                             <label for="date_of_birth" class="form__label">Date of Birth</label>
-                            <input id="date_of_birth" type="date" class="form__input @error('date_of_birth') is-invalid @enderror" name="date_of_birth" value="{{ old('date_of_birth') }}" required autocomplete="date_of_birth">
-                            @error('date_of_birth')
+                            <input id="date_of_birth" type="text" class="form__input @error('date_of_birth') is-invalid @enderror" name="date_of_birth" value="{{ old('date_of_birth') }}" required autocomplete="date_of_birth">
+                          
+                        </div>
+                    </div>
+ @error('date_of_birth')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div>
-                    </div>
-
                     <div class="form__div">
                         <div class="form__icon">
                             <i class='bx bx-phone'></i>
@@ -72,14 +78,14 @@
                         <div class="form__div-input">
                             <label for="phone_number" class="form__label">Phone Number</label>
                             <input id="phone_number" type="text" class="form__input @error('phone_number') is-invalid @enderror" name="phone_number" value="{{ old('phone_number') }}" required autocomplete="phone_number">
-                            @error('phone_number')
+                            
+                        </div>
+                    </div>
+                    @error('phone_number')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div>
-                    </div>
-
                     <div class="form__div">
                         <div class="form__icon">
                             <i class='bx bx-envelope'></i>
@@ -87,14 +93,14 @@
 
                         <div class="form__div-input">
                             <label for="email" class="form__label">Email</label>
-                            <input id="email" type="email" class="form__input @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
-                            @error('email')
+                            <input id="email" type="email" class="form__input @error('email') is-invalid @enderror" name="email" required autocomplete="email">
+                        </div>
+                    </div>
+                    @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div>
-                    </div>
 
                     <div class="form__div">
                         <div class="form__icon">
@@ -104,14 +110,14 @@
                         <div class="form__div-input">
                             <label for="password" class="form__label">Password</label>
                             <input id="password" type="password" class="form__input @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-                            @error('password')
+                            
+                        </div>
+                    </div>
+                    @error('password')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div>
-                    </div>
-
                     <div class="form__div">
                         <div class="form__icon">
                             <i class='bx bx-lock' ></i>
@@ -120,13 +126,14 @@
                         <div class="form__div-input">
                             <label for="password_confirmation" class="form__label">Confirm Password</label>
                             <input id="password_confirmation" type="password" class="form__input @error('password_confirmation') is-invalid @enderror" name="password_confirmation" required autocomplete="new-password">
-                            @error('password_confirmation')
+                            
+                        </div>
+                    </div>
+                    @error('password_confirmation')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div>
-                    </div>
 
                     <button type="submit" class="form__button">
                         {{ __('Register') }}
@@ -135,6 +142,20 @@
             </div>
         </div>
         
+        <!-- jQuery and jQuery UI JS -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+        <!-- Flatpickr JS -->
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                flatpickr("#date_of_birth", {
+                    dateFormat: "Y-m-d"
+                });
+            });
+        </script>
+
         <!-- ===== MAIN JS ===== -->
         <script src="/js/main.js"></script>
     </body>

@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\MedicalVisitController;
 use App\Http\Controllers\RequestForVisitController;
+use App\Http\Controllers\AdminDashboardController; // Add this import
 
 Route::get('/', function () {
     return view('Homepage.welcome');
@@ -42,6 +43,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function() {
     Route::put('patient/{id}/storePatientData', [PatientController::class, 'storePatientData'])->name('patient.storePatientData');
     Route::get('patient-list', [PatientController::class, 'list'])->name('patient.list');
     Route::delete('patient/{id}', [PatientController::class, 'destroy'])->name('patient.destroy'); // Add this line
+Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard'); // Ensure this line is correct
 });
 
 Route::prefix('admin')->group(function () {
