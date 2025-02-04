@@ -37,26 +37,15 @@
                             <h3 class="card-title">Patients</h3>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Full Name</th>
-                                        <th>Email</th>
-                                        <th>Unique ID</th>
-                                        <th>Phone Number</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($patients as $patient)
-                                    <tr>
-                                        <td>{{ $patient->id }}</td>
-                                        <td>{{ $patient->full_name }}</td>
-                                        <td>{{ $patient->email }}</td>
-                                        <td>{{ $patient->unique_id }}</td>
-                                        <td>{{ $patient->phone_number }}</td>
-                                        <td>
+                            <div class="row">
+                                @foreach($patients as $patient)
+                                <div class="col-md-4">
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ $patient->full_name }}</h5>
+                                            <p class="card-text"><strong>Email:</strong> {{ $patient->email }}</p>
+                                            <p class="card-text"><strong>Unique ID:</strong> {{ $patient->unique_id }}</p>
+                                            <p class="card-text"><strong>Phone Number:</strong> {{ $patient->phone_number }}</p>
                                             <a href="{{ route('admin.patient.show', $patient->id) }}" class="btn btn-info">View</a>
                                             <a href="{{ route('admin.patient.edit', $patient->id) }}" class="btn btn-warning">Edit</a>
                                             <form action="{{ route('admin.patient.destroy', $patient->id) }}" method="POST" style="display:inline;">
@@ -64,11 +53,11 @@
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger">Delete</button>
                                             </form>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
                             <div class="mt-3">
                                 {{ $patients->links() }}
                             </div>

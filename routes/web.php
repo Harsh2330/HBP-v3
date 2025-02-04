@@ -12,9 +12,11 @@ use App\Http\Controllers\MedicalVisitController;
 use App\Http\Controllers\RequestForVisitController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('Homepage.welcome');
 });
-
+Route::get('/about-us', function () {
+    return view('Homepage.about');
+})->name('about-us');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
