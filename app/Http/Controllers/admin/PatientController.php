@@ -13,6 +13,14 @@ use Illuminate\Support\Facades\Auth; // Add this import
 
 class PatientController extends Controller
 {         
+    function __construct()
+    {
+        $this->middleware('permission:patient-list|patient-create|patient-edit|patient-delete', ['only' => ['index','show']]);
+        $this->middleware('permission:patient-create', ['only' => ['create','store']]);
+        $this->middleware('permission:patient-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:patient-delete', ['only' => ['destroy']]);
+    }
+
     public function index(Request $request)
     {
         $search = $request->input('search');

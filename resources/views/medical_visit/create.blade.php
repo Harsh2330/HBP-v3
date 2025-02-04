@@ -33,11 +33,14 @@
                                 @csrf
                                 <div class="patient-details">
                                     <h3>Patient Information</h3>
+                                    @php
+                                        $patients = \App\Models\Patient::where('user_unique_id', auth()->user()->id)->get();
+                                    @endphp
                                     <div class="form-group">
                                         <label for="patient_id">Patient</label>
                                         <select name="patient_id" id="patient_id" class="form-control custom-select">
                                             @foreach($patients as $patient)
-                                                <option value="{{ $patient->id }}" data-unique-id="{{ $patient->unique_id }}">{{ $patient->name }}</option>
+                                                <option value="{{ $patient->id }}" data-unique-id="{{ $patient->unique_id }}">{{ $patient->full_name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
