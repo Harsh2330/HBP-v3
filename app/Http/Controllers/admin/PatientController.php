@@ -9,6 +9,7 @@ use App\Models\Patient; // Change to Patient model
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; // Add this import
 use Illuminate\Support\Facades\Log; // Add this import
+use Illuminate\Support\Facades\Auth; // Add this import
 
 class PatientController extends Controller
 {         
@@ -55,9 +56,10 @@ class PatientController extends Controller
     {
         $data = $request->all();
         $data['full_name'] = $request->input('Full_name');
-        $user = \Illuminate\Support\Facades\Auth::user();
+        $user = Auth::user();
         if ($user) {
-            $data['user_unique_id'] = $user->unique_id;
+            $data['user_unique_id'] = $user->id; // Fetch the id field from the User table
+            
             // Generate a unique ID for the patient
             $currentYear = date('Y');
             $latestPatient = Patient::whereYear('created_at', $currentYear)->orderBy('id', 'desc')->first();
@@ -76,7 +78,7 @@ class PatientController extends Controller
         $data = $request->all();
         $data['full_name'] = $request->input('Full_name');
         $user = User::findOrFail($request->input('user_id'));
-        $data['user_unique_id'] = $user->unique_id;
+        $data['user_unique_id'] = $user->id; // Fetch the id field from the User table
         $data['pat_unique_id'] = $patient->pat_unique_id;
         $patient->update($data);
         return redirect()->route('admin.patient.show', $id);

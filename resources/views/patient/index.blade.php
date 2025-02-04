@@ -48,7 +48,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach($patients as $patient)
-                                        @if(Auth::user()->unique_id == $patient->user_unique_id)
+                                        @if(Auth::user()->id == $patient->user_unique_id)
                                             <tr>
                                                 <td>{{ $patient->full_name }}</td>
                                                 <td>{{ $patient->email }}</td>
