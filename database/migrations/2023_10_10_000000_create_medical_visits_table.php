@@ -13,7 +13,7 @@ class CreateMedicalVisitsTable extends Migration
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('doctor_id');
             $table->unsignedBigInteger('nurse_id'); // New field added
-            $table->string('unique_id')->unique(); // Added unique constraint
+            $table->string('unique_id'); // Added unique constraint
             $table->date('visit_date');
             $table->string('doctor_name');
             $table->string('nurse_name');

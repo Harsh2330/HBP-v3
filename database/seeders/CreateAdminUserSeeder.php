@@ -46,6 +46,8 @@ class CreateAdminUserSeeder extends Seeder
 
         $role = Role::create(['name' => 'Admin']);
         $userRole = Role::create(['name' => 'User']); // Create User role
+        $doctorRole = Role::create(['name' => 'doctor']); // Create Doctor role
+        $nurseRole = Role::create(['name' => 'nurse']); // Create Nurse role
 
         $permissions = Permission::pluck('id','id')->all();
         $userPermissions = Permission::whereIn('name', [
@@ -54,9 +56,25 @@ class CreateAdminUserSeeder extends Seeder
             'patient-edit',
             'patient-delete'
         ])->pluck('id','id')->all(); // Get basic permissions
+        $doctorPermissions = Permission::whereIn('name', [
+            'doctor-dashboard',
+            'medical-visit-list',
+           'medical-visit-create',
+           'medical-visit-edit',
+           'medical-visit-delete',
+        ])->pluck('id','id')->all(); // Get doctor permissions
+        $nursePermissions = Permission::whereIn('name', [
+            'nurse-dashboard',
+            'medical-visit-list',
+           'medical-visit-create',
+           'medical-visit-edit',
+           'medical-visit-delete'
+        ])->pluck('id','id')->all(); // Get nurse permissions
 
         $role->syncPermissions($permissions);
         $userRole->syncPermissions($userPermissions); // Assign basic permissions to User role
+        $doctorRole->syncPermissions($doctorPermissions); // Assign doctor permissions to Doctor role
+        $nurseRole->syncPermissions($nursePermissions); // Assign nurse permissions to Nurse role
 
         $user->assignRole([$role->id]);
     }
