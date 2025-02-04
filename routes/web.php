@@ -58,3 +58,6 @@ Route::prefix('patient')->name('patient.')->middleware(['auth'])->group(function
     Route::get('profile', [PatientController::class, 'profile'])->name('profile');
     Route::post('profile', [PatientController::class, 'updateProfile'])->name('profile.update');
 });
+
+// API route to fetch users with a specified role
+Route::get('/api/users-with-role/{role}', [UserController::class, 'getUsersWithRole']);
