@@ -16,5 +16,5 @@
 @stop
 
 @section('js')
-    <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>
+<script src="https://cdn.tailwindcss.com"></script>
 @stop

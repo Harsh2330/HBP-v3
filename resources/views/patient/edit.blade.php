@@ -23,17 +23,17 @@
                             <h3 class="card-title">Patient Information</h3>
                         </div>
                         <div class="card-body">
-                                @if(session('approved_session'))
-                                    @php
-                                        $approvedSession = session('approved_session');
-                                        $user = \App\Models\User::find($approvedSession['user_id']);
-                                    @endphp
-                                    @if($user)
-                                        <div style="background-color: #d4edda; padding: 10px; border: 1px solid #c3e6cb; border-radius: 5px; margin-bottom: 15px;">
-                                            Approved Patient: {{ $user->first_name }} (Unique ID: {{ $approvedSession['unique_id'] }}) Approved At: {{ $approvedSession['approved_at'] }}
-                                        </div>
-                                    @endif
+                            @if(session('approved_session'))
+                                @php
+                                    $approvedSession = session('approved_session');
+                                    $user = \App\Models\User::find($approvedSession['user_id']);
+                                @endphp
+                                @if($user)
+                                    <div style="background-color: #d4edda; padding: 10px; border: 1px solid #c3e6cb; border-radius: 5px; margin-bottom: 15px;">
+                                        Approved Patient: {{ $user->first_name }} (Unique ID: {{ $approvedSession['unique_id'] }}) Approved At: {{ $approvedSession['approved_at'] }}
+                                    </div>
                                 @endif
+                            @endif
                             <form id="patientForm" action="{{ route('admin.patient.storePatientData', $patient->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
@@ -100,7 +100,6 @@
                                         <!-- Add other relationships as needed -->
                                     </select>
                                 </div>
-                                
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </form>
                         </div>

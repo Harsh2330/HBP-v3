@@ -23,7 +23,6 @@
                             <h3 class="card-title">Patient Information</h3>
                         </div>
                         <div class="card-body">
-                                                     
                             <form id="patientForm" action="{{ route('admin.patient.store') }}" method="POST">
                                 @csrf
                                 <div class="form-group">
