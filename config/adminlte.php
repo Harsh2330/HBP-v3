@@ -317,9 +317,9 @@ return [
         ],
         ['header' => 'account_settings'],
             [
-                'text' => 'Dashboard',
-                'url' => 'home',
-                'icon' => 'fas fa-fw fa-tachometer-alt',
+            'text' => 'Dashboard',
+            'url' => 'home',
+            'icon' => 'fas fa-fw fa-tachometer-alt',
             ],
             [
                 'text' => 'Roles',
@@ -338,6 +338,17 @@ return [
                 'url' => 'medical_visit/create',
                 'icon' => 'fas fa-fw fa-user',
                 'permission' => 'medical-visit-list',
+            ],
+        ['header' => 'PATIENT MANAGEMENT'],
+            [
+            'text' => 'Patients',
+            'url' => 'admin/patient',
+            'icon' => 'fas fa-fw fa-procedures',
+            ],
+            [
+            'text' => 'Appointments',
+            'url' => 'appointments',
+            'icon' => 'fas fa-fw fa-calendar-check',
             ],
             
        

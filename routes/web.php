@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Admin\PatientController;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
@@ -26,4 +28,33 @@ Route::group(['middleware' => ['auth']], function() {
     Route::patch('/medical_visit/{id}/approve', [MedicalVisitController::class, 'approve'])->name('medical_visit.approve');
     Route::patch('/medical_visit/{id}/update_status', [MedicalVisitController::class, 'updateStatus'])->name('medical_visit.update_status');
     Route::delete('/medical_visit/{id}', [MedicalVisitController::class, 'destroy'])->name('medical_visit.destroy');
+});
+
+// Admin routes
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function() {
+    Route::resource('patient', PatientController::class);
+    Route::post('patient/{user}/approve', [PatientController::class, 'approve'])->name('patient.approve');
+    Route::post('patient', [PatientController::class, 'store'])->name('patient.store');
+    Route::put('patient/{id}/storePatientData', [PatientController::class, 'storePatientData'])->name('patient.storePatientData');
+    Route::get('patient-list', [PatientController::class, 'list'])->name('patient.list');
+    Route::delete('patient/{id}', [PatientController::class, 'destroy'])->name('patient.destroy'); // Add this line
+});
+
+Route::prefix('admin')->group(function () {
+    Route::get('patient/list', [PatientController::class, 'list'])->name('admin.patient.list');
+    Route::get('patient/create', [PatientController::class, 'create'])->name('admin.patient.create');
+    Route::post('patient/store', [PatientController::class, 'store'])->name('admin.patient.store');
+    Route::get('patient/{id}/show', [PatientController::class, 'show'])->name('admin.patient.show');
+    Route::get('patient/{id}/edit', [PatientController::class, 'edit'])->name('admin.patient.edit');
+    Route::put('patient/{id}', [PatientController::class, 'update'])->name('admin.patient.update');
+    Route::delete('patient/{id}', [PatientController::class, 'destroy'])->name('admin.patient.destroy');
+    Route::post('patient/{id}/approve', [PatientController::class, 'approve'])->name('admin.patient.approve');
+    Route::get('patient', [PatientController::class, 'index'])->name('admin.patient.index');
+});
+
+// Add patient panel routes
+Route::prefix('patient')->name('patient.')->middleware(['auth'])->group(function() {
+    Route::get('dashboard', [HomeController::class, 'patientIndex'])->name('dashboard');
+    Route::get('profile', [PatientController::class, 'profile'])->name('profile');
+    Route::post('profile', [PatientController::class, 'updateProfile'])->name('profile.update');
 });

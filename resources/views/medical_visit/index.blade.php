@@ -7,53 +7,70 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Medical Visits</h1>
+                    <h1 style="font-family: Arial, sans-serif;">Medical Visits</h1>
+                </div>
+                <div class="col-sm-6 text-right">
                     @if(Auth::check())
-                        <span class="badge badge-primary">Logged in as: {{ Auth::user()->name }}</span>
+                        <span class="badge badge-primary slide-in" style="font-size: 1.2em;">Logged in as : {{ Auth::user()->name }}</span>
                     @endif
                 </div>
             </div>
         </div><!-- /.container-fluid -->
     </section>
 
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 2s;
+        }
+    </style>
+
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header">
+                    <div class="card shadow-lg"> <!-- Added shadow class -->
+                        <div class="card-header" style="background-color: #17a2b8; color: white;"> <!-- Changed background color -->
                             <h3 class="card-title">Medical Visits List</h3>
                         </div>
                         <div class="card-body">
                             @if($medicalVisits)
-                            <table class="table">
+                            <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Patient Unique ID</th>
-                                        <th>Patient Name</th>
-                                        <th>Visit Date</th>
-                                        <th>Doctor</th>
-                                        <th>Nurse</th>
-                                        <th>Diagnosis</th>
-                                        <th>Medical Status</th> <!-- New column added -->
-                                        <th>Actions</th>
+                                        <th style="font-size: 1.1em;">Patient Unique ID</th> <!-- Changed font size -->
+                                        <th style="font-size: 1.1em;">Patient Name</th> <!-- Changed font size -->
+                                        <th style="font-size: 1.1em;">Visit Date</th> <!-- Changed font size -->
+                                        <th style="font-size: 1.1em;">Doctor</th> <!-- Changed font size -->
+                                        <th style="font-size: 1.1em;">Nurse</th> <!-- Changed font size -->
+                                        <th style="font-size: 1.1em;">Diagnosis</th> <!-- Changed font size -->
+                                        <th style="font-size: 1.1em;">Medical Status</th> <!-- Changed font size -->
+                                        <th style="font-size: 1.1em;">Actions</th> <!-- Changed font size -->
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($medicalVisits as $visit)
                                     <tr>
-                                        <td>{{ $visit->patient->unique_id }}</td>
-                                        <td>{{ $visit->patient->first_name }} {{ $visit->patient->middle_name}} {{ $visit->patient->last_name}}</td>
-                                        <td>{{ $visit->visit_date }}</td>
-                                        <td>{{ $visit->doctor_name }}</td>
-                                        <td>{{ $visit->nurse_name }}</td>
-                                        <td>{{ $visit->simplified_diagnosis }}</td>
-                                        <td>
+                                        <td style="padding: 10px;">{{ $visit->patient->unique_id }}</td> <!-- Added padding -->
+                                        <td style="padding: 10px;">{{ $visit->patient->first_name }} {{ $visit->patient->middle_name}} {{ $visit->patient->last_name}}</td> <!-- Added padding -->
+                                        <td style="padding: 10px;">{{ $visit->visit_date }}</td> <!-- Added padding -->
+                                        <td style="padding: 10px;">{{ $visit->doctor_name }}</td> <!-- Added padding -->
+                                        <td style="padding: 10px;">{{ $visit->nurse_name }}</td> <!-- Added padding -->
+                                        <td style="padding: 10px;">{{ $visit->simplified_diagnosis }}</td> <!-- Added padding -->
+                                        <td style="padding: 10px;">
                                             <form action="{{ route('medical_visit.update_status', $visit->id) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('PATCH')
-                                                <select name="medical_status" onchange="this.form.submit()">
+                                                <select name="medical_status" onchange="this.form.submit()" class="form-control">
                                                     <option value="Pending" {{ $visit->medical_status == 'Pending' ? 'selected' : '' }}>Pending</option>
                                                     <option value="Completed" {{ $visit->medical_status == 'Completed' ? 'selected' : '' }}>Completed</option>
                                                     <option value="Cancelled" {{ $visit->medical_status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
@@ -61,7 +78,7 @@
                                             </form>
                                         </td> <!-- Display medical status -->
                                         
-                                        <td>
+                                        <td style="padding: 10px;">
                                             <a href="{{ route('medical_visit.show', $visit->id) }}" class="btn btn-info">View Visit</a>
                                             <a href="{{ route('medical_visit.edit', $visit->id) }}" class="btn btn-primary">Edit Visit</a>
                                             <form action="{{ route('medical_visit.destroy', $visit->id) }}" method="POST" style="display:inline;">
