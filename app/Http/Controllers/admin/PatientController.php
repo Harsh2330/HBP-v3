@@ -110,7 +110,7 @@ class PatientController extends Controller
         $request->validate([
             'date_of_birth' => 'required|date',
             'phone_number' => 'required|string|max:15',
-            'email' => 'nullable|string|email|max:255|unique:users,email,' . auth()->guard()->user()->id,
+            'email' => 'nullable|string|email|max:255,email,' . auth()->guard()->user()->id,
             'full_address' => 'required|string',
             'religion' => 'required|string',
             'economic_status' => 'required|string',
