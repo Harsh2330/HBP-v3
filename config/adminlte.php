@@ -325,13 +325,19 @@ return [
                 'text' => 'Roles',
                 'url' => 'roles',
                 'icon' => 'fas fa-fw fa-users',
-                
+                'permission' => 'role-list',
             ],
             [
                 'text' => 'Manage Users',
                 'url' => 'users',
                 'icon' => 'fas fa-fw fa-user',
-                
+                'permission' => 'user-list',
+            ],
+            [
+                'text' => 'Medical visit',
+                'url' => 'medical_visit/create',
+                'icon' => 'fas fa-fw fa-user',
+                'permission' => 'medical-visit-list',
             ],
             
        
@@ -357,6 +363,7 @@ return [
         JeroenNoten\LaravelAdminLte\Menu\Filters\ClassesFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\LangFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\DataFilter::class,
+        App\Filters\MenuFilter::class,
     ],
 
     /*
