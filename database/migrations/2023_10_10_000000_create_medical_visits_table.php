@@ -10,6 +10,7 @@ class CreateMedicalVisitsTable extends Migration
     {
         Schema::create('medical_visits', function (Blueprint $table) {
             $table->id();
+            // $table->unsignedBigInteger('created_by')->after('is_approved'); // Add the new field
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('doctor_id');
             $table->unsignedBigInteger('nurse_id'); // New field added
@@ -31,10 +32,15 @@ class CreateMedicalVisitsTable extends Migration
             $table->string('medical_status')->default('todo'); // New field added
             $table->string('is_approved')->default("pending"); // New field added
             $table->timestamps();
+        });
 
-            $table->foreign('patient_id')->references('id')->on('users')->onDelete('cascade');
+        // Explicitly define the foreign key constraints after creating the table
+        Schema::table('medical_visits', function (Blueprint $table) {
+            $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade'); // Foreign key constraint for patient_id
             $table->foreign('doctor_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('nurse_id')->references('id')->on('users')->onDelete('cascade'); // Foreign key constraint
+            // $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
 

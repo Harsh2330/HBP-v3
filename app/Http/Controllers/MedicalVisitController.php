@@ -6,6 +6,7 @@ use App\Models\MedicalVisit;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class MedicalVisitController extends Controller
 {
@@ -64,6 +65,7 @@ class MedicalVisitController extends Controller
         $medicalVisit->visit_date = $request->visit_date;
         $medicalVisit->doctor_name = $doctor->first_name . ' ' . $doctor->middle_name . ' ' . $doctor->last_name;
         $medicalVisit->nurse_name = $nurse->first_name . ' ' . $nurse->middle_name . ' ' . $nurse->last_name;
+        // $medicalVisit->created_by = Auth::id();
         $medicalVisit->save();
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit created successfully.');
@@ -145,5 +147,14 @@ class MedicalVisitController extends Controller
         $visit->save();
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit rejected successfully.');
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $visit = MedicalVisit::findOrFail($id);
+        $visit->medical_status = $request->input('medical_status');
+        $visit->save();
+
+        return redirect()->route('medical_visit.index')->with('success', 'Medical status updated successfully.');
     }
 }
