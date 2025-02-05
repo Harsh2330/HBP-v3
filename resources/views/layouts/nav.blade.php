@@ -19,7 +19,6 @@
             <a href="{{ route('register') }}">Register</a>
         </nav>
     </header>
-    
     <footer>
         <!DOCTYPE html>
         Deepak Foundation
