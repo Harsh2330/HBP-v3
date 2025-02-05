@@ -42,6 +42,12 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
+                <strong>Phone Number:</strong>
+                <input type="text" name="phone_number" placeholder="Phone Number" class="form-control" value="{{ $user->phone_number }}">
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group">
                 <strong>Password:</strong>
                 <input type="password" name="password" placeholder="Password" class="form-control">
             </div>

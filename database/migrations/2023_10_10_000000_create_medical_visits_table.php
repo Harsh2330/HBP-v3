@@ -13,7 +13,7 @@ class CreateMedicalVisitsTable extends Migration
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('doctor_id');
             $table->unsignedBigInteger('nurse_id'); // New field added
-            $table->string('unique_id')->unique(); // Added unique constraint
+            $table->string('unique_id'); // Added unique constraint
             $table->date('visit_date');
             $table->string('doctor_name');
             $table->string('nurse_name');
@@ -29,6 +29,7 @@ class CreateMedicalVisitsTable extends Migration
             $table->text('doctor_notes')->nullable()->default(null);
             $table->text('nurse_observations')->nullable()->default(null);
             $table->string('medical_status')->default('todo'); // New field added
+            $table->string('is_approved')->default("pending"); // New field added
             $table->timestamps();
 
             $table->foreign('patient_id')->references('id')->on('users')->onDelete('cascade');

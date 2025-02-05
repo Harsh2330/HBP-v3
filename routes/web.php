@@ -9,6 +9,11 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\MedicalVisitController;
+use App\Http\Controllers\RequestForVisitController;
+use App\Http\Controllers\AdminDashboardController; // Add this import
+use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\DoctorDashboardController;
+use App\Http\Controllers\NurseDashboardController;
 
 Route::get('/', function () {
     return view('Homepage.welcome');
@@ -28,8 +33,13 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('medical_visit/{id}/edit', [MedicalVisitController::class, 'edit'])->name('medical_visit.edit');
     Route::patch('medical_visit/{id}', [MedicalVisitController::class, 'update'])->name('medical_visit.update');
     Route::patch('/medical_visit/{id}/approve', [MedicalVisitController::class, 'approve'])->name('medical_visit.approve');
+    Route::patch('/medical_visit/{id}/reject', [MedicalVisitController::class, 'reject'])->name('medical_visit.reject');
     Route::patch('/medical_visit/{id}/update_status', [MedicalVisitController::class, 'updateStatus'])->name('medical_visit.update_status');
     Route::delete('/medical_visit/{id}', [MedicalVisitController::class, 'destroy'])->name('medical_visit.destroy');
+    
+    Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
+    Route::get('/doctor/dashboard', [DoctorDashboardController::class, 'index'])->name('doctor.dashboard');
+    Route::get('/nurse/dashboard', [NurseDashboardController::class, 'index'])->name('nurse.dashboard');
 });
 
 // Admin routes
@@ -40,6 +50,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function() {
     Route::put('patient/{id}/storePatientData', [PatientController::class, 'storePatientData'])->name('patient.storePatientData');
     Route::get('patient-list', [PatientController::class, 'list'])->name('patient.list');
     Route::delete('patient/{id}', [PatientController::class, 'destroy'])->name('patient.destroy'); // Add this line
+Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard'); // Ensure this line is correct
 });
 
 Route::prefix('admin')->group(function () {
@@ -63,3 +74,11 @@ Route::prefix('patient')->name('patient.')->middleware(['auth'])->group(function
 
 // API route to fetch users with a specified role
 Route::get('/api/users-with-role/{role}', [UserController::class, 'getUsersWithRole']);
+
+// Add the route for request_for_visit
+Route::get('/request_for_visit', [RequestForVisitController::class, 'index'])->name('request_for_visit');
+Route::get('/request-for-visit/create', [RequestForVisitController::class, 'create'])->name('request_for_visit.create');
+Route::post('/request-for-visit/store', [RequestForVisitController::class, 'store'])->name('request_for_visit.store');
+Route::post('/request-for-visit/{id}/approve', [RequestForVisitController::class, 'approve'])->name('approve.visit');
+
+Route::resource('request_for_visit', RequestForVisitController::class);

@@ -316,30 +316,55 @@ return [
             'text' => 'search',
         ],
         ['header' => 'account_settings'],
-            [
-            'text' => 'Dashboard',
-            'url' => 'home',
+        [
+            'text' => 'Admin Dashboard',
+            'url' => 'admin/dashboard',
             'icon' => 'fas fa-fw fa-tachometer-alt',
+            'permission' => 'admin-dashboard',
             ],
             [
-                'text' => 'Roles',
-                'url' => 'roles',
-                'icon' => 'fas fa-fw fa-users',
-                'permission' => 'role-list',
+            'text' => 'Doctor Dashboard',
+            'url' => 'doctor/dashboard',
+            'icon' => 'fas fa-fw fa-stethoscope',
+            'permission' => 'doctor-dashboard',
             ],
             [
-                'text' => 'Manage Users',
-                'url' => 'users',
-                'icon' => 'fas fa-fw fa-user',
-                'permission' => 'user-list',
+            'text' => 'Nurse Dashboard',
+            'url' => 'nurse/dashboard',
+            'icon' => 'fas fa-fw fa-user-nurse',
+            'permission' => 'nurse-dashboard',
             ],
             [
-                'text' => 'Medical visit',
-                'url' => 'medical_visit',
-                'icon' => 'fas fa-fw fa-user',
-                'permission' => 'medical-visit-list',
+            'text' => 'User Dashboard',
+            'url' => 'user/dashboard',
+            'icon' => 'fas fa-fw fa-user',
+            'permission' => 'user-dashboard',
             ],
-        ['header' => 'PATIENT MANAGEMENT'],
+            [
+            'text' => 'Roles',
+            'url' => 'roles',
+            'icon' => 'fas fa-fw fa-user-shield',
+            'permission' => 'role-list',
+            ],
+            [
+            'text' => 'Manage Users',
+            'url' => 'users',
+            'icon' => 'fas fa-fw fa-users-cog',
+            'permission' => 'user-list',
+            ],
+            [
+            'text' => 'Appointments',
+            'url' => 'medical_visit',
+            'icon' => 'fas fa-fw fa-calendar-alt',
+            'permission' => 'medical-visit-list',
+            ],
+            [
+            'text' => 'Request for visit',
+            'url' => 'request_for_visit',
+            'icon' => 'fas fa-fw fa-calendar-check',
+            'permission' => 'medical-visit-list',
+            ],
+
             [
             'text' => 'Patients',
             'url' => 'admin/patient',
@@ -347,9 +372,9 @@ return [
             'permission' => 'patient-list',
             ],
             [
-            'text' => 'Appointments',
+            
             'url' => 'appointments',
-            'icon' => 'fas fa-fw fa-calendar-check',
+            
             ],
             
        

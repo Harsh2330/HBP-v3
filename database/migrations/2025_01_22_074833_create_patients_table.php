@@ -17,7 +17,7 @@ class CreatePatientsTable extends Migration
             $table->date('date_of_birth');
             $table->string('age_category');
             $table->string('phone_number');
-            $table->string('email')->nullable()->unique();
+            $table->string('email')->nullable();
             $table->text('full_address');
             $table->string('religion');
             $table->string('economic_status');
