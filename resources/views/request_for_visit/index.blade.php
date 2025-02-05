@@ -57,7 +57,7 @@
                                 <tbody>
                                 @php
                                     $pendingVisits = $medicalVisits->filter(function($visit) {
-                                        return $visit->is_approved == 'Pending';
+                                        return $visit->is_approved == 'pending';
                                     });
                                     @endphp
                                     @foreach($pendingVisits as $visit)
