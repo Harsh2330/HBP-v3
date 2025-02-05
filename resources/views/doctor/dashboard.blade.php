@@ -26,15 +26,15 @@
                 <div class="card-body" style="background-color: #f8f9fa; border-left: 5px solid #f6c23e;">
                     <h5 class="card-title" style="color: #f6c23e; font-weight: bold;">Today's Appointments</h5>
                     <ul class="list-group">
-                        <li class="list-group-item d-flex justify-content-between align-items-center" onclick="showPatientDetail('John Doe', 'Checkup', '10:00 AM')">
+                        <li class="list-group-item d-flex justify-content-between align-items-center hover-effect" onclick="showPatientDetail('John Doe', 'Checkup', '10:00 AM')">
                             John Doe - Checkup
                             <span class="badge badge-primary badge-pill">10:00 AM</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center" onclick="showPatientDetail('Jane Smith', 'Follow-up', '11:00 AM')">
+                        <li class="list-group-item d-flex justify-content-between align-items-center hover-effect" onclick="showPatientDetail('Jane Smith', 'Follow-up', '11:00 AM')">
                             Jane Smith - Follow-up
                             <span class="badge badge-primary badge-pill">11:00 AM</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center" onclick="showPatientDetail('Robert Brown', 'Dental', '12:00 PM')">
+                        <li class="list-group-item d-flex justify-content-between align-items-center hover-effect" onclick="showPatientDetail('Robert Brown', 'Dental', '12:00 PM')">
                             Robert Brown - Dental
                             <span class="badge badge-primary badge-pill">12:00 PM</span>
                         </li>
@@ -58,9 +58,9 @@
                 <div class="card-body" style="background-color: #f8f9fa; border-left: 5px solid #6f42c1;">
                     <h5 class="card-title" style="color: #6f42c1; font-weight: bold;">Recent Activities</h5>
                     <ul class="list-group">
-                        <li class="list-group-item">Checked patient John Doe</li>
-                        <li class="list-group-item">Follow-up with Jane Smith</li>
-                        <li class="list-group-item">Dental appointment with Robert Brown</li>
+                        <li class="list-group-item hover-effect">Checked patient John Doe</li>
+                        <li class="list-group-item hover-effect">Follow-up with Jane Smith</li>
+                        <li class="list-group-item hover-effect">Dental appointment with Robert Brown</li>
                     </ul>
                 </div>
             </div>
@@ -80,7 +80,7 @@
                                 <th>Frequency</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="prescriptions-list">
                             <tr>
                                 <td>Kirtan</td>
                                 <td>Paracetamol</td>
@@ -101,6 +101,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    <button class="btn btn-success" onclick="addPrescription()">Add Prescription</button>
                 </div>
             </div>
         </div>
@@ -114,6 +115,10 @@
     .transition-card:hover {
         transform: translateY(-10px);
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    .hover-effect:hover {
+        background-color: #f1f1f1;
+        cursor: pointer;
     }
 </style>
 
@@ -153,5 +158,17 @@
             }
         });
     });
+
+    function addPrescription() {
+        const prescriptionsList = document.getElementById('prescriptions-list');
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td>New Patient</td>
+            <td>New Medicine</td>
+            <td>New Dosage</td>
+            <td>New Frequency</td>
+        `;
+        prescriptionsList.appendChild(newRow);
+    }
 </script>
 @endsection
