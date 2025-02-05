@@ -62,8 +62,8 @@
                                     @endphp
                                     @foreach($pendingVisits as $visit)
                                     <tr>
-                                        <td style="padding: 10px;">{{ $visit->patient->unique_id }}</td> <!-- Added padding -->
-                                        <td style="padding: 10px;">{{ $visit->patient->name }} {{ $visit->patient->middle_name}} {{ $visit->patient->last_name}}</td> <!-- Added padding -->
+                                        <td style="padding: 10px;">{{ $visit->patient->pat_unique_id }}</td> <!-- Added padding -->
+                                        <td style="padding: 10px;">{{ $visit->patient->full_name }} {{ $visit->patient->middle_name}} {{ $visit->patient->last_name}}</td> <!-- Added padding -->
                                         <td style="padding: 10px;">{{ $visit->visit_date }}</td> <!-- Added padding -->
                                         <td style="padding: 10px;">
                                             <form action="{{ route('approve.visit', $visit->id) }}" method="POST">

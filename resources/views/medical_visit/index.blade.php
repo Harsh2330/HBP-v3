@@ -60,8 +60,9 @@
                                 <tbody>
                                     @foreach($medicalVisits as $visit)
                                     <tr>
-                                        <td style="padding: 10px;">{{ $visit->patient->unique_id }}</td> <!-- Added padding -->
-                                        <td style="padding: 10px;">{{ $visit->patient->name }} </td> <!-- Added padding -->
+                                        <td style="padding: 10px;">{{ $visit->patient->pat_unique_id }}</td> <!-- Added padding -->
+                                        <td style="padding: 10px;">{{ $visit->patient->full_name }}</td> <!-- Added padding -->
+                                        <!-- ...existing code... -->
                                         <td style="padding: 10px;">{{ $visit->visit_date }}</td> <!-- Added padding -->
                                         <td style="padding: 10px;">{{ $visit->doctor->name }}</td> <!-- Added padding -->
                                         <td style="padding: 10px;">{{ $visit->nurse->name}}</td> <!-- Added padding -->
