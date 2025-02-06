@@ -110,7 +110,7 @@ class MedicalVisitController extends Controller
                 'date',
                 Rule::unique('medical_visits')->ignore($id)->where(function ($query) use ($request) {
                     return $query->where('patient_id', $request->patient_id)
-                                 ->whddereDate('visit_date', $request->visit_date);
+                                 ->whereDate('visit_date', $request->visit_date);
                 }),
             ],
         ]);

@@ -6,6 +6,12 @@ use App\Models\MedicalVisit;
 
 class RequestForVisitController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:req-list|req-create|req-approve', ['only' => ['index','show']]);
+        $this->middleware('permission:req-create', ['only' => ['create','store']]);
+        $this->middleware('permission:req-approve', ['only' => ['approve']]);
+    }
     public function index()
     {
         $medicalVisits = MedicalVisit::all(); // Fetch all medical visits

@@ -51,10 +51,15 @@ class CreateAdminUserSeeder extends Seeder
 
         $permissions = Permission::pluck('id','id')->all();
         $userPermissions = Permission::whereIn('name', [
+            'user-dashboard',
             'patient-list',
             'patient-create',
             'patient-edit',
-            'patient-delete'
+            'patient-delete',
+            'medical-visit-list',
+           'medical-visit-create',
+           'medical-visit-edit',
+           'medical-visit-delete'
         ])->pluck('id','id')->all(); // Get basic permissions
         $doctorPermissions = Permission::whereIn('name', [
             'doctor-dashboard',

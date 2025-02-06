@@ -79,12 +79,12 @@
                                             </td>
                                             
                                             <td class="py-2 px-4">
-                                                <a href="{{ route('medical_visit.show', $visit->id) }}" class="btn btn-info">View Visit</a>
-                                                <a href="{{ route('medical_visit.edit', $visit->id) }}" class="btn btn-primary">Edit Visit</a>
+                                                <a href="{{ route('medical_visit.show', $visit->id) }}" class="btn btn-info text-white bg-blue-500 hover:bg-blue-700">View Visit</a>
+                                                <a href="{{ route('medical_visit.edit', $visit->id) }}" class="btn btn-primary text-white bg-green-500 hover:bg-green-700">Edit Visit</a>
                                                 <form action="{{ route('medical_visit.destroy', $visit->id) }}" method="POST" class="inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this visit?')">Delete</button>
+                                                    <button type="submit" class="btn btn-danger text-white bg-red-500 hover:bg-red-700" onclick="return confirm('Are you sure you want to delete this visit?')">Delete</button>
                                                 </form>
                                             </td>
                                         </tr>

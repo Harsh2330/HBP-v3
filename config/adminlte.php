@@ -362,7 +362,7 @@ return [
             'text' => 'Request for visit',
             'url' => 'request_for_visit',
             'icon' => 'fas fa-fw fa-calendar-check',
-            'permission' => 'medical-visit-list',
+            'permission' => 'req-list',
             ],
 
             [

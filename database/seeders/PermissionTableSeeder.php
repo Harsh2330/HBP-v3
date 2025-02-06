@@ -33,7 +33,10 @@ class PermissionTableSeeder extends Seeder
            'admin-dashboard',
            'doctor-dashboard',
            'nurse-dashboard',
-           'user-dashboard'
+           'user-dashboard',
+           'req-list',
+           'req-create',
+           'req-approve',
         ];
         
         foreach ($permissions as $permission) {
