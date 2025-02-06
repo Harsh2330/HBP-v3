@@ -1,30 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
-            <h2> Show Role</h2>
-        </div>
-        <div class="pull-right">
-            <a class="btn btn-primary" href="{{ route('roles.index') }}"> Back</a>
-        </div>
+<div class="container mx-auto">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold">Show Role</h2>
+        <a class="btn btn-primary" href="{{ route('roles.index') }}">Back</a>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
+    <div class="bg-white shadow-lg rounded-lg p-4">
+        <div class="mb-4">
             <strong>Name:</strong>
-            {{ $role->name }}
+            <span>{{ $role->name }}</span>
         </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
+        <div class="mb-4">
             <strong>Permissions:</strong>
             @if(!empty($rolePermissions))
                 @foreach($rolePermissions as $v)
-                    <label class="label label-success">{{ $v->name }},</label>
+                    <span class="badge bg-success">{{ $v->name }}</span>
                 @endforeach
             @endif
         </div>

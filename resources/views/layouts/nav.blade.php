@@ -12,7 +12,7 @@
     <header class="p-6 bg-blue-600 shadow-md">
         <h1 class="text-4xl font-bold text-white">HOME BASED PALLIATIVE CARE</h1>
         <nav class="mt-4 flex justify-center space-x-6">
-            <a href="#" class="text-lg text-white hover:text-blue-300">Home</a>
+            <a href="{{ route('welcome') }}" class="text-lg text-white hover:text-blue-300">Home</a>
             <a href="#" class="text-lg text-white hover:text-blue-300">Services</a>
             <a href="{{ route('about-us') }}" class="text-lg text-white hover:text-blue-300">About Us</a>
             <a href="{{ route('login') }}" class="text-lg text-white hover:text-blue-300">Login</a>

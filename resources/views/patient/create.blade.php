@@ -124,5 +124,11 @@
         var fullName = document.querySelector('input[name="Full_name"]').value;
         document.getElementById('full_name').value = fullName;
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        flatpickr('input[name="date_of_birth"]', {
+            dateFormat: 'Y-m-d'
+        });
+    });
 </script>
 @endsection
