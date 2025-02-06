@@ -26,10 +26,10 @@
                         <div class="tab-pane fade show active" id="patient-info" role="tabpanel" aria-labelledby="patient-info-tab">
                             <div class="patient-details mt-4">
                                 <h3 class="text-primary font-weight-bold"><i class="fas fa-user"></i> Patient Information</h3>
-                                <p><strong>Name:</strong> {{ $visit->patient->first_name }} {{ $visit->patient->middle_name}} {{ $visit->patient->last_name}}</p>
-                                <p><strong>ID:</strong> {{ $visit->patient->unique_id }}</p>
+                                <p><strong>Name:</strong> {{ $visit->patient->full_name }}</p>
+                                <p><strong>ID:</strong> {{ $visit->patient->pat_unique_id }}</p>
                                 <p><strong>Gender:</strong> {{ $visit->patient->gender }}</p>
-                                <p><strong>Age:</strong> {{ $visit->patient->age }}</p>
+                                <p><strong>Age:</strong> {{ $visit->patient->date_of_birth	 }}</p>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="visit-details" role="tabpanel" aria-labelledby="visit-details-tab">
