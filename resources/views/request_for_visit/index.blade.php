@@ -4,18 +4,14 @@
 <div class="content">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 style="font-family: Arial, sans-serif;">Requested Medical Visits</h1>
-                </div>
-                <div class="col-sm-6 text-right">
-                    @if(Auth::check())
-                        <span class="badge badge-primary slide-in" style="font-size: 1.2em;">Logged in as : {{ Auth::user()->name }}</span>
-                    @endif
-                </div>
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-2xl font-bold">Requested Medical Visits</h1>
+                @if(Auth::check())
+                    <span class="badge badge-primary slide-in text-lg">Logged in as : {{ Auth::user()->name }}</span>
+                @endif
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
 
     <style>
@@ -35,23 +31,23 @@
 
     <!-- Main content -->
     <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card shadow-lg"> <!-- Added shadow class -->
-                        <div class="card-header" style="background-color: #17a2b8; color: white;"> <!-- Changed background color -->
-                            <h3 class="card-title">Medical Visits List</h3>
+        <div class="container mx-auto">
+            <div class="flex justify-center">
+                <div class="w-full">
+                    <div class="bg-white shadow-lg rounded-lg"> <!-- Tailwind classes for card -->
+                        <div class="bg-teal-500 text-white p-4 rounded-t-lg"> <!-- Tailwind classes for header -->
+                            <h3 class="text-lg font-semibold">Medical Visits List</h3>
                         </div>
-                        <div class="card-body">
+                        <div class="p-4">
                             @if($medicalVisits)
-                            <table class="table table-striped">
+                            <table class="min-w-full bg-white">
                                 <thead>
                                     <tr>
-                                        <th style="font-size: 1.1em;">Patient Unique ID</th> <!-- Changed font size -->
-                                        <th style="font-size: 1.1em;">Patient Name</th> <!-- Changed font size -->
-                                        <th style="font-size: 1.1em;">Visit Date</th> <!-- Changed font size -->
-                                        <th style="font-size: 1.1em;">Action</th> <!-- Added new column for action -->
-                                        <th style="font-size: 1.1em;">Approval Status</th> <!-- Added new column for approval status -->
+                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Patient Unique ID</th>
+                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Patient Name</th>
+                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Visit Date</th>
+                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Action</th>
+                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Approval Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -59,23 +55,22 @@
                                     $pendingVisits = $medicalVisits->filter(function($visit) {
                                         return $visit->is_approved == 'pending';
                                     });
-                                    @endphp
+                                @endphp
                                     @foreach($pendingVisits as $visit)
-                                    <tr>
-                                        <td style="padding: 10px;">{{ $visit->patient->pat_unique_id }}</td> <!-- Added padding -->
-                                        <td style="padding: 10px;">{{ $visit->patient->full_name }} {{ $visit->patient->middle_name}} {{ $visit->patient->last_name}}</td> <!-- Added padding -->
-                                        <td style="padding: 10px;">{{ $visit->visit_date }}</td> <!-- Added padding -->
-                                        <td style="padding: 10px;">
+                                    <tr class="border-b">
+                                        <td class="py-2 px-4">{{ $visit->patient->pat_unique_id }}</td>
+                                        <td class="py-2 px-4">{{ $visit->patient->full_name }} {{ $visit->patient->middle_name}} {{ $visit->patient->last_name}}</td>
+                                        <td class="py-2 px-4">{{ $visit->visit_date }}</td>
+                                        <td class="py-2 px-4">
                                             <form action="{{ route('approve.visit', $visit->id) }}" method="POST">
                                                 @csrf
-                                                <input type="hidden" name="is_approved" value="Approved"> <!-- Changed value to "Approved" -->
+                                                <input type="hidden" name="is_approved" value="Approved">
                                                 <button type="submit" class="btn btn-success">Approve</button>
                                             </form>
-                                        </td> <!-- Added approve button -->
-                                        <td style="padding: 10px;">
+                                        </td>
+                                        <td class="py-2 px-4">
                                             {{ $visit->is_approved ? 'Pending' : 'Approved' }}
-                                        </td> <!-- Display approval status -->
-                                    
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>

@@ -17,7 +17,7 @@ use App\Http\Controllers\NurseDashboardController;
 
 Route::get('/', function () {
     return view('Homepage.welcome');
-});
+})->name('welcome');;
 Route::get('/about-us', function () {
     return view('Homepage.about');
 })->name('about-us');

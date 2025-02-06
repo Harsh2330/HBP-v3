@@ -39,7 +39,7 @@
                                 @method('PUT')
                                 <div class="form-group">
                                     <label for="date_of_birth">Date of Birth</label>
-                                    <input type="date" name="date_of_birth" class="form-control" value="{{ $patient->date_of_birth }}" required>
+                                    <input type="text" name="date_of_birth" class="form-control" value="{{ $patient->date_of_birth }}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="age_category">Age Category</label>
@@ -110,4 +110,11 @@
     </section>
     <!-- /.content -->
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        flatpickr('input[name="date_of_birth"]', {
+            dateFormat: 'Y-m-d'
+        });
+    });
+</script>
 @endsection

@@ -36,7 +36,7 @@
                             <h3 class="text-primary font-weight-bold" style="font-size: 1.8rem;">Visit Details</h3>
                             <div class="form-group">
                                 <label for="visit_date" style="font-size: 1.1rem;">Visit Date</label>
-                                <input type="date" name="visit_date" id="visit_date" class="form-control" value="{{ $visit->visit_date }}" style="font-size: 1.1rem;">
+                                <input type="text" name="visit_date" id="visit_date" class="form-control datepicker" value="{{ $visit->visit_date }}" style="font-size: 1.1rem;">
                             </div>
                             <div class="form-group">
                                 <label for="doctor_name" style="font-size: 1.1rem;">Doctor</label>
@@ -130,6 +130,12 @@ document.getElementById('patient_id').addEventListener('change', function() {
     var selectedOption = this.options[this.selectedIndex];
     var uniqueId = selectedOption.getAttribute('data-unique-id');
     document.getElementById('unique_id').value = uniqueId;
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    flatpickr('.datepicker', {
+        dateFormat: 'Y-m-d'
+    });
 });
 </script>
 @endsection
