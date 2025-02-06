@@ -10,10 +10,9 @@ class CreateMedicalVisitsTable extends Migration
     {
         Schema::create('medical_visits', function (Blueprint $table) {
             $table->id();
-            // $table->unsignedBigInteger('created_by')->after('is_approved'); // Add the new field
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('doctor_id');
-            $table->unsignedBigInteger('nurse_id'); // New field added
+            $table->unsignedBigInteger('nurse_id');
             $table->string('unique_id'); // Added unique constraint
             $table->date('visit_date');
             $table->string('doctor_name');
@@ -31,6 +30,7 @@ class CreateMedicalVisitsTable extends Migration
             $table->text('nurse_observations')->nullable()->default(null);
             $table->string('medical_status')->default('todo'); // New field added
             $table->string('is_approved')->default("pending"); // New field added
+            $table->unsignedBigInteger('created_by'); // Add the new field
             $table->timestamps();
         });
 
@@ -39,8 +39,7 @@ class CreateMedicalVisitsTable extends Migration
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade'); // Foreign key constraint for patient_id
             $table->foreign('doctor_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('nurse_id')->references('id')->on('users')->onDelete('cascade'); // Foreign key constraint
-            // $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
-
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

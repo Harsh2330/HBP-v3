@@ -59,38 +59,40 @@
                                 </thead>
                                 <tbody>
                                     @foreach($medicalVisits as $visit)
-                                    <tr>
-                                        <td style="padding: 10px;">{{ $visit->patient->pat_unique_id }}</td> <!-- Added padding -->
-                                        <td style="padding: 10px;">{{ $visit->patient->full_name }}</td> <!-- Added padding -->
-                                        <!-- ...existing code... -->
-                                        <td style="padding: 10px;">{{ $visit->visit_date }}</td> <!-- Added padding -->
-                                        <td style="padding: 10px;">{{ $visit->doctor->name }}</td> <!-- Added padding -->
-                                        <td style="padding: 10px;">{{ $visit->nurse->name}}</td> <!-- Added padding -->
-                                        <!-- <td style="padding: 10px;">{{ $visit->simplified_diagnosis }}</td> -->
-                                        <td style="padding: 10px;">{{ $visit->is_approved }}</td>
-                                        
-                                        <td style="padding: 10px;">
-                                            <form action="{{ route('medical_visit.update_status', $visit->id) }}" method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('PATCH')
-                                                <select name="medical_status" onchange="this.form.submit()" class="form-control">
-                                                    <option value="Pending" {{ $visit->medical_status == 'Pending' ? 'selected' : '' }}>Pending</option>
-                                                    <option value="Completed" {{ $visit->medical_status == 'Completed' ? 'selected' : '' }}>Completed</option>
-                                                    <option value="Cancelled" {{ $visit->medical_status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
-                                                </select>
-                                            </form>
-                                        </td> 
-                                        
-                                        <td style="padding: 10px;">
-                                            <a href="{{ route('medical_visit.show', $visit->id) }}" class="btn btn-info">View Visit</a>
-                                            <a href="{{ route('medical_visit.edit', $visit->id) }}" class="btn btn-primary">Edit Visit</a>
-                                            <form action="{{ route('medical_visit.destroy', $visit->id) }}" method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this visit?')">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
+                                        @if(Auth::user()->id == $visit->created_by)
+                                        <tr> 
+                                            <td style="padding: 10px;">{{ $visit->patient->pat_unique_id }}</td> <!-- Added padding -->
+                                            <td style="padding: 10px;">{{ $visit->patient->full_name }}</td> <!-- Added padding -->
+                                            <!-- ...existing code... -->
+                                            <td style="padding: 10px;">{{ $visit->visit_date }}</td> <!-- Added padding -->
+                                            <td style="padding: 10px;">{{ $visit->doctor->name }}</td> <!-- Added padding -->
+                                            <td style="padding: 10px;">{{ $visit->nurse->name}}</td> <!-- Added padding -->
+                                            <!-- <td style="padding: 10px;">{{ $visit->simplified_diagnosis }}</td> -->
+                                            <td style="padding: 10px;">{{ $visit->is_approved }}</td>
+                                            
+                                            <td style="padding: 10px;">
+                                                <form action="{{ route('medical_visit.update_status', $visit->id) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <select name="medical_status" onchange="this.form.submit()" class="form-control">
+                                                        <option value="Pending" {{ $visit->medical_status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                                        <option value="Completed" {{ $visit->medical_status == 'Completed' ? 'selected' : '' }}>Completed</option>
+                                                        <option value="Cancelled" {{ $visit->medical_status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                                    </select>
+                                                </form>
+                                            </td> 
+                                            
+                                            <td style="padding: 10px;">
+                                                <a href="{{ route('medical_visit.show', $visit->id) }}" class="btn btn-info">View Visit</a>
+                                                <a href="{{ route('medical_visit.edit', $visit->id) }}" class="btn btn-primary">Edit Visit</a>
+                                                <form action="{{ route('medical_visit.destroy', $visit->id) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this visit?')">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        @endif
                                     @endforeach
                                     <tr>
                                         <td colspan="8">
