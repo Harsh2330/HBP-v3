@@ -18,64 +18,6 @@
 
         <title>Registration Page</title>  
         <style>
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-                font-family: 'Arial', sans-serif;
-            }
-            .l-form {
-                position: relative;
-                width: 100%;
-                max-width: 400px;
-                background: #fff;
-                padding: 2rem;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                border-radius: 10px;
-            }
-            .form__title {
-                margin-bottom: 1.5rem;
-                font-size: 1.5rem;
-                color: #333;
-            }
-            .form__div {
-                position: relative;
-                margin-bottom: 1.5rem;
-            }
-            .form__icon {
-                position: absolute;
-                top: 50%;
-                left: 10px;
-                transform: translateY(-50%);
-                color: #666;
-            }
-            .form__input {
-                width: 100%;
-                padding: 0.75rem 1rem 0.75rem 2.5rem;
-                border: 1px solid #ddd;
-                border-radius: 5px;
-                outline: none;
-                transition: border-color 0.3s;
-            }
-            .form__input:focus {
-                border-color: #007bff;
-            }
-            .form__button {
-                width: 100%;
-                padding: 0.75rem;
-                border: none;
-                border-radius: 5px;
-                background: #007bff;
-                color: #fff;
-                font-size: 1rem;
-                cursor: pointer;
-                transition: background 0.3s;
-            }
-            .form__button:hover {
-                background: #0056b3;
-            }
             .shape1, .shape2 {
                 position: absolute;
                 width: 200px;
