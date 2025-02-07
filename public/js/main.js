@@ -20,3 +20,17 @@ inputs.forEach(input=>{
     input.addEventListener("focus",addfocus)
     input.addEventListener("blur",remfocus)
 })
+
+document.addEventListener('DOMContentLoaded', function() {
+    const floatingElements = document.querySelectorAll('.floating');
+
+    floatingElements.forEach(element => {
+        element.addEventListener('mouseover', () => {
+            element.classList.add('animate-pulse');
+        });
+
+        element.addEventListener('mouseout', () => {
+            element.classList.remove('animate-pulse');
+        });
+    });
+});
