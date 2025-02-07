@@ -49,7 +49,7 @@
                                         <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Doctor</th>
                                         <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Nurse</th>
                                         <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Appointment Status</th>
-                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Medical Status</th>
+                                        @can('medical-visit-update-status')<th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Medical Status</th>@endcan
                                         <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Actions</th>
                                     </tr>
                                 </thead>
@@ -66,7 +66,7 @@
                                             <!-- <td class="py-2 px-4">{{ $visit->simplified_diagnosis }}</td> -->
                                             <td class="py-2 px-4">{{ $visit->is_approved }}</td>
                                             
-                                            <td class="py-2 px-4">
+                                            @can('medical-visit-update-status', $visit)<td class="py-2 px-4">
                                                 <form action="{{ route('medical_visit.update_status', $visit->id) }}" method="POST" class="inline">
                                                     @csrf
                                                     @method('PATCH')
@@ -76,23 +76,31 @@
                                                         <option value="Cancelled" {{ $visit->medical_status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
                                                     </select>
                                                 </form>
-                                            </td>
+                                            </td>@endcan
                                             
                                             <td class="py-2 px-4">
+                                                @can('medical-visit-create', $visit)
                                                 <a href="{{ route('medical_visit.show', $visit->id) }}" class="btn btn-info text-white bg-blue-500 hover:bg-blue-700">View Visit</a>
+                                                @endcan
+                                                @can('medical-visit-edit', $visit)
                                                 <a href="{{ route('medical_visit.edit', $visit->id) }}" class="btn btn-primary text-white bg-green-500 hover:bg-green-700">Edit Visit</a>
+                                                @endcan
+                                                @can('medical-visit-delete', $visit)
                                                 <form action="{{ route('medical_visit.destroy', $visit->id) }}" method="POST" class="inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger text-white bg-red-500 hover:bg-red-700" onclick="return confirm('Are you sure you want to delete this visit?')">Delete</button>
                                                 </form>
+                                                @endcan
                                             </td>
                                         </tr>
                                         @endif
                                     @endforeach
                                     <tr>
                                         <td colspan="8" class="py-2 px-4">
+                                            @can('medical-visit-create', App\Models\MedicalVisit::class)
                                             <a href="{{ route('medical_visit.create') }}" class="btn btn-success">Add New Visit</a>
+                                            @endcan
                                         </td>
                                     </tr>
                                 </tbody>

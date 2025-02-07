@@ -17,6 +17,7 @@ class MedicalVisitController extends Controller
         $this->middleware('permission:medical-visit-create', ['only' => ['create','store']]);
         $this->middleware('permission:medical-visit-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:medical-visit-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:medical-visit-update-status', ['only' => ['updateStatus']]);
     }
 
     // Display a listing of the medical visits

@@ -58,7 +58,6 @@ class CreateAdminUserSeeder extends Seeder
             'patient-delete',
             'medical-visit-list',
            'medical-visit-create',
-           'medical-visit-edit',
            'medical-visit-delete'
         ])->pluck('id','id')->all(); // Get basic permissions
         $doctorPermissions = Permission::whereIn('name', [

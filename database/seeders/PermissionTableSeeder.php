@@ -22,6 +22,7 @@ class PermissionTableSeeder extends Seeder
            'medical-visit-create',
            'medical-visit-edit',
            'medical-visit-delete',
+           'medical-visit-update-status',
            'user-list',
            'user-create',
            'user-edit',
