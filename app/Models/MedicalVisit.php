@@ -10,6 +10,7 @@ class MedicalVisit extends Model
     use HasFactory;
 
     protected $fillable = [
+        
         'patient_id',
         'doctor_id', // New field added
         'nurse_id', // New field added
@@ -27,12 +28,14 @@ class MedicalVisit extends Model
         'medications_prescribed',
         'procedures',
         'doctor_notes',
-        'nurse_observations'
+        'nurse_observations',
+        'is_approved',// New field added
+        'created_by'
     ];
 
     public function patient()
     {
-        return $this->belongsTo(User::class, 'patient_id');
+        return $this->belongsTo(Patient::class, 'patient_id'); // Relationship with Patient model
     }
 
     public function doctor()
@@ -43,5 +46,9 @@ class MedicalVisit extends Model
     public function nurse()
     {
         return $this->belongsTo(User::class, 'nurse_id'); // Ensure nurse relationship is defined
+    }
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by'); // Add this relationship
     }
 }

@@ -4,76 +4,94 @@
 <div class="content">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Medical Visits</h1>
-                    @if(Auth::check())
-                        <span class="badge badge-primary">Logged in as: {{ Auth::user()->name }}</span>
-                    @endif
-                </div>
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-2xl font-bold">Medical Visits</h1>
+                @if(Auth::check())
+                    <span class="badge badge-primary slide-in text-lg">Logged in as : {{ Auth::user()->name }}</span>
+                @endif
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
+
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 2s;
+        }
+    </style>
 
     <!-- Main content -->
     <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Medical Visits List</h3>
+        <div class="container mx-auto">
+            <div class="flex justify-center">
+                <div class="w-full">
+                    <div class="bg-white shadow-lg rounded-lg"> <!-- Tailwind classes for card -->
+                        <div class="bg-teal-500 text-white p-4 rounded-t-lg"> <!-- Tailwind classes for header -->
+                            <h3 class="text-lg font-semibold">Medical Visits List</h3>
                         </div>
-                        <div class="card-body">
+                        <div class="p-4">
                             @if($medicalVisits)
-                            <table class="table">
+                            <table class="min-w-full bg-white">
                                 <thead>
                                     <tr>
-                                        <th>Patient Unique ID</th>
-                                        <th>Patient Name</th>
-                                        <th>Visit Date</th>
-                                        <th>Doctor</th>
-                                        <th>Nurse</th>
-                                        <th>Diagnosis</th>
-                                        <th>Medical Status</th> <!-- New column added -->
-                                        <th>Actions</th>
+                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Patient Unique ID</th>
+                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Patient Name</th>
+                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Visit Date</th>
+                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Doctor</th>
+                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Nurse</th>
+                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Appointment Status</th>
+                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Medical Status</th>
+                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($medicalVisits as $visit)
-                                    <tr>
-                                        <td>{{ $visit->patient->unique_id }}</td>
-                                        <td>{{ $visit->patient->first_name }} {{ $visit->patient->middle_name}} {{ $visit->patient->last_name}}</td>
-                                        <td>{{ $visit->visit_date }}</td>
-                                        <td>{{ $visit->doctor_name }}</td>
-                                        <td>{{ $visit->nurse_name }}</td>
-                                        <td>{{ $visit->simplified_diagnosis }}</td>
-                                        <td>
-                                            <form action="{{ route('medical_visit.update_status', $visit->id) }}" method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('PATCH')
-                                                <select name="medical_status" onchange="this.form.submit()">
-                                                    <option value="Pending" {{ $visit->medical_status == 'Pending' ? 'selected' : '' }}>Pending</option>
-                                                    <option value="Completed" {{ $visit->medical_status == 'Completed' ? 'selected' : '' }}>Completed</option>
-                                                    <option value="Cancelled" {{ $visit->medical_status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
-                                                </select>
-                                            </form>
-                                        </td> <!-- Display medical status -->
-                                        
-                                        <td>
-                                            <a href="{{ route('medical_visit.show', $visit->id) }}" class="btn btn-info">View Visit</a>
-                                            <a href="{{ route('medical_visit.edit', $visit->id) }}" class="btn btn-primary">Edit Visit</a>
-                                            <form action="{{ route('medical_visit.destroy', $visit->id) }}" method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this visit?')">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
+                                        @if(Auth::user()->id == $visit->created_by)
+                                        <tr class="border-b">
+                                            <td class="py-2 px-4">{{ $visit->patient->pat_unique_id }}</td>
+                                            <td class="py-2 px-4">{{ $visit->patient->full_name }}</td>
+                                            <!-- ...existing code... -->
+                                            <td class="py-2 px-4">{{ $visit->visit_date }}</td>
+                                            <td class="py-2 px-4">{{ $visit->doctor->name }}</td>
+                                            <td class="py-2 px-4">{{ $visit->nurse->name}}</td>
+                                            <!-- <td class="py-2 px-4">{{ $visit->simplified_diagnosis }}</td> -->
+                                            <td class="py-2 px-4">{{ $visit->is_approved }}</td>
+                                            
+                                            <td class="py-2 px-4">
+                                                <form action="{{ route('medical_visit.update_status', $visit->id) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <select name="medical_status" onchange="this.form.submit()" class="form-control">
+                                                        <option value="Pending" {{ $visit->medical_status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                                        <option value="Completed" {{ $visit->medical_status == 'Completed' ? 'selected' : '' }}>Completed</option>
+                                                        <option value="Cancelled" {{ $visit->medical_status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                                    </select>
+                                                </form>
+                                            </td>
+                                            
+                                            <td class="py-2 px-4">
+                                                <a href="{{ route('medical_visit.show', $visit->id) }}" class="btn btn-info text-white bg-blue-500 hover:bg-blue-700">View Visit</a>
+                                                <a href="{{ route('medical_visit.edit', $visit->id) }}" class="btn btn-primary text-white bg-green-500 hover:bg-green-700">Edit Visit</a>
+                                                <form action="{{ route('medical_visit.destroy', $visit->id) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger text-white bg-red-500 hover:bg-red-700" onclick="return confirm('Are you sure you want to delete this visit?')">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        @endif
                                     @endforeach
                                     <tr>
-                                        <td colspan="8">
+                                        <td colspan="8" class="py-2 px-4">
                                             <a href="{{ route('medical_visit.create') }}" class="btn btn-success">Add New Visit</a>
                                         </td>
                                     </tr>

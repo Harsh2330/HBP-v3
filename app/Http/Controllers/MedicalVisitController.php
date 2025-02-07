@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\MedicalVisit;
+use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class MedicalVisitController extends Controller
 {
@@ -37,25 +40,33 @@ class MedicalVisitController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'patient_id' => 'required|exists:users,id',
+            'patient_id' => [
+                'required',
+                'exists:patients,id', // Ensure this validation rule is correct
+                Rule::unique('medical_visits')->where(function ($query) use ($request) {
+                    return $query->where('patient_id', $request->patient_id)
+                                 ->whereDate('visit_date', $request->visit_date);
+                }),
+            ],
             'visit_date' => 'required|date',
             'doctor_id' => 'required|exists:users,id',
             'nurse_id' => 'required|exists:users,id',
-            // ...existing code...
+            // Add other validation rules as needed
         ]);
 
-        $patient = User::findOrFail($request->patient_id);
+        $patient = Patient::findOrFail($request->patient_id);
         $doctor = User::findOrFail($request->doctor_id);
         $nurse = User::findOrFail($request->nurse_id);
 
         $medicalVisit = new MedicalVisit();
         $medicalVisit->patient_id = $request->patient_id;
-        $medicalVisit->doctor_id = $request->doctor_id; // Set doctor_id
-        $medicalVisit->nurse_id = $request->nurse_id; // Ensure nurse_id is set
-        $medicalVisit->unique_id = $patient->unique_id; // Ensure unique_id is set
+        $medicalVisit->doctor_id = $request->doctor_id;
+        $medicalVisit->nurse_id = $request->nurse_id;
+        $medicalVisit->unique_id = $patient->pat_unique_id;
         $medicalVisit->visit_date = $request->visit_date;
-        $medicalVisit->doctor_name = $doctor->first_name . ' ' . $doctor->middle_name . ' ' . $doctor->last_name;
-        $medicalVisit->nurse_name = $nurse->first_name . ' ' . $nurse->middle_name . ' ' . $nurse->last_name;
+        $medicalVisit->doctor_name = $doctor->name;
+        $medicalVisit->nurse_name = $nurse->name;
+        $medicalVisit->created_by = Auth::id(); // Set the authenticated user's ID
         $medicalVisit->save();
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit created successfully.');
@@ -94,15 +105,14 @@ class MedicalVisitController extends Controller
             'procedures' => 'nullable|string',
             'doctor_notes' => 'nullable|string',
             'nurse_observations' => 'nullable|string',
-            // 'visit_date' => [
-            //     'required',
-            //     'date',
-            //     Rule::unique('medical_visits')->ignore($id)->where(function ($query) use ($request) {
-            //         return $query->where('doctor_id', $request->doctor_id)
-            //                      ->orWhere('nurse_id', $request->nurse_id)
-            //                      ->where('visit_date', $request->visit_date);
-            //     })
-            // ],
+            'visit_date' => [
+                'required',
+                'date',
+                Rule::unique('medical_visits')->ignore($id)->where(function ($query) use ($request) {
+                    return $query->where('patient_id', $request->patient_id)
+                                 ->whereDate('visit_date', $request->visit_date);
+                }),
+            ],
         ]);
 
         $visit = MedicalVisit::findOrFail($id);
@@ -118,5 +128,34 @@ class MedicalVisitController extends Controller
         $visit->delete();
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit deleted successfully.');
+    }
+
+    // Approve a specific medical visit
+    public function approve($id)
+    {
+        $visit = MedicalVisit::findOrFail($id);
+        $visit->medical_status = 'Approved';
+        $visit->save();
+
+        return redirect()->route('medical_visit.index')->with('success', 'Medical visit approved successfully.');
+    }
+
+    // Reject a specific medical visit
+    public function reject($id)
+    {
+        $visit = MedicalVisit::findOrFail($id);
+        $visit->medical_status = 'Rejected';
+        $visit->save();
+
+        return redirect()->route('medical_visit.index')->with('success', 'Medical visit rejected successfully.');
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $visit = MedicalVisit::findOrFail($id);
+        $visit->medical_status = $request->input('medical_status');
+        $visit->save();
+
+        return redirect()->route('medical_visit.index')->with('success', 'Medical status updated successfully.');
     }
 }

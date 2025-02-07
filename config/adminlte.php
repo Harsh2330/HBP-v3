@@ -190,14 +190,14 @@ return [
     |
     */
 
-    'classes_body' => '',
-    'classes_brand' => '',
-    'classes_brand_text' => '',
-    'classes_content_wrapper' => '',
-    'classes_content_header' => '',
-    'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-primary elevation-4',
-    'classes_sidebar_nav' => '',
+    'classes_body' => 'hold-transition sidebar-mini layout-fixed',
+    'classes_brand' => 'navbar-light',
+    'classes_brand_text' => 'text-dark',
+    'classes_content_wrapper' => 'content-wrapper',
+    'classes_content_header' => 'content-header',
+    'classes_content' => 'content',
+    'classes_sidebar' => 'sidebar-light-primary elevation-4',
+    'classes_sidebar_nav' => 'nav-child-indent text-primary',
     'classes_topnav' => 'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
     'classes_topnav_container' => 'container',
@@ -316,22 +316,65 @@ return [
             'text' => 'search',
         ],
         ['header' => 'account_settings'],
-            [
-                'text' => 'Dashboard',
-                'url' => 'home',
-                'icon' => 'fas fa-fw fa-tachometer-alt',
+        [
+            'text' => 'Admin Dashboard',
+            'url' => 'admin/dashboard',
+            'icon' => 'fas fa-fw fa-tachometer-alt',
+            'permission' => 'admin-dashboard',
             ],
             [
-                'text' => 'Roles',
-                'url' => 'roles',
-                'icon' => 'fas fa-fw fa-users',
-                
+            'text' => 'Doctor Dashboard',
+            'url' => 'doctor/dashboard',
+            'icon' => 'fas fa-fw fa-stethoscope',
+            'permission' => 'doctor-dashboard',
             ],
             [
-                'text' => 'Manage Users',
-                'url' => 'users',
-                'icon' => 'fas fa-fw fa-user',
-                
+            'text' => 'Nurse Dashboard',
+            'url' => 'nurse/dashboard',
+            'icon' => 'fas fa-fw fa-user-nurse',
+            'permission' => 'nurse-dashboard',
+            ],
+            [
+            'text' => 'User Dashboard',
+            'url' => 'user/dashboard',
+            'icon' => 'fas fa-fw fa-user',
+            'permission' => 'user-dashboard',
+            ],
+            [
+            'text' => 'Roles',
+            'url' => 'roles',
+            'icon' => 'fas fa-fw fa-user-shield',
+            'permission' => 'role-list',
+            ],
+            [
+            'text' => 'Manage Users',
+            'url' => 'users',
+            'icon' => 'fas fa-fw fa-users-cog',
+            'permission' => 'user-list',
+            ],
+            [
+            'text' => 'Appointments',
+            'url' => 'medical_visit',
+            'icon' => 'fas fa-fw fa-calendar-alt',
+            'permission' => 'medical-visit-list',
+            ],
+            [
+            'text' => 'Request for visit',
+            'url' => 'request_for_visit',
+            'icon' => 'fas fa-fw fa-calendar-check',
+            'permission' => 'req-list',
+            ],
+
+            [
+            'text' => 'Patients',
+            'url' => 'admin/patient',
+            'icon' => 'fas fa-fw fa-procedures',
+            'permission' => 'patient-list',
+            ],
+            [
+            
+            'url' => 'appointments',
+            
             ],
             
        
@@ -357,6 +400,7 @@ return [
         JeroenNoten\LaravelAdminLte\Menu\Filters\ClassesFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\LangFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\DataFilter::class,
+        App\Filters\MenuFilter::class,
     ],
 
     /*
