@@ -25,4 +25,9 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    public function patientIndex()
+    {
+        return view('patient.dashboard');
+    }
 }

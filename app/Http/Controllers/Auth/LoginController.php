@@ -28,6 +28,19 @@ class LoginController extends Controller
     protected $redirectTo = '/home';
 
     /**
+     * Override the username method to allow login with email or unique ID.
+     *
+     * @return string
+     */
+    public function username()
+    {
+        $login = request()->input('login');
+        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'unique_id';
+        request()->merge([$field => $login]);
+        return $field;
+    }
+
+    /**
      * Create a new controller instance.
      *
      * @return void

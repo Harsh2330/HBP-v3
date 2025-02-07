@@ -6,14 +6,23 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
-use DB;
-use Hash;
+
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
     
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:user-list|user-create|user-edit|user-delete', ['only' => ['index','show']]);
+        $this->middleware('permission:user-create', ['only' => ['create','store']]);
+        $this->middleware('permission:user-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:user-delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -50,11 +59,19 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
-            'roles' => 'required'
+            'roles' => 'required',
+            'date_of_birth' => 'required|date',
+            'phone_number' => 'required|string|max:15',
         ]);
     
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
+
+        $currentYear = date('Y');
+        $lastUser = User::whereYear('created_at', $currentYear)->orderBy('id', 'desc')->first();
+        $sequenceNumber = $lastUser ? intval(substr($lastUser->unique_id, -4)) + 1 : 1;
+        $uniqueId = sprintf('USR-%s-%04d', $currentYear, $sequenceNumber);
+        $input['unique_id'] = $uniqueId;
     
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
@@ -134,5 +151,11 @@ class UserController extends Controller
         User::find($id)->delete();
         return redirect()->route('users.index')
                         ->with('success','User deleted successfully');
+    }
+
+    public function getUsersWithRole($role)
+    {
+        $users = User::role($role)->get();
+        return response()->json($users);
     }
 }
