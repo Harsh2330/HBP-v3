@@ -55,8 +55,8 @@
                                 </thead>
                                 <tbody>
                                     @foreach($medicalVisits as $visit)
-                                        @if(Auth::user()->id == $visit->created_by || Auth::user()->id == $visit->doctor_id || Auth::user()->id == $visit->nurse_id)
-                                        @if(Auth::user()->hasRole('admin'))
+
+                                        @if(Auth::user()->id == $visit->created_by || Auth::user()->id == $visit->doctor_id || Auth::user()->name == $visit->nurse_id)
                                         <tr class="border-b">
                                             <td class="py-2 px-4">{{ $visit->patient->pat_unique_id }}</td>
                                             <td class="py-2 px-4">{{ $visit->patient->full_name }}</td>
@@ -94,46 +94,7 @@
                                             </td>
                                         </tr>
                                         @endif
-                                        @else
-                                        <tr class="border-b">
-                                            <td class="py-2 px-4">{{ $visit->patient->pat_unique_id }}</td>
-                                            <td class="py-2 px-4">{{ $visit->patient->full_name }}</td>
-                                            <!-- ...existing code... -->
-                                            <td class="py-2 px-4">{{ $visit->visit_date }}</td>
-                                            <td class="py-2 px-4">{{ $visit->doctor->name }}</td>
-                                            <td class="py-2 px-4">{{ $visit->nurse->name}}</td>
-                                            <!-- <td class="py-2 px-4">{{ $visit->simplified_diagnosis }}</td> -->
-                                            <td class="py-2 px-4">{{ $visit->is_approved }}</td>
-                                            
-                                            @can('medical-visit-update-status', $visit)<td class="py-2 px-4">
-                                                <form action="{{ route('medical_visit.update_status', $visit->id) }}" method="POST" class="inline">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <select name="medical_status" onchange="this.form.submit()" class="form-control">
-                                                        <option value="Pending" {{ $visit->medical_status == 'Pending' ? 'selected' : '' }}>Pending</option>
-                                                        <option value="Completed" {{ $visit->medical_status == 'Completed' ? 'selected' : '' }}>Completed</option>
-                                                        <option value="Cancelled" {{ $visit->medical_status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
-                                                    </select>
-                                                </form>
-                                            </td>@endcan
-                                            
-                                            <td class="py-2 px-4">
-                                                @can('medical-visit-create', $visit)
-                                                <a href="{{ route('medical_visit.show', $visit->id) }}" class="btn btn-info text-white bg-blue-500 hover:bg-blue-700">View Visit</a>
-                                                @endcan
-                                                @can('medical-visit-edit', $visit)
-                                                <a href="{{ route('medical_visit.edit', $visit->id) }}" class="btn btn-primary text-white bg-green-500 hover:bg-green-700">Edit Visit</a>
-                                                @endcan
-                                                @can('medical-visit-delete', $visit)
-                                                <form action="{{ route('medical_visit.destroy', $visit->id) }}" method="POST" class="inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger text-white bg-red-500 hover:bg-red-700" onclick="return confirm('Are you sure you want to delete this visit?')">Delete</button>
-                                                </form>
-                                                @endcan
-                                            </td>
-                                        </tr>
-                                        @endif
+                                      
                                     @endforeach
                                     <tr>
                                         <td colspan="8" class="py-2 px-4">
