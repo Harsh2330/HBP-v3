@@ -3,6 +3,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\MedicalVisit;
+use App\Models\AuditLog; // Add this import
+use Illuminate\Support\Facades\Auth; // Add this import
 
 class RequestForVisitController extends Controller
 {
@@ -36,6 +38,12 @@ class RequestForVisitController extends Controller
         // Create a new medical visit
         $medicalVisit = MedicalVisit::create($validatedData);
 
+        AuditLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'create',
+            'description' => 'Scheduled a new appointment for patient: ' . $medicalVisit->patient_name,
+        ]);
+
         // Redirect to the index page with a success message
         return redirect()->route('request_for_visit.index')->with('success', 'Medical visit created successfully.');
     }
@@ -45,6 +53,12 @@ class RequestForVisitController extends Controller
         $medicalVisit = MedicalVisit::findOrFail($id);
         $medicalVisit->is_approved = 'Approved'; // Set is_approved to "Approved"
         $medicalVisit->save();
+
+        AuditLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'approve',
+            'description' => 'Approved medical visit for patient: ' . $medicalVisit->patient->full_name,
+        ]);
 
         return redirect()->route('request_for_visit.index')->with('success', 'Medical visit approved successfully.');
     }

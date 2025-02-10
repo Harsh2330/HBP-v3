@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
-
+use App\Models\AuditLog; // Add this import
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
@@ -75,6 +75,12 @@ class UserController extends Controller
     
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
+
+        AuditLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'create',
+            'description' => 'Created a new user: ' . $user->name,
+        ]);
     
         return redirect()->route('users.index')
                         ->with('success','User created successfully');
@@ -135,6 +141,12 @@ class UserController extends Controller
         DB::table('model_has_roles')->where('model_id',$id)->delete();
     
         $user->assignRole($request->input('roles'));
+
+        AuditLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'update',
+            'description' => 'Updated user: ' . $user->name,
+        ]);
     
         return redirect()->route('users.index')
                         ->with('success','User updated successfully');
@@ -148,7 +160,16 @@ class UserController extends Controller
      */
     public function destroy($id): RedirectResponse
     {
-        User::find($id)->delete();
+        $user = User::find($id);
+        $userName = $user->name;
+        $user->delete();
+
+        AuditLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'delete',
+            'description' => 'Deleted user: ' . $userName,
+        ]);
+
         return redirect()->route('users.index')
                         ->with('success','User deleted successfully');
     }

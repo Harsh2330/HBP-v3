@@ -47,6 +47,23 @@
             </div>
         </div>
     </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card shadow-lg transition-card">
+                <div class="card-body" style="background-color: #f8f9fa;">
+                    <h5 class="card-title" style="color: #4e73df; font-weight: bold;">Recent Activities</h5>
+                    <ul class="list-group">
+                        @foreach($auditLogs as $log)
+                            <li class="list-group-item">
+                                <strong>{{ $log->user->name }}</strong> {{ $log->action }}: {{ $log->description }}
+                                <span class="text-muted float-right">{{ $log->created_at->diffForHumans() }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <style>

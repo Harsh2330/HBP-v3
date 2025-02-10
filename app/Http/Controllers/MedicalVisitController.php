@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\MedicalVisit;
 use App\Models\Patient;
 use App\Models\User;
+use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -70,6 +71,12 @@ class MedicalVisitController extends Controller
         $medicalVisit->created_by = Auth::id(); // Set the authenticated user's ID
         $medicalVisit->save();
 
+        AuditLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'create',
+            'description' => 'Created a new medical visit for patient: ' . $patient->full_name,
+        ]);
+
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit created successfully.');
     }
 
@@ -119,6 +126,12 @@ class MedicalVisitController extends Controller
         $visit = MedicalVisit::findOrFail($id);
         $visit->update($request->all());
 
+        AuditLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'update',
+            'description' => 'Updated medical visit for patient: ' . $visit->patient->full_name,
+        ]);
+
         return redirect()->route('medical_visit.show', $visit->id)->with('success', 'Medical visit updated successfully.');
     }
 
@@ -127,6 +140,12 @@ class MedicalVisitController extends Controller
     {
         $visit = MedicalVisit::findOrFail($id);
         $visit->delete();
+
+        AuditLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'delete',
+            'description' => 'Deleted medical visit for patient: ' . $visit->patient->full_name,
+        ]);
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit deleted successfully.');
     }
