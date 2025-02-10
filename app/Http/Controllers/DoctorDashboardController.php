@@ -12,10 +12,19 @@ class DoctorDashboardController extends Controller
 {
     public function index(): View
     {
-        $totalMedicalVisits = MedicalVisit::where('doctor_id', Auth::user()->id)->count();
-        $todaysAppointments = MedicalVisit::whereDate('visit_date', Carbon::today())
+        $user = Auth::user();
+        $totalMedicalVisits = MedicalVisit::count();
+
+        if (!MedicalVisit::where('doctor_id', $user->id)->exists()) {
+            $todaysAppointments = MedicalVisit::whereDate('visit_date', Carbon::today())
             ->where('is_approved', 'approved')
             ->get();
+        } else {
+            $todaysAppointments = MedicalVisit::where('doctor_id', $user->id)
+                ->whereDate('visit_date', Carbon::today())
+                ->where('is_approved', 'approved')
+                ->get();
+        }
 
         return view('doctor.dashboard', compact('totalMedicalVisits', 'todaysAppointments'));
     }
