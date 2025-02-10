@@ -36,15 +36,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card shadow-lg transition-card">
-                <div class="card-body" style="background-color: #f8f9fa; border-left: 5px solid #36b9cc;">
-                    <h5 class="card-title" style="color: #36b9cc; font-weight: bold;">Doctor's Availability</h5>
-                    <p class="card-text" style="font-size: 1.2em;">Dr. Smith: 9:00 AM - 5:00 PM</p>
-                    <p class="card-text" style="font-size: 1.2em;">Dr. Johnson: 10:00 AM - 6:00 PM</p>
-                </div>
-            </div>
-        </div>
     </div>
     <div class="row mt-4">
         <div class="col-md-12">
