@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\UserController; // Add this import
 use App\Models\User;
 use App\Models\Patient; // Change to Patient model
+use App\Models\AuditLog; // Add this import
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; // Add this import
 use Illuminate\Support\Facades\Log; // Add this import
@@ -77,9 +78,16 @@ class PatientController extends Controller
         } else {
             return redirect()->back()->withErrors(['error' => 'User not authenticated']);
         }
-        Patient::create($data);
+        $patient = Patient::create($data);
+        AuditLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'create',
+            'description' => 'Created a new patient: ' . $patient->full_name,
+        ]);
+        Log::info('Audit log created for patient creation', ['user_id' => auth()->id(), 'action' => 'create']);
         return redirect()->route('admin.patient.index');
     }
+
     public function update(Request $request, $id)
     {
         $patient = Patient::findOrFail($id);
@@ -89,13 +97,26 @@ class PatientController extends Controller
         $data['user_unique_id'] = $user->id; // Fetch the id field from the User table
         $data['pat_unique_id'] = $patient->pat_unique_id;
         $patient->update($data);
+        AuditLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'update',
+            'description' => 'Updated patient: ' . $patient->full_name . ' with fields: ' . implode(', ', array_keys($data)),
+        ]);
+        Log::info('Audit log created for patient update', ['user_id' => auth()->id(), 'action' => 'update']);
         return redirect()->route('admin.patient.show', $id);
     }
 
     public function destroy($id)
     {
         $patient = Patient::findOrFail($id);
+        $patientName = $patient->full_name;
         $patient->delete();
+        AuditLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'delete',
+            'description' => 'Deleted patient: ' . $patientName,
+        ]);
+        Log::info('Audit log created for patient deletion', ['user_id' => auth()->id(), 'action' => 'delete']);
         return redirect()->route('admin.patient.index');
     }
 

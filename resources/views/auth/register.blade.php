@@ -18,11 +18,35 @@
 
         <title>Registration Page</title>  
         <style>
+            .shape1, .shape2 {
+                position: absolute;
+                width: 200px;
+                height: 200px;
+                border-radius: 50%;
+                animation: float 6s ease-in-out infinite;
+            }
             .shape1 {
                 background-color:rgb(229, 196, 6); /* Change to desired color */
+                top: -50px;
+                left: -50px;
             }
             .shape2 {
                 background-color:rgb(228, 209, 4); /* Change to desired color */
+                bottom: -50px;
+                right: -50px;
+                animation-delay: 3s;
+            }
+            @keyframes float {
+                0%, 100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-20px);
+                }
+            }
+            .form {
+                position: relative;
+                z-index: 1;
             }
         </style>
     </head>

@@ -24,30 +24,15 @@
         <div class="col-md-6">
             <div class="card shadow-lg transition-card">
                 <div class="card-body" style="background-color: #f8f9fa; border-left: 5px solid #f6c23e;">
-                    <h5 class="card-title" style="color: #f6c23e; font-weight: bold;">Today's Appointments</h5>
+                    <h5 class="card-title" style="color: #f6c23e; font-weight: bold;">Today's Appointments</h5><br>
                     <ul class="list-group">
-                        <li class="list-group-item d-flex justify-content-between align-items-center hover-effect" onclick="showPatientDetail('John Doe', 'Checkup', '10:00 AM')">
-                            John Doe - Checkup
-                            <span class="badge badge-primary badge-pill">10:00 AM</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center hover-effect" onclick="showPatientDetail('Jane Smith', 'Follow-up', '11:00 AM')">
-                            Jane Smith - Follow-up
-                            <span class="badge badge-primary badge-pill">11:00 AM</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center hover-effect" onclick="showPatientDetail('Robert Brown', 'Dental', '12:00 PM')">
-                            Robert Brown - Dental
-                            <span class="badge badge-primary badge-pill">12:00 PM</span>
-                        </li>
+                        @foreach($todaysAppointments as $appointment)
+                            <li class="list-group-item d-flex justify-content-between align-items-center hover-effect">
+                                <span class="font-weight-bold">{{ $appointment->patient->full_name }}</span>
+                                <span class="badge badge-primary badge-pill">{{ $appointment->visit_date }}</span>
+                            </li>
+                        @endforeach
                     </ul>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card shadow-lg transition-card">
-                <div class="card-body" style="background-color: #f8f9fa; border-left: 5px solid #36b9cc;">
-                    <h5 class="card-title" style="color: #36b9cc; font-weight: bold;">Doctor's Availability</h5>
-                    <p class="card-text" style="font-size: 1.2em;">Dr. Smith: 9:00 AM - 5:00 PM</p>
-                    <p class="card-text" style="font-size: 1.2em;">Dr. Johnson: 10:00 AM - 6:00 PM</p>
                 </div>
             </div>
         </div>
@@ -170,5 +155,6 @@
         `;
         prescriptionsList.appendChild(newRow);
     }
+
 </script>
 @endsection
