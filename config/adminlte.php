@@ -372,9 +372,9 @@ return [
             'permission' => 'patient-list',
             ],
             [
-            
-            'url' => 'appointments',
-            
+                'text' => 'Calendar',
+                'url'  => 'calendar',
+                'icon' => 'fas fa-calendar-alt',
             ],
             
        
@@ -416,6 +416,21 @@ return [
     */
 
     'plugins' => [
+        'Fullcalendar' => [
+        'active' => true, // Enable the plugin
+        'files' => [
+            [
+                'type' => 'js',
+                'asset' => false,
+                'location' => '//cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.js',
+            ],
+            [
+                'type' => 'css',
+                'asset' => false,
+                'location' => '//cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.css',
+            ],
+        ],
+    ],
         'Datatables' => [
             'active' => false,
             'files' => [
