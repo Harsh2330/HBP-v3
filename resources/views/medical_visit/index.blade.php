@@ -27,6 +27,16 @@
         .slide-in {
             animation: slideIn 2s;
         }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        @media (max-width: 640px) {
+            th {
+                font-size: 0.75rem; /* Small font size for table headers on small screens */
+            }
+        }
     </style>
 
     <!-- Main content -->
@@ -38,7 +48,7 @@
                         <div class="bg-teal-500 text-white p-4 rounded-t-lg"> <!-- Tailwind classes for header -->
                             <h3 class="text-lg font-semibold">Medical Visits List</h3>
                         </div>
-                        <div class="p-4">
+                        <div class="p-4 table-responsive">
                             @if($medicalVisits)
                             <table class="min-w-full bg-white">
                                 <thead>

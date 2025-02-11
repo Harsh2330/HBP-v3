@@ -13,7 +13,7 @@
         <h1 class="text-4xl font-bold text-white">HOME BASED PALLIATIVE CARE</h1>
         <nav class="mt-4 flex justify-center space-x-6">
             <a href="{{ route('welcome') }}" class="text-lg text-white hover:text-blue-300">Home</a>
-            <a href="#" class="text-lg text-white hover:text-blue-300">Services</a>
+            <a href="{{ route('services') }}" class="text-lg text-white hover:text-blue-300">Services</a>
             <a href="{{ route('about-us') }}" class="text-lg text-white hover:text-blue-300">About Us</a>
             <a href="{{ route('login') }}" class="text-lg text-white hover:text-blue-300">Login</a>
             <a href="{{ route('register') }}" class="text-lg text-white hover:text-blue-300">Register</a>
