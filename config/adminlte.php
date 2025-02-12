@@ -422,12 +422,12 @@ return [
             [
                 'type' => 'js',
                 'asset' => false,
-                'location' => '//cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.js',
+                'location' => '/vendor/fullcalendar/main.min.js',
             ],
             [
                 'type' => 'css',
                 'asset' => false,
-                'location' => '//cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.css',
+                'location' => '/vendor/fullcalendar/main.min.css',
             ],
         ],
     ],
