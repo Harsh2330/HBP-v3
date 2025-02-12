@@ -6,9 +6,9 @@
     <title>Palliative Care</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="text-center">
+<body class="bg-gray-100 text-gray-900 text-center">
     <header class="bg-yellow-600 text-purple-900 p-5">
-        <h1 class="text-3xl font-bold"></h1>
+        <h1 class="text-3xl font-bold">Palliative Care</h1>
     </header>
     <section class="p-10">
         <!-- <img src="./public/IMG_0929.PNG" alt="Palliative Care Image" class="w-full h-auto"> -->

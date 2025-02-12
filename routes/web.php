@@ -24,6 +24,27 @@ Route::get('/about-us', function () {
 Route::get('/services', function () {
     return view('Homepage.services');
 })->name('services');
+
+Route::get('/services/service1', function () {
+    return view('Services.Service1');
+})->name('services.service1');
+
+Route::get('/services/service2', function () {
+    return view('Services.Service2');
+})->name('services.service2');
+
+Route::get('/services/service3', function () {
+    return view('Services.Service3');
+})->name('services.service3');
+
+Route::get('/services/service4', function () {
+    return view('Services.Service4');
+})->name('services.service4');
+
+Route::get('/services/service5', function () {
+    return view('Services.Service5');
+})->name('services.service5');
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
