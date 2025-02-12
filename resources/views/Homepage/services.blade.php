@@ -50,7 +50,7 @@
         <button class="scroll-button scroll-left">&#9664;</button>
         <button class="scroll-button scroll-right">&#9654;</button>
 
-        <a href="service1.html" class="service-box">
+        <a href="{{ route('services.service1') }}" class="service-box">
             <div class="service">
                 <div class="service-image"></div>
                     <img src="{{ asset('image/IMG_1311.JPEG.jpg') }}" alt="Palliative Care Image" style="width:100%; height:auto;">
@@ -59,7 +59,7 @@
             </div>
         </a>
 
-        <a href="service2.html" class="service-box">
+        <a href="{{ route('services.service2') }}" class="service-box">
             <div class="service">
                 <div class="service-image"></div>
                     <img src="{{ asset('image/IMG_0969.JPG') }}" alt="Patient Checkup" style="width:100%; height:auto;">
@@ -68,7 +68,7 @@
             </div>
         </a>
 
-        <a href="service3.html" class="service-box">
+        <a href="{{ route('services.service3') }}" class="service-box">
             <div class="service">
                 <div class="service-image"></div>
                     <img src="{{ asset('image/MEDICINE.JPG.jpg') }}" alt="Checking patients" style="width:100%; height:auto; padding: 1px;">
@@ -77,7 +77,7 @@
             </div>
         </a>
 
-        <a href="service4.html" class="service-box">
+        <a href="{{ route('services.service4') }}" class="service-box">
             <div class="service">
                 <div class="service-image"></div>
                     <img src="{{ asset('image/DOC.png') }}" alt="Checking patients" style="width:100%; height:auto; padding: 1px;">
@@ -86,7 +86,7 @@
             </div>
         </a>
 
-        <a href="service5.html" class="service-box">
+        <a href="{{ route('services.service5') }}" class="service-box">
             <div class="service">
                 <div class="service-image"></div>
                     <img src="{{ asset('image/IMG_1308.JPEG.jpg') }}" alt="Service Five Image" style="width:100%; height:auto;">
