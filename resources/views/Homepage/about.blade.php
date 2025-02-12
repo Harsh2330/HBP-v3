@@ -6,8 +6,8 @@
     <section class="info-section">
         <h2 class="text-2xl font-bold mb-4">Our Mission</h2>
         <section class="info-section">
-            <img src="\image\abut-us\IMG_1262-removebg-preview.png" alt="" class="w-72 h-auto mb-4">
-            <img src="\image\abut-us\IMG_1175.png" alt="doctor" class="mb-4 mx-auto">
+            <img src="{{ asset('image/abut-us/IMG_1262-removebg-preview.png') }}" alt="" class="w-72 h-auto mb-4">
+            <img src="{{ asset('image/abut-us/IMG_1175.png') }}" alt="doctor" class="mb-4 mx-auto">
             <p class="foundation-info text-left font-serif font-bold text-lg">
                 Deepak Foundation was initiated in 1982 with a vision of providing healthcare facilities to the families of workers and local communities residing in the industrial area of Nandesari. The Foundation has progressed over the period into a leading non-profit civil society. With a Pan-India presence, it has branch offices in Pune, Roha, Palghar and Aurangabad in Maharashtra, Hyderabad in Telengana, Dumri, Arki, Kuchai and Madhuban in Jharkhand, and New Delhi.
             </p>
@@ -24,7 +24,7 @@
     <!-- Information Section -->
     <section class="info-section">
         <div class="flex items-center gap-5">
-            <img src="\image\abut-us\IMG_0977.png" alt="" class="flex-shrink-0 w-112 h-auto animate-float">
+            <img src="{{ asset('image/abut-us/IMG_0977.png') }}" alt="" class="flex-shrink-0 w-112 h-auto animate-float">
             <div>
                 <p class="text-left">
                     Introduction: Every patient has the fundamental right to receive a good quality of care at the place where he/she lives. A home is a place of memories, familiarity and safety, a place where we remain comfortable, relaxed and confident and the best place for freedom of choice and autonomy. It is possible to manage patients with advanced diseases at home.
@@ -49,7 +49,7 @@
                     End of life Care patients are mostly bedridden and cannot come to an OPD of a hospital. Such patients will need to be cared for at a hospice or their homes. Since most of our patients prefer to be cared at homes, home care services should be provided. Home based Care has several additional advantages for the patient and family such as comfort, privacy, familiarity with surroundings, security, autonomy and a greater degree of independence. It is also cost effective and as it does not entail travelling to the hospital repeatedly for follow up visits and unnecessary investigations and treatments.
                 </p>
             </div>
-            <img src="\image\abut-us\IMG_1041.png" alt="" class="flex-shrink-0 w-112 h-auto animate-float">
+            <img src="{{ asset('image/abut-us/IMG_1041.png') }}" alt="" class="flex-shrink-0 w-112 h-auto animate-float">
         </div>
     </section>
     
@@ -61,17 +61,17 @@
                 <button class="scroll-button left absolute left-0 top-1/2 transform -translate-y-1/2" onclick="scrollTeamMembers(-1)">&#10094;</button>
                 <div class="team-members flex overflow-x-auto" id="team-members">
                     <div class="team-member flex-shrink-0 w-64 p-4">
-                        <img src="https://upload.wikimedia.org/wikipedia/en/1/18/Benedict_Cumberbatch_as_Doctor_Strange.jpeg" alt="Team Member 1" class="w-40 h-40 rounded-full mx-auto object-cover">
+                        <img src="{{ asset('image/abut-us/doctor_strange.jpeg') }}" alt="Team Member 1" class="w-40 h-40 rounded-full mx-auto object-cover">
                         <h3 class="text-center mt-2">Dr. Dhruve</h3>
                         <p class="text-center">Chief Medical Officer</p>
                     </div>
                     <div class="team-member flex-shrink-0 w-64 p-4">
-                        <img src="https://preview.redd.it/do-yall-think-well-see-more-of-scarlet-witch-after-secret-v0-dvvfoevgmyxc1.jpeg?width=640&crop=smart&auto=webp&s=460f7561eefd51f81a759f2bc1d29141b8e8cec6" alt="Team Member 2" class="w-40 h-40 rounded-full mx-auto object-cover">
+                        <img src="{{ asset('image/abut-us/scarlet_witch.jpeg') }}" alt="Team Member 2" class="w-40 h-40 rounded-full mx-auto object-cover">
                         <h3 class="text-center mt-2">Dr. Sakshi</h3>
                         <p class="text-center">Head of Patient Support</p>
                     </div>
                     <div class="team-member flex-shrink-0 w-64 p-4">
-                        <img src="\image\abut-us\tarun.JPG" alt="Team Member 4" class="w-40 h-40 rounded-full mx-auto object-cover">
+                        <img src="{{ asset('image/abut-us/tarun.JPG') }}" alt="Team Member 4" class="w-40 h-40 rounded-full mx-auto object-cover">
                         <h3 class="text-center mt-2">Dr. Tarun Machhi</h3>
                         <p class="text-center">Therapist</p>
                     </div>

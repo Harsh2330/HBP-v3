@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Services</title>
-    <link rel="stylesheet" href="/css/SERVICES.css">
+    <link rel="stylesheet" href="{{ asset('css/SERVICES.css') }}">
     <script>
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -53,7 +53,7 @@
         <a href="service1.html" class="service-box">
             <div class="service">
                 <div class="service-image"></div>
-                    <img src="/image/IMG_1311.JPEG.jpg" alt="Palliative Care Image" style="width:100%; height:auto;">
+                    <img src="{{ asset('image/IMG_1311.JPEG.jpg') }}" alt="Palliative Care Image" style="width:100%; height:auto;">
                 </div>
                 <p>Palliative care.</p> 
             </div>
@@ -62,7 +62,7 @@
         <a href="service2.html" class="service-box">
             <div class="service">
                 <div class="service-image"></div>
-                    <img src="/image/IMG_0969.JPG" alt="Patient Checkup" style="width:100%; height:auto;">
+                    <img src="{{ asset('image/IMG_0969.JPG') }}" alt="Patient Checkup" style="width:100%; height:auto;">
                 </div>
                 <p>Partient Ckeckup .</p> 
             </div>
@@ -71,7 +71,7 @@
         <a href="service3.html" class="service-box">
             <div class="service">
                 <div class="service-image"></div>
-                    <img src="/image/MEDICINE.JPG.jpg" alt="Checking patients" style="width:100%; height:auto; padding: 1px;">
+                    <img src="{{ asset('image/MEDICINE.JPG.jpg') }}" alt="Checking patients" style="width:100%; height:auto; padding: 1px;">
                 </div>
                 <p>Medication .</p> 
             </div>
@@ -80,7 +80,7 @@
         <a href="service4.html" class="service-box">
             <div class="service">
                 <div class="service-image"></div>
-                    <img src="/image/DOC.png" alt="Checking patients" style="width:100%; height:auto; padding: 1px;">
+                    <img src="{{ asset('image/DOC.png') }}" alt="Checking patients" style="width:100%; height:auto; padding: 1px;">
                 </div>
                  <p>Documentation.</p>
             </div>
@@ -89,7 +89,7 @@
         <a href="service5.html" class="service-box">
             <div class="service">
                 <div class="service-image"></div>
-                    <img src="/image/IMG_1308.JPEG.jpg" alt="Service Five Image" style="width:100%; height:auto;">
+                    <img src="{{ asset('image/IMG_1308.JPEG.jpg') }}" alt="Service Five Image" style="width:100%; height:auto;">
                 </div>
                  <p>Counselling.</p>
             </div>

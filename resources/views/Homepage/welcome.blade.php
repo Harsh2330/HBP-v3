@@ -23,8 +23,8 @@
     }
 </style>
 <main class="p-8">
-    <img src="/image/logo.png.png" alt="Logo" class="w-full md:w-72 h-auto mt-[-1rem]">
-    <img src="/image/patient.png" alt="patient" class="w-full md:w-[750px] h-auto float-none md:float-right ml-0 md:ml-8 mt-4 md:mt-0"> <!-- Shifted the patient image to the right side -->        
+    <img src="{{ asset('image/logo.png.png') }}" alt="Logo" class="w-full md:w-72 h-auto mt-[-1rem]">
+    <img src="{{ asset('image/patient.png') }}" alt="patient" class="w-full md:w-[750px] h-auto float-none md:float-right ml-0 md:ml-8 mt-4 md:mt-0"> <!-- Shifted the patient image to the right side -->        
     <div class="mt-[-2rem]"> <!-- Moved the first paragraph upward -->
         <p class="max-w-2xl h-auto md:h-[500px] mx-auto text-lg leading-relaxed text-justify p-4 bg-transparent rounded-lg overflow-y-auto">
         Home-based palliative care is a specialized medical service providing comprehensive support to individuals with serious, life-limiting illnesses at home, focusing on enhancing quality of life by addressing physical, emotional, social, and spiritual needs through a multidisciplinary team delivering personalized care.<br>
