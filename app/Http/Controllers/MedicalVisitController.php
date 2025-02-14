@@ -53,6 +53,7 @@ class MedicalVisitController extends Controller
             'visit_date' => 'required|date',
             'doctor_id' => 'required|exists:users,id',
             'nurse_id' => 'required|exists:users,id',
+            'treatment_name' => 'required|string', // Add validation for treatment_name
             // Add other validation rules as needed
         ]);
 
@@ -68,6 +69,7 @@ class MedicalVisitController extends Controller
         $medicalVisit->visit_date = $request->visit_date;
         $medicalVisit->doctor_name = $doctor->name;
         $medicalVisit->nurse_name = $nurse->name;
+        $medicalVisit->treatment_name = $request->treatment_name; // Set treatment_name
         $medicalVisit->created_by = Auth::id(); // Set the authenticated user's ID
         $medicalVisit->save();
 
@@ -121,6 +123,7 @@ class MedicalVisitController extends Controller
                                  ->whereDate('visit_date', $request->visit_date);
                 }),
             ],
+            'treatment_name' => 'required|string', // Add validation for treatment_name
         ]);
 
         $visit = MedicalVisit::findOrFail($id);
@@ -177,5 +180,25 @@ class MedicalVisitController extends Controller
         $visit->save();
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical status updated successfully.');
+    }
+
+    public function calendar()
+    {
+        $userId = Auth::id();
+        $medicalVisits = MedicalVisit::where('created_by', $userId)
+            ->orWhere('doctor_id', $userId)
+            ->orWhere('nurse_id', $userId)
+            ->with('patient') // Include patient relationship
+            ->get(['visit_date', 'doctor_name', 'nurse_name', 'simplified_diagnosis', 'patient_id', 'treatment_name']);
+
+        $events = $medicalVisits->map(function ($visit) {
+            return [
+                'title' => $visit->patient->full_name . ' - ' . $visit->treatment_name,
+                'start' => $visit->visit_date,
+                'backgroundColor' => '#4e73df'
+            ];
+        });
+
+        return view('calendar', compact('events'));
     }
 }

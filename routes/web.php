@@ -106,6 +106,4 @@ Route::post('/request-for-visit/store', [RequestForVisitController::class, 'stor
 Route::post('/request-for-visit/{id}/approve', [RequestForVisitController::class, 'approve'])->name('approve.visit');
 
 Route::resource('request_for_visit', RequestForVisitController::class);
-Route::get('/calendar', function () {
-    return view('calendar');
-})->name('calendar');
+Route::get('/calendar', [App\Http\Controllers\MedicalVisitController::class, 'calendar'])->name('calendar');

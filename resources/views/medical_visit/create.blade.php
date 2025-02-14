@@ -52,6 +52,10 @@
                                     <!-- Options will be populated by JavaScript -->
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label for="treatment_name">Treatment Name</label>
+                                <input type="text" name="treatment_name" id="treatment_name" class="form-control" value="{{ old('treatment_name') }}">
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Submit</button>

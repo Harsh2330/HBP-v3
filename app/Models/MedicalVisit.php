@@ -30,7 +30,8 @@ class MedicalVisit extends Model
         'doctor_notes',
         'nurse_observations',
         'is_approved',// New field added
-        'created_by'
+        'created_by',
+        'treatment_name', // Add treatment_name field
     ];
 
     public function patient()

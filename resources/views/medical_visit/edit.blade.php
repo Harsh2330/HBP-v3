@@ -86,6 +86,10 @@
                                 <label for="procedures" style="font-size: 1.1rem;">Procedures Performed</label>
                                 <textarea name="procedures" id="procedures" class="form-control" rows="3" style="font-size: 1.1rem;">{{ $visit->procedures }}</textarea>
                             </div>
+                            <div class="form-group">
+                                <label for="treatment_name">Treatment Name</label>
+                                <input type="text" name="treatment_name" id="treatment_name" class="form-control" value="{{ $visit->treatment_name }}">
+                            </div>
                         </div>
 
                         <div class="notes mb-4">

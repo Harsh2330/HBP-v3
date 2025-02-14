@@ -55,6 +55,7 @@
                                 <p><strong>Ongoing Treatments:</strong> {{ $visit->ongoing_treatments }}</p>
                                 <p><strong>Medications Prescribed:</strong> {{ $visit->medications_prescribed }}</p>
                                 <p><strong>Procedures Performed:</strong> {{ $visit->procedures }}</p>
+                                <p><strong>Treatment Name:</strong> {{ $visit->treatment_name }}</p>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="additional-notes" role="tabpanel" aria-labelledby="additional-notes-tab">
