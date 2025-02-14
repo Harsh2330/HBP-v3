@@ -64,9 +64,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($medicalVisits as $visit)
-
-                                        @if(Auth::user()->id == $visit->created_by || Auth::user()->id == $visit->doctor_id || Auth::user()->name == $visit->nurse_id)
+                                    @foreach($medicalVisits as $visit)                     
+                                        @if(auth()->user()->hasRole('Admin') || Auth::user()->id == $visit->created_by || Auth::user()->id == $visit->doctor_id || Auth::user()->name == $visit->nurse_id)
                                         <tr class="border-b">
                                             <td class="py-2 px-4">{{ $visit->patient->pat_unique_id }}</td>
                                             <td class="py-2 px-4">{{ $visit->patient->full_name }}</td>
