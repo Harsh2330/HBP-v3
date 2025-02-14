@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="phone_number">Phone Number</label>
-                                    <input type="text" name="phone_number" class="form-control" required>
+                                    <input type="number" name="phone_number" class="form-control" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email</label>
@@ -78,7 +78,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="bpl_card_number">BPL Card Number</label>
-                                    <input type="text" name="bpl_card_number" class="form-control">
+                                    <input type="number" name="bpl_card_number" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label for="ayushman_card">Ayushman Card</label>
