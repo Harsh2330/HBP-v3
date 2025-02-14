@@ -29,7 +29,8 @@
                 <h2 class="text-lg font-semibold text-gray-600 mb-4">Users List</h2>
                 <div class="grid md:grid-cols-3 gap-6">
                     @foreach($patients as $patient)
-                        @if(Auth::user()->id == $patient->user_unique_id)
+                                                
+                        @if(Auth::user()->hasRole('Admin') || Auth::user()->id == $patient->user_unique_id)
                             <div class="bg-white p-4 rounded-lg shadow border border-blue-300">
                                 <h3 class="text-lg font-bold text-gray-700">{{ $patient->full_name }}</h3>
                                 <p class="text-gray-600"><strong>Email:</strong> {{ $patient->email }}</p>

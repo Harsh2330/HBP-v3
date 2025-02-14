@@ -29,7 +29,7 @@
                 <p class="mt-2"><strong class="text-gray-800">Emergency Contact Name:</strong> {{ $patient->emergency_contact_name }}</p>
                 <p class="mt-2"><strong class="text-gray-800">Emergency Contact Phone:</strong> {{ $patient->emergency_contact_phone }}</p>
                 <p class="mt-2"><strong class="text-gray-800">Emergency Contact Relationship:</strong> {{ $patient->emergency_contact_relationship }}</p>
-                <p class="mt-2"><strong class="text-gray-800">Approval Status:</strong> <span class="font-semibold {{ $patient->is_approved ? 'text-green-600' : 'text-red-600' }}">{{ $patient->is_approved ? 'Approved' : 'Not Approved' }}</span></p>
+                <!-- <p class="mt-2"><strong class="text-gray-800">Approval Status:</strong> <span class="font-semibold {{ $patient->is_approved ? 'text-green-600' : 'text-red-600' }}">{{ $patient->is_approved ? 'Approved' : 'Not Approved' }}</span></p> -->
             </div>
         </div>
         @else
