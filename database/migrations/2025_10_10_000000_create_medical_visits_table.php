@@ -14,7 +14,7 @@ class CreateMedicalVisitsTable extends Migration
             $table->unsignedBigInteger('doctor_id');
             $table->unsignedBigInteger('nurse_id');
             $table->string('unique_id'); // Added unique constraint
-            $table->date('visit_date');
+            $table->dateTime('visit_date');
             $table->string('doctor_name');
             $table->string('nurse_name');
             $table->text('diagnosis')->nullable()->default(null); // Made nullable with default value

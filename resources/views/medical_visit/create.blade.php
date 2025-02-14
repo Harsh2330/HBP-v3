@@ -38,7 +38,7 @@
                             <h3 class="text-primary font-weight-bold">Visit Details</h3>
                             <div class="form-group">
                                 <label for="visit_date">Visit Date</label>
-                                <input type="text" name="visit_date" id="visit_date" class="form-control datepicker" value="{{ old('visit_date') }}">
+                                <input type="text" name="visit_date" id="visit_date" class="form-control datetimepicker" value="{{ old('visit_date') }}">
                             </div>
                             <div class="form-group">
                                 <label for="doctor_id">Doctor</label>
@@ -108,8 +108,9 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => console.error('Error fetching users with role:', error));
     }
 
-    flatpickr('.datepicker', {
-        dateFormat: 'Y-m-d'
+    flatpickr('.datetimepicker', {
+        enableTime: true,
+        dateFormat: 'Y-m-d H:i'
     });
 });
 </script>

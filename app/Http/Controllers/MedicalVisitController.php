@@ -9,6 +9,7 @@ use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class MedicalVisitController extends Controller
 {
@@ -66,7 +67,10 @@ class MedicalVisitController extends Controller
         $medicalVisit->doctor_id = $request->doctor_id;
         $medicalVisit->nurse_id = $request->nurse_id;
         $medicalVisit->unique_id = $patient->pat_unique_id;
-        $medicalVisit->visit_date = $request->visit_date;
+
+        // Format visit_date using Carbon
+        $medicalVisit->visit_date = Carbon::parse($request->visit_date)->format('Y-m-d H:i:s');
+
         $medicalVisit->doctor_name = $doctor->name;
         $medicalVisit->nurse_name = $nurse->name;
         $medicalVisit->treatment_name = $request->treatment_name; // Set treatment_name
@@ -157,7 +161,7 @@ class MedicalVisitController extends Controller
     public function approve($id)
     {
         $visit = MedicalVisit::findOrFail($id);
-        $visit->medical_status = 'Approved';
+        $visit->is_approved = 'Approved';
         $visit->save();
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit approved successfully.');
@@ -167,7 +171,7 @@ class MedicalVisitController extends Controller
     public function reject($id)
     {
         $visit = MedicalVisit::findOrFail($id);
-        $visit->medical_status = 'Rejected';
+        $visit->is_approved = 'Rejected';
         $visit->save();
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit rejected successfully.');
@@ -176,7 +180,7 @@ class MedicalVisitController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $visit = MedicalVisit::findOrFail($id);
-        $visit->medical_status = $request->input('medical_status');
+        $visit->is_approved = $request->input('medical_status');
         $visit->save();
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical status updated successfully.');
@@ -189,13 +193,15 @@ class MedicalVisitController extends Controller
             ->orWhere('doctor_id', $userId)
             ->orWhere('nurse_id', $userId)
             ->with('patient') // Include patient relationship
-            ->get(['visit_date', 'doctor_name', 'nurse_name', 'simplified_diagnosis', 'patient_id', 'treatment_name']);
+            ->get(['visit_date', 'doctor_name', 'nurse_name', 'simplified_diagnosis', 'patient_id', 'treatment_name', 'is_approved']);
 
         $events = $medicalVisits->map(function ($visit) {
             return [
                 'title' => $visit->patient->full_name . ' - ' . $visit->treatment_name,
                 'start' => $visit->visit_date,
-                'backgroundColor' => '#4e73df'
+                'status' => $visit->is_approved,
+                'backgroundColor' => $visit->is_approved === 'Approved' ? 'green' : 'yellow',
+                'borderColor' => $visit->is_approved === 'Approved' ? 'green' : 'yellow'
             ];
         });
 
