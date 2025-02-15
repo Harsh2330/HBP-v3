@@ -32,6 +32,8 @@ class CreateMedicalVisitsTable extends Migration
             $table->string('is_approved')->default("pending"); // New field added
             $table->unsignedBigInteger('created_by'); // Add the new field
             $table->string('treatment_name')->nullable(); // Add treatment_name field
+            $table->string('time_slot')->nullable()->default(null); // Add time_slot field
+            $table->boolean('is_emergency')->default(false); // Add is_emergency field with default value
             $table->timestamps();
         });
 

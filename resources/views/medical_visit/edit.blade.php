@@ -46,6 +46,19 @@
                                 <label for="nurse_name" style="font-size: 1.1rem;">Nurse</label>
                                 <input type="text" name="nurse_name" id="nurse_name" class="form-control" value="{{ $visit->nurse_name }}" style="font-size: 1.1rem;">
                             </div>
+                            <div class="form-group">
+                                <label for="is_emergency" style="font-size: 1.1rem;">Emergency Visit</label>
+                                <input type="checkbox" name="is_emergency" id="is_emergency" class="form-control" {{ $visit->is_emergency ? 'checked' : '' }} style="font-size: 1.1rem;">
+                            </div>
+                            <div class="form-group">
+                                <label for="time_slot" style="font-size: 1.1rem;">Time Slot</label>
+                                <select name="time_slot" id="time_slot" class="form-control" style="font-size: 1.1rem;">
+                                    <option value="9 AM - 11 AM" {{ $visit->time_slot == '9 AM - 11 AM' ? 'selected' : '' }}>9 AM - 11 AM</option>
+                                    <option value="11 AM - 1 PM" {{ $visit->time_slot == '11 AM - 1 PM' ? 'selected' : '' }}>11 AM - 1 PM</option>
+                                    <option value="1 PM - 3 PM" {{ $visit->time_slot == '1 PM - 3 PM' ? 'selected' : '' }}>1 PM - 3 PM</option>
+                                    <option value="3 PM - 5 PM" {{ $visit->time_slot == '3 PM - 5 PM' ? 'selected' : '' }}>3 PM - 5 PM</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div class="treatment-details mb-4">

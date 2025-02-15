@@ -23,9 +23,28 @@ class MedicalVisitController extends Controller
     }
 
     // Display a listing of the medical visits
-    public function index()
+    public function index(Request $request)
     {
-        $medicalVisits = MedicalVisit::with(['patient', 'doctor', 'nurse'])->paginate(10); // Include 'nurse' relationship
+        $query = MedicalVisit::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->whereHas('patient', function ($q) use ($search) {
+                $q->where('pat_unique_id', 'like', "%{$search}%")
+                  ->orWhere('full_name', 'like', "%{$search}%");
+            })
+            ->orWhereHas('doctor', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            })
+            ->orWhereHas('nurse', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            })
+            ->orWhere('visit_date', 'like', "%{$search}%")
+            ->orWhere('is_approved', 'like', "%{$search}%");
+        }
+
+        $medicalVisits = $query->paginate(10);
+
         return view('medical_visit.index', compact('medicalVisits'));
     }
 
@@ -55,6 +74,7 @@ class MedicalVisitController extends Controller
             'doctor_id' => 'required|exists:users,id',
             'nurse_id' => 'required|exists:users,id',
             'treatment_name' => 'required|string', // Add validation for treatment_name
+            'is_emergency' => 'boolean', // Add validation for is_emergency
             // Add other validation rules as needed
         ]);
 
@@ -74,6 +94,7 @@ class MedicalVisitController extends Controller
         $medicalVisit->doctor_name = $doctor->name;
         $medicalVisit->nurse_name = $nurse->name;
         $medicalVisit->treatment_name = $request->treatment_name; // Set treatment_name
+        $medicalVisit->is_emergency = $request->is_emergency ?? false; // Set is_emergency with default value
         $medicalVisit->created_by = Auth::id(); // Set the authenticated user's ID
         $medicalVisit->save();
 
@@ -128,10 +149,16 @@ class MedicalVisitController extends Controller
                 }),
             ],
             'treatment_name' => 'required|string', // Add validation for treatment_name
+            'is_emergency' => 'boolean', // Add validation for is_emergency
+            'time_slot' => 'required|string', // Add validation for time_slot
         ]);
 
         $visit = MedicalVisit::findOrFail($id);
         $visit->update($request->all());
+
+        // Ensure is_emergency is set to a default value if not provided
+        $visit->is_emergency = $request->is_emergency ?? false;
+        $visit->save();
 
         AuditLog::create([
             'user_id' => auth()->id(),
@@ -158,11 +185,19 @@ class MedicalVisitController extends Controller
     }
 
     // Approve a specific medical visit
-    public function approve($id)
+    public function approve(Request $request, $id)
     {
         $visit = MedicalVisit::findOrFail($id);
         $visit->is_approved = 'Approved';
+        $visit->time_slot = $request->input('time_slot'); // Set the time slot
+
         $visit->save();
+
+        AuditLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'approve',
+            'description' => 'Approved medical visit for patient: ' . $visit->patient->full_name,
+        ]);
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit approved successfully.');
     }

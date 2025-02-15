@@ -21,7 +21,7 @@
                         <div class="patient-details mb-4">
                             <h3 class="text-primary font-weight-bold">Patient Information</h3>
                             @php
-                                $patients = \App\Models\Patient::where('user_unique_id', auth()->user()->id)->get();
+                                $patients = auth()->user()->hasRole('Admin') ? \App\Models\Patient::all() : \App\Models\Patient::where('user_unique_id', auth()->user()->id)->get();
                             @endphp
                             <div class="form-group">
                                 <label for="patient_id">Patient</label>
@@ -55,6 +55,11 @@
                             <div class="form-group">
                                 <label for="treatment_name">Treatment Name</label>
                                 <input type="text" name="treatment_name" id="treatment_name" class="form-control" value="{{ old('treatment_name') }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="is_emergency">Emergency Visit</label>
+                                <input type="hidden" name="is_emergency" value="0"> <!-- Add hidden input to ensure a value is always sent -->
+                                <input type="checkbox" name="is_emergency" id="is_emergency" class="form-control" value="1">
                             </div>
                         </div>
 

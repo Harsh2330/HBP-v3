@@ -33,6 +33,7 @@ class RequestForVisitController extends Controller
             'visit_date' => 'required|date',
             'doctor_name' => 'required|string|max:255',
             'notes' => 'nullable|string',
+            'is_emergency' => 'boolean',
         ]);
 
         // Create a new medical visit
@@ -48,10 +49,16 @@ class RequestForVisitController extends Controller
         return redirect()->route('request_for_visit.index')->with('success', 'Medical visit created successfully.');
     }
 
-    public function approve($id)
+    public function approve(Request $request, $id)
     {
         $medicalVisit = MedicalVisit::findOrFail($id);
-        $medicalVisit->is_approved = 'Approved'; // Set is_approved to "Approved"
+        $medicalVisit->is_approved = 'Approved';
+        $medicalVisit->time_slot = $request->input('time_slot'); // Set the time slot
+
+        if ($medicalVisit->is_emergency) {
+            $medicalVisit->is_approved = 'Emergency Approved';
+        }
+
         $medicalVisit->save();
 
         AuditLog::create([

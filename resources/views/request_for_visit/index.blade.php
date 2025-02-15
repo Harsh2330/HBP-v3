@@ -27,6 +27,10 @@
         .slide-in {
             animation: slideIn 2s;
         }
+
+        .emergency {
+            background-color: rgba(255, 0, 0, 0.1);
+        }
     </style>
 
     <!-- Main content -->
@@ -55,17 +59,27 @@
                                     $pendingVisits = $medicalVisits->filter(function($visit) {
                                         return $visit->is_approved == 'pending';
                                     });
+                                    $emergencyVisits = $medicalVisits->filter(function($visit) {
+                                        return $visit->is_emergency == true;
+                                    });
                                 @endphp
                                     @foreach($pendingVisits as $visit)
-                                    <tr class="border-b">
+                                    <tr class="border-b {{ $visit->is_emergency ? 'emergency' : '' }}">
                                         <td class="py-2 px-4">{{ $visit->patient->pat_unique_id }}</td>
                                         <td class="py-2 px-4">{{ $visit->patient->full_name }} {{ $visit->patient->middle_name}} {{ $visit->patient->last_name}}</td>
                                         <td class="py-2 px-4">{{ $visit->visit_date }}</td>
                                         <td class="py-2 px-4">
-                                            <form action="{{ route('approve.visit', $visit->id) }}" method="POST">
+                                            <form action="{{ route('medical_visit.approve', $visit->id) }}" method="POST">
                                                 @csrf
+                                                @method('PATCH')
                                                 <input type="hidden" name="is_approved" value="Approved">
-                                                <button type="submit" class="btn btn-success">Approve</button>
+                                                <select name="time_slot" class="form-control">
+                                                    <option value="9 AM - 11 AM">9 AM - 11 AM</option>
+                                                    <option value="11 AM - 1 PM">11 AM - 1 PM</option>
+                                                    <option value="1 PM - 3 PM">1 PM - 3 PM</option>
+                                                    <option value="3 PM - 5 PM">3 PM - 5 PM</option>
+                                                </select>
+                                                <button type="submit" class="btn btn-success mt-2">Approve</button>
                                             </form>
                                         </td>
                                         <td class="py-2 px-4">

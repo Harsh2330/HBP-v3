@@ -40,6 +40,7 @@
                                 <p><strong>Nurse:</strong> {{ $visit->nurse_name }}</p>
                                 <p><strong>Diagnosis:</strong> {{ $visit->diagnosis }}</p>
                                 <p><strong>Simplified Diagnosis:</strong> {{ $visit->simplified_diagnosis }}</p>
+                                <p><strong>Emergency:</strong> {{ $visit->is_emergency ? 'Yes' : 'No' }}</p>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="treatment-info" role="tabpanel" aria-labelledby="treatment-info-tab">
