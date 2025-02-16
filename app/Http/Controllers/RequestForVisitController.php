@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\MedicalVisit;
 use App\Models\AuditLog; // Add this import
+use App\Models\User; // Add this import
 use Illuminate\Support\Facades\Auth; // Add this import
 
 class RequestForVisitController extends Controller
@@ -14,6 +15,7 @@ class RequestForVisitController extends Controller
         $this->middleware('permission:req-create', ['only' => ['create','store']]);
         $this->middleware('permission:req-approve', ['only' => ['approve']]);
     }
+
     public function index()
     {
         $medicalVisits = MedicalVisit::all(); // Fetch all medical visits
@@ -29,9 +31,8 @@ class RequestForVisitController extends Controller
     {
         // Validate the request data
         $validatedData = $request->validate([
-            'patient_name' => 'required|string|max:255',
+            
             'visit_date' => 'required|date',
-            'doctor_name' => 'required|string|max:255',
             'notes' => 'nullable|string',
             'is_emergency' => 'boolean',
         ]);
@@ -54,7 +55,9 @@ class RequestForVisitController extends Controller
         $medicalVisit = MedicalVisit::findOrFail($id);
         $medicalVisit->is_approved = 'Approved';
         $medicalVisit->time_slot = $request->input('time_slot'); // Set the time slot
-
+        $medicalVisit->doctor_id = $request->input('doctor_id');
+        $medicalVisit->nurse_id = $request->input('nurse_id');
+        $medicalVisit->visit_date = Carbon::parse($request->input('visit_date'))->format('Y-m-d H:i:s');
         if ($medicalVisit->is_emergency) {
             $medicalVisit->is_approved = 'Emergency Approved';
         }

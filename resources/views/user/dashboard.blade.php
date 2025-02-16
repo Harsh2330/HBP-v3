@@ -86,8 +86,8 @@
         data: {
             labels: {!! json_encode($vitalsData['dates']) !!},
             datasets: [{
-                label: 'Blood Pressure',
-                data: {!! json_encode($vitalsData['bloodPressure']) !!},
+                label: 'Sugar Level',
+                data: {!! json_encode($vitalsData['SugarLevel']) !!},
                 borderColor: 'rgba(255, 99, 132, 1)',
                 backgroundColor: gradientBP,
                 borderWidth: 2,
@@ -121,7 +121,19 @@
                 pointHoverBorderColor: 'rgba(75, 192, 192, 1)',
                 tension: 0.4,
                 fill: true
-            }]
+            },{
+                label: 'Oxygen Level',
+                data: {!! json_encode($vitalsData['oxygen']) !!},
+                borderColor: 'rgb(255, 170, 0)',
+                backgroundColor: gradientBP,
+                borderWidth: 2,
+                pointBackgroundColor: 'rgb(255, 170, 0)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(255, 170, 0)',
+                tension: 0.4,
+                fill: true
+            },]
         },
         options: {
             scales: {

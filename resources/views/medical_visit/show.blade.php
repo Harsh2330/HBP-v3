@@ -36,10 +36,14 @@
                             <div class="visit-details mt-4">
                                 <h3 class="text-primary font-weight-bold"><i class="fas fa-calendar-alt"></i> Visit Details</h3>
                                 <p><strong>Visit Date:</strong> {{ $visit->visit_date }}</p>
+                                <p><strong>Time Slot:</strong> {{ $visit->time_slot }}</p>
+                                <p><strong>Preferred Visit Date:</strong> {{ $visit->preferred_visit_date }}</p>
+                                <p><strong>Preferred Time Slot:</strong> {{ $visit->preferred_time_slot }}</p>
                                 <p><strong>Doctor:</strong> {{ $visit->doctor_name }}</p>
                                 <p><strong>Nurse:</strong> {{ $visit->nurse_name }}</p>
-                                <p><strong>Diagnosis:</strong> {{ $visit->diagnosis }}</p>
-                                <p><strong>Simplified Diagnosis:</strong> {{ $visit->simplified_diagnosis }}</p>
+                                <p><strong>Appointment Type:</strong> {{ $visit->appointment_type }}</p>
+                                <p><strong>Primary Complaint:</strong> {{ $visit->primary_complaint }}</p>
+                                <p><strong>Symptoms:</strong> {{ $visit->symptoms }}</p>
                                 <p><strong>Emergency:</strong> {{ $visit->is_emergency ? 'Yes' : 'No' }}</p>
                             </div>
                         </div>
@@ -48,15 +52,16 @@
                                 <h3 class="text-primary font-weight-bold"><i class="fas fa-stethoscope"></i> Treatment Information</h3>
                                 <p><strong>Vitals:</strong></p>
                                 <ul>
-                                    <li>Blood Pressure: {{ $visit->blood_pressure }}</li>
+                                    <li>Sugar Level: {{ $visit->sugar_level }}</li>
                                     <li>Heart Rate: {{ $visit->heart_rate }}</li>
                                     <li>Temperature: {{ $visit->temperature }}</li>
-                                    <li>Weight: {{ $visit->weight }}</li>
+                                    <li>Oxygen Level: {{ $visit->oxygen_level }}</li>
                                 </ul>
-                                <p><strong>Ongoing Treatments:</strong> {{ $visit->ongoing_treatments }}</p>
-                                <p><strong>Medications Prescribed:</strong> {{ $visit->medications_prescribed }}</p>
-                                <p><strong>Procedures Performed:</strong> {{ $visit->procedures }}</p>
-                                <p><strong>Treatment Name:</strong> {{ $visit->treatment_name }}</p>
+                                <p><strong>Physical Examination:</strong> {{ $visit->physical_examination }}</p>
+                                <p><strong>Diagnosis:</strong> {{ $visit->diagnosis }}</p>
+                                <p><strong>Prescribed Medications:</strong> {{ $visit->prescribed_medications }}</p>
+                                <p><strong>Treatment Plan:</strong> {{ $visit->treatment_plan }}</p>
+                                <p><strong>Next Steps:</strong> {{ $visit->next_steps }}</p>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="additional-notes" role="tabpanel" aria-labelledby="additional-notes-tab">
@@ -68,8 +73,58 @@
                         </div>
                     </div>
 
+                    @can('medical-visit-edit', $visit)
                     <a href="{{ route('medical_visit.edit', $visit->id) }}" class="btn btn-primary mt-4">Update Visit</a>
+                    @endcan
+
+                    @can('medical-visit-reschedule', $visit)
+                    <button class="btn btn-warning mt-4" data-toggle="modal" data-target="#rescheduleModal-{{ $visit->id }}">Reschedule Visit</button>
+                    @endcan
+
                     <a href="{{ route('medical_visit.index') }}" class="btn btn-secondary mt-4">Back to List</a>
+
+                    <div class="modal fade" id="rescheduleModal-{{ $visit->id }}" tabindex="-1" role="dialog" aria-labelledby="rescheduleModalLabel-{{ $visit->id }}" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="rescheduleModalLabel-{{ $visit->id }}">Reschedule Medical Visit</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ route('medical_visit.reschedule', $visit->id) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <div class="form-group">
+                                            <label for="visit_date">Visit Date</label>
+                                            <input type="date" name="visit_date" id="visit_date" class="form-control" value="{{ $visit->visit_date }}" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="time_slot">Time Slot</label>
+                                            <input type="time" name="time_slot" id="time_slot" class="form-control" value="{{ $visit->time_slot }}" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Reschedule</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            // Handle reschedule modal
+                            var rescheduleButtons = document.querySelectorAll('[data-toggle="modal"]');
+                            rescheduleButtons.forEach(function (button) {
+                                button.addEventListener('click', function () {
+                                    var target = button.getAttribute('data-target');
+                                    var modal = document.querySelector(target);
+                                    $(modal).modal('show');
+                                });
+                            });
+                        });
+                    </script>
 
                     @else
                     <p>No visit details available.</p>
@@ -93,6 +148,41 @@
     }
     .font-weight-bold {
         font-weight: bold !important;
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1050; /* Ensure the modal is on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+        z-index: 1051; /* Ensure the modal content is on top */
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
     }
 </style>
 @endsection

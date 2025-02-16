@@ -11,29 +11,34 @@ class CreateMedicalVisitsTable extends Migration
         Schema::create('medical_visits', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('patient_id');
-            $table->unsignedBigInteger('doctor_id');
-            $table->unsignedBigInteger('nurse_id');
-            $table->string('unique_id'); // Added unique constraint
-            $table->dateTime('visit_date');
-            $table->string('doctor_name');
-            $table->string('nurse_name');
-            $table->text('diagnosis')->nullable()->default(null); // Made nullable with default value
+            $table->string('appointment_type');
+            $table->text('primary_complaint');
+            $table->text('symptoms')->nullable();
+            $table->unsignedBigInteger('doctor_id')->nullable()->default(null);
+            $table->unsignedBigInteger('nurse_id')->nullable()->default(null);
+            $table->string('unique_id')->nullable()->default(null);
+            $table->date('visit_date')->nullable()->default(null);
+            $table->string('doctor_name')->nullable()->default(null);
+            $table->string('nurse_name')->nullable()->default(null);
+            $table->text('diagnosis')->nullable()->default(null); 
             $table->text('simplified_diagnosis')->nullable()->default(null);
-            $table->string('blood_pressure')->nullable()->default(null);
+            $table->string('sugar_level')->nullable()->default(null);
             $table->string('heart_rate')->nullable()->default(null);
             $table->string('temperature')->nullable()->default(null);
-            $table->string('weight')->nullable()->default(null);
+            $table->string('oxygen_level')->nullable()->default(null);
             $table->text('ongoing_treatments')->nullable()->default(null);
             $table->text('medications_prescribed')->nullable()->default(null);
             $table->text('procedures')->nullable()->default(null);
             $table->text('doctor_notes')->nullable()->default(null);
-            $table->text('nurse_observations')->nullable()->default(null);
-            $table->string('medical_status')->default('todo'); // New field added
-            $table->string('is_approved')->default("pending"); // New field added
-            $table->unsignedBigInteger('created_by'); // Add the new field
-            $table->string('treatment_name')->nullable(); // Add treatment_name field
-            $table->string('time_slot')->nullable()->default(null); // Add time_slot field
-            $table->boolean('is_emergency')->default(false); // Add is_emergency field with default value
+            $table->text('nurse_observations')->nullable()->default(null);  
+            $table->string('medical_status')->default('todo'); 
+            $table->string('is_approved')->default("pending"); 
+            $table->unsignedBigInteger('created_by'); 
+            $table->string('treatment_name')->nullable(); 
+            $table->string('time_slot')->nullable()->default(null); 
+            $table->boolean('is_emergency')->default(false); 
+            $table->date('preferred_visit_date')->nullable()->default(null); // New column
+            $table->string('preferred_time_slot')->nullable()->default(null); // New column
             $table->timestamps();
         });
 

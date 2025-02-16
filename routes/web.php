@@ -61,6 +61,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::patch('/medical_visit/{id}/update_status', [MedicalVisitController::class, 'updateStatus'])->name('medical_visit.update_status');
     Route::delete('/medical_visit/{id}', [MedicalVisitController::class, 'destroy'])->name('medical_visit.destroy');
     Route::post('/medical-visit/reschedule', [App\Http\Controllers\MedicalVisitController::class, 'reschedule'])->name('medical_visit.reschedule');
+    Route::patch('/medical_visit/{id}/reschedule', [MedicalVisitController::class, 'reschedule'])->name('medical_visit.reschedule');
     
     Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
     Route::get('/doctor/dashboard', [DoctorDashboardController::class, 'index'])->name('doctor.dashboard');

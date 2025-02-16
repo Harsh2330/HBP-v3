@@ -10,46 +10,50 @@ class MedicalVisit extends Model
     use HasFactory;
 
     protected $fillable = [
-        
         'patient_id',
-        'doctor_id', // New field added
-        'nurse_id', // New field added
+        'doctor_id',
+        'nurse_id',
         'unique_id',
         'visit_date',
         'doctor_name',
         'nurse_name',
         'diagnosis',
         'simplified_diagnosis',
-        'blood_pressure',
+        'sugar_level',
         'heart_rate',
         'temperature',
-        'weight',
+        'oxygen_level',
         'ongoing_treatments',
         'medications_prescribed',
         'procedures',
         'doctor_notes',
         'nurse_observations',
-        'is_approved',// New field added
+        'is_approved',
         'created_by',
-        'treatment_name', // Add treatment_name field
+        'treatment_name',
+        'patient_name',
+        'notes',
+        'is_emergency',
+        'time_slot',
     ];
 
     public function patient()
     {
-        return $this->belongsTo(Patient::class, 'patient_id'); // Relationship with Patient model
+        return $this->belongsTo(Patient::class, 'patient_id');
     }
 
     public function doctor()
     {
-        return $this->belongsTo(User::class, 'doctor_id'); // New relationship added
+        return $this->belongsTo(User::class, 'doctor_id');
     }
 
     public function nurse()
     {
-        return $this->belongsTo(User::class, 'nurse_id'); // Ensure nurse relationship is defined
+        return $this->belongsTo(User::class, 'nurse_id');
     }
+
     public function creator()
     {
-        return $this->belongsTo(User::class, 'created_by'); // Add this relationship
+        return $this->belongsTo(User::class, 'created_by');
     }
 }
