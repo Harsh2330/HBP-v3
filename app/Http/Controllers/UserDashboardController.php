@@ -12,7 +12,9 @@ class UserDashboardController extends Controller
     public function index(Request $request): View
     {
         $totalPatients = Patient::where('user_unique_id', auth()->id())->count();
-        $totalMedicalVisits = MedicalVisit::where('unique_id', auth()->id())->count();
+        $totalMedicalVisits = MedicalVisit::whereHas('patient', function ($query) {
+            $query->where('user_unique_id', auth()->id());
+        })->count();
 
         // Fetch patients created by the user
         $patients = Patient::where('user_unique_id', auth()->id())->get();

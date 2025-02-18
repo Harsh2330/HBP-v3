@@ -117,10 +117,14 @@ class MedicalVisitController extends Controller
             'doctor_notes' => 'nullable|string',
             'nurse_observations' => 'nullable|string',
             'is_emergency' => 'boolean',
+            'doctor_name' => 'required|string',
+            'nurse_name' => 'required|string',
         ]);
-
+        $symptoms = $request->input('symptoms', []);
+        $symptomsString = implode(', ', $symptoms);
         $visit = MedicalVisit::findOrFail($id);
         $visit->update($request->all());
+        $visit->symptoms = $symptomsString;
         $visit->is_emergency = $request->is_emergency ?? false;
         $visit->save();
 

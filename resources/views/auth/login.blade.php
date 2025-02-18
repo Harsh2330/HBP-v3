@@ -20,12 +20,12 @@
                 animation: float 6s ease-in-out infinite;
             }
             .shape1 {
-                background-color:rgb(229, 196, 6); /* Change to desired color */
+                background-color:rgba(88, 117, 210, 0.82); /* Change to desired color */
                 top: -50px;
                 left: -50px;
             }
             .shape2 {
-                background-color:rgb(228, 209, 4); /* Change to desired color */
+                background-color:rgba(88, 117, 210, 0.82); /* Change to desired color */
                 bottom: -50px;
                 right: -50px;
                 animation-delay: 3s;

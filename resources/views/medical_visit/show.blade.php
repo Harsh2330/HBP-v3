@@ -57,11 +57,11 @@
                                     <li>Temperature: {{ $visit->temperature }}</li>
                                     <li>Oxygen Level: {{ $visit->oxygen_level }}</li>
                                 </ul>
-                                <p><strong>Physical Examination:</strong> {{ $visit->physical_examination }}</p>
+                                <p><strong>Simplified Diagnosis:</strong> {{ $visit->simplified_diagnosis }}</p>
                                 <p><strong>Diagnosis:</strong> {{ $visit->diagnosis }}</p>
-                                <p><strong>Prescribed Medications:</strong> {{ $visit->prescribed_medications }}</p>
-                                <p><strong>Treatment Plan:</strong> {{ $visit->treatment_plan }}</p>
-                                <p><strong>Next Steps:</strong> {{ $visit->next_steps }}</p>
+                                <p><strong>Prescribed Medications:</strong> {{ $visit->medications_prescribed }}</p>
+                                <p><strong>Treatment Plan:</strong> {{ $visit->ongoing_treatments }}</p>
+                                <p><strong>Next Steps:</strong> {{ $visit->procedures }}</p>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="additional-notes" role="tabpanel" aria-labelledby="additional-notes-tab">
