@@ -108,7 +108,7 @@
                         <input type="date" name="visit_date" id="visit_date" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label for="time_slot">Preferred Time Slot</label>
+                        <label for="time_slot">Time Slot</label>
                         <input type="time" name="time_slot" id="time_slot" class="form-control" required>
                     </div>
                     <div class="form-group">

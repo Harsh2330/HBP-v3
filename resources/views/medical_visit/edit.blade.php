@@ -54,15 +54,15 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="doctor_id" style="font-size: 1.1rem;">Doctor</label>
-                                <select name="doctor_id" id="doctor_id" class="form-control" style="font-size: 1.1rem;" readonly>
-                                    <option value="{{ $visit->doctor_id }}" selected>{{ $visit->doctor->name }}</option>
+                                <label for="doctor_name" style="font-size: 1.1rem;">Doctor</label>
+                                <select name="doctor_name" id="doctor_name" class="form-control" style="font-size: 1.1rem;" readonly>
+                                    <option value="{{ $visit->doctor->name }}" selected>{{ $visit->doctor->name }}</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="nurse_id" style="font-size: 1.1rem;">Nurse</label>
-                                <select name="nurse_id" id="nurse_id" class="form-control" style="font-size: 1.1rem;" readonly>
-                                    <option value="{{ $visit->nurse_id }}" selected>{{ $visit->nurse->name }}</option>
+                                <label for="nurse_name" style="font-size: 1.1rem;">Nurse</label>
+                                <select name="nurse_name" id="nurse_name" class="form-control" style="font-size: 1.1rem;" readonly>
+                                    <option value="{{  $visit->nurse->name }}" selected>{{ $visit->nurse->name }}</option>
                                 </select>
                                 </select>
                             </div>
@@ -80,8 +80,15 @@
                                 <textarea name="primary_complaint" id="primary_complaint" class="form-control" rows="3" style="font-size: 1.1rem;">{{ $visit->primary_complaint }}</textarea>
                             </div>
                             <div class="form-group">
-                                <label for="symptoms" style="font-size: 1.1rem;">Symptoms</label>
-                                <textarea name="symptoms" id="symptoms" class="form-control" rows="3" style="font-size: 1.1rem;">{{ $visit->symptoms }}</textarea>
+                                <label for="symptoms">Symptoms (if applicable)</label>
+                                <div>
+                                    <label><input type="checkbox" name="symptoms[]" value="Fever" {{ is_array(old('symptoms')) && in_array('Fever', old('symptoms')) ? 'checked' : '' }}> Fever</label>
+                                    <label><input type="checkbox" name="symptoms[]" value="Cough" {{ is_array(old('symptoms')) && in_array('Cough', old('symptoms')) ? 'checked' : '' }}> Cough</label>
+                                    <label><input type="checkbox" name="symptoms[]" value="Breathing Issues" {{ is_array(old('symptoms')) && in_array('Breathing Issues', old('symptoms')) ? 'checked' : '' }}> Breathing Issues</label>
+                                    <label><input type="checkbox" name="symptoms[]" value="Body Pain" {{ is_array(old('symptoms')) && in_array('Body Pain', old('symptoms')) ? 'checked' : '' }}> Body Pain</label>
+                                    <label><input type="checkbox" name="symptoms[]" value="Weakness" {{ is_array(old('symptoms')) && in_array('Weakness', old('symptoms')) ? 'checked' : '' }}> Weakness</label>
+                                    <label><input type="checkbox" name="symptoms[]" value="Other" {{ is_array(old('symptoms')) && in_array('Other', old('symptoms')) ? 'checked' : '' }}> Other</label>
+                                </div>
                             </div>
                         </div>
 
@@ -107,25 +114,26 @@
                                 <input type="range" name="oxygen_level" id="oxygen_level" class="form-control" min="70" max="100" value="{{ $visit->oxygen_level }}" style="font-size: 1.1rem;">
                                 <span id="oxygen_level_value">{{ $visit->oxygen_level }}</span>
                             </div>
-                            <div class="form-group">
-                                <label for="physical_examination" style="font-size: 1.1rem;">Physical Examination</label>
-                                <textarea name="physical_examination" id="physical_examination" class="form-control" rows="3" style="font-size: 1.1rem;">{{ $visit->physical_examination }}</textarea>
-                            </div>
+                            
                             <div class="form-group">
                                 <label for="diagnosis" style="font-size: 1.1rem;">Diagnosis</label>
                                 <textarea name="diagnosis" id="diagnosis" class="form-control" rows="3" style="font-size: 1.1rem;">{{ $visit->diagnosis }}</textarea>
                             </div>
                             <div class="form-group">
-                                <label for="prescribed_medications" style="font-size: 1.1rem;">Prescribed Medications</label>
-                                <textarea name="prescribed_medications" id="prescribed_medications" class="form-control" rows="3" style="font-size: 1.1rem;">{{ $visit->prescribed_medications }}</textarea>
+                                <label for="simplified_diagnosis" style="font-size: 1.1rem;">Simplified Diagnosis</label>
+                                <textarea name="simplified_diagnosis" id="simplified_diagnosis" class="form-control" rows="3" style="font-size: 1.1rem;">{{ $visit->simplified_diagnosis }}</textarea>
                             </div>
                             <div class="form-group">
-                                <label for="treatment_plan" style="font-size: 1.1rem;">Treatment Plan</label>
-                                <textarea name="treatment_plan" id="treatment_plan" class="form-control" rows="3" style="font-size: 1.1rem;">{{ $visit->treatment_plan }}</textarea>
+                                <label for="medications_prescribed" style="font-size: 1.1rem;">Prescribed Medications</label>
+                                <textarea name="medications_prescribed" id="medications_prescribed" class="form-control" rows="3" style="font-size: 1.1rem;">{{ $visit->medications_prescribed }}</textarea>
                             </div>
                             <div class="form-group">
-                                <label for="next_steps" style="font-size: 1.1rem;">Next Steps</label>
-                                <textarea name="next_steps" id="next_steps" class="form-control" rows="3" style="font-size: 1.1rem;">{{ $visit->next_steps }}</textarea>
+                                <label for="ongoing_treatments" style="font-size: 1.1rem;">Treatment Plan</label>
+                                <textarea name="ongoing_treatments" id="ongoing_treatments" class="form-control" rows="3" style="font-size: 1.1rem;">{{ $visit->ongoing_treatments }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="procedures" style="font-size: 1.1rem;">Next Steps</label>
+                                <textarea name="procedures" id="procedures" class="form-control" rows="3" style="font-size: 1.1rem;">{{ $visit->procedures }}</textarea>
                             </div>
                         </div>
 
