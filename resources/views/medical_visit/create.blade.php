@@ -21,7 +21,7 @@
                         <div class="patient-details mb-4">
                             <h3 class="text-primary font-weight-bold">Patient Information</h3>
                             @php
-                                $patients = \App\Models\Patient::where('user_unique_id', auth()->user()->id)->get();
+                                $patients = auth()->user()->hasRole('Admin') ? \App\Models\Patient::all() : \App\Models\Patient::where('user_unique_id', auth()->user()->id)->get();
                             @endphp
                             <div class="form-group">
                                 <label for="patient_id">Patient</label>
@@ -37,20 +37,74 @@
                         <div class="visit-details mb-4">
                             <h3 class="text-primary font-weight-bold">Visit Details</h3>
                             <div class="form-group">
-                                <label for="visit_date">Visit Date</label>
-                                <input type="text" name="visit_date" id="visit_date" class="form-control datepicker" value="{{ old('visit_date') }}">
+                                <label for="preferred_visit_date">Preferred Visit Date</label>
+                                <input type="date" name="preferred_visit_date" id="preferred_visit_date" class="form-control" value="{{ old('preferred_visit_date') }}" required>
                             </div>
                             <div class="form-group">
-                                <label for="doctor_id">Doctor</label>
-                                <select name="doctor_id" id="doctor_id" class="form-control" required>
-                                    <!-- Options will be populated by JavaScript -->
-                                </select>
+                                <label for="preferred_time_slot">Preferred Time Slot</label>
+                                <input type="time" name="preferred_time_slot" id="preferred_time_slot" class="form-control" value="{{ old('preferred_time_slot') }}" required>
+
                             </div>
                             <div class="form-group">
-                                <label for="nurse_id">Nurse</label>
-                                <select name="nurse_id" id="nurse_id" class="form-control" required>
-                                    <!-- Options will be populated by JavaScript -->
+                                <label for="appointment_type">Appointment Type</label>
+                                <select name="appointment_type" id="appointment_type" class="form-control" required>
+                                    <option value="Routine Checkup" {{ old('appointment_type') == 'Routine Checkup' ? 'selected' : '' }}>Routine Checkup</option>
+                                    <option value="Follow-up Visit" {{ old('appointment_type') == 'Follow-up Visit' ? 'selected' : '' }}>Follow-up Visit</option>
+                                    <option value="Emergency Visit" {{ old('appointment_type') == 'Emergency Visit' ? 'selected' : '' }}>Emergency Visit</option>
+                                    <option value="Other" {{ old('appointment_type') == 'Other' ? 'selected' : '' }}>Other</option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="medical-information mb-4">
+                            <h3 class="text-primary font-weight-bold">Medical Information</h3>
+                            <div class="form-group">
+                                <label for="primary_complaint">Reason for Appointment (Primary Complaint)</label>
+                                <textarea name="primary_complaint" id="primary_complaint" class="form-control" required>{{ old('primary_complaint') }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="existing_conditions">Existing Medical Conditions (if any)</label>
+                                <div>
+                                    <label><input type="checkbox" name="existing_conditions[]" value="Diabetes" {{ is_array(old('existing_conditions')) && in_array('Diabetes', old('existing_conditions')) ? 'checked' : '' }}> Diabetes</label>
+                                    <label><input type="checkbox" name="existing_conditions[]" value="Hypertension" {{ is_array(old('existing_conditions')) && in_array('Hypertension', old('existing_conditions')) ? 'checked' : '' }}> Hypertension</label>
+                                    <label><input type="checkbox" name="existing_conditions[]" value="Heart Disease" {{ is_array(old('existing_conditions')) && in_array('Heart Disease', old('existing_conditions')) ? 'checked' : '' }}> Heart Disease</label>
+                                    <label><input type="checkbox" name="existing_conditions[]" value="Asthma" {{ is_array(old('existing_conditions')) && in_array('Asthma', old('existing_conditions')) ? 'checked' : '' }}> Asthma</label>
+                                    <label><input type="checkbox" name="existing_conditions[]" value="Other" {{ is_array(old('existing_conditions')) && in_array('Other', old('existing_conditions')) ? 'checked' : '' }}> Other</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="symptoms">Symptoms (if applicable)</label>
+                                <div>
+                                    <label><input type="checkbox" name="symptoms[]" value="Fever" {{ is_array(old('symptoms')) && in_array('Fever', old('symptoms')) ? 'checked' : '' }}> Fever</label>
+                                    <label><input type="checkbox" name="symptoms[]" value="Cough" {{ is_array(old('symptoms')) && in_array('Cough', old('symptoms')) ? 'checked' : '' }}> Cough</label>
+                                    <label><input type="checkbox" name="symptoms[]" value="Breathing Issues" {{ is_array(old('symptoms')) && in_array('Breathing Issues', old('symptoms')) ? 'checked' : '' }}> Breathing Issues</label>
+                                    <label><input type="checkbox" name="symptoms[]" value="Body Pain" {{ is_array(old('symptoms')) && in_array('Body Pain', old('symptoms')) ? 'checked' : '' }}> Body Pain</label>
+                                    <label><input type="checkbox" name="symptoms[]" value="Weakness" {{ is_array(old('symptoms')) && in_array('Weakness', old('symptoms')) ? 'checked' : '' }}> Weakness</label>
+                                    <label><input type="checkbox" name="symptoms[]" value="Other" {{ is_array(old('symptoms')) && in_array('Other', old('symptoms')) ? 'checked' : '' }}> Other</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="preferred_provider">Preferred Doctor/Nurse (if any)</label>
+                                <input type="text" name="preferred_provider" id="preferred_provider" class="form-control" value="{{ old('preferred_provider') }}">
+                            </div>
+                        </div>
+
+                        <div class="confirmation mb-4">
+                            <h3 class="text-primary font-weight-bold">Appointment Confirmation</h3>
+                            <div class="form-group">
+                                <label for="terms_conditions">Do you agree to the terms and conditions of the visit?</label>
+                                <div>
+                                    <label><input type="radio" name="terms_conditions" value="Yes" {{ old('terms_conditions') == 'Yes' ? 'checked' : '' }}> Yes</label>
+                                    <label><input type="radio" name="terms_conditions" value="No" {{ old('terms_conditions') == 'No' ? 'checked' : '' }}> No</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="patient_signature">Patient’s Signature</label>
+                                <input type="text" name="patient_signature" id="patient_signature" class="form-control" value="{{ old('patient_signature') }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="signature_date">Date</label>
+                                <input type="date" name="signature_date" id="signature_date" class="form-control" value="{{ old('signature_date', \Carbon\Carbon::today()->toDateString()) }}">
                             </div>
                         </div>
 
@@ -104,8 +158,9 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => console.error('Error fetching users with role:', error));
     }
 
-    flatpickr('.datepicker', {
-        dateFormat: 'Y-m-d'
+    flatpickr('.datetimepicker', {
+        enableTime: true,
+        dateFormat: 'Y-m-d H:i'
     });
 });
 </script>

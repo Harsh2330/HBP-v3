@@ -300,11 +300,7 @@ return [
 
     'menu' => [
         // Navbar items:
-        [
-            'type' => 'navbar-search',
-            'text' => 'search',
-            'topnav_right' => true,
-        ],
+        
         [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
@@ -372,9 +368,9 @@ return [
             'permission' => 'patient-list',
             ],
             [
-            
-            'url' => 'appointments',
-            
+                'text' => 'Calendar',
+                'url'  => 'calendar',
+                'icon' => 'fas fa-calendar-alt',
             ],
             
        
@@ -416,6 +412,21 @@ return [
     */
 
     'plugins' => [
+        'Fullcalendar' => [
+        'active' => true, // Enable the plugin
+        'files' => [
+            [
+                'type' => 'js',
+                'asset' => false,
+                'location' => '/vendor/fullcalendar/main.min.js',
+            ],
+            [
+                'type' => 'css',
+                'asset' => false,
+                'location' => '/vendor/fullcalendar/main.min.css',
+            ],
+        ],
+    ],
         'Datatables' => [
             'active' => false,
             'files' => [

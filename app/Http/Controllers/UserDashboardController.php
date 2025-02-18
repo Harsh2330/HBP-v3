@@ -21,12 +21,13 @@ class UserDashboardController extends Controller
         $selectedPatientId = $request->input('patient_id', $patients->first()->id ?? null);
         $vitalsData = [];
         if ($selectedPatientId) {
-            $vitals = MedicalVisit::where('patient_id', $selectedPatientId)->get(['visit_date', 'blood_pressure', 'heart_rate', 'temperature']);
+            $vitals = MedicalVisit::where('patient_id', $selectedPatientId)->get(['visit_date', 'sugar_level', 'heart_rate', 'temperature','oxygen_level']);
             $vitalsData = [
                 'dates' => $vitals->pluck('visit_date'),
-                'bloodPressure' => $vitals->pluck('blood_pressure'),
+                'SugarLevel' => $vitals->pluck('sugar_level'),
                 'heartRate' => $vitals->pluck('heart_rate'),
-                'temperature' => $vitals->pluck('temperature')
+                'temperature' => $vitals->pluck('temperature'),
+                'oxygen' => $vitals->pluck('oxygen_level'),
             ];
         }
 

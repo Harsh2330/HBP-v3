@@ -45,16 +45,15 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="age_category">Age Category</label>
-                                    <select name="age_category" class="form-control" required>
+                                    <select name="age_category" id="age_category" class="form-control" required>
                                         <option value="0-9">0-9</option>
                                         <option value="10-19">10-19</option>
                                         <option value="20-29">20-29</option>
-                                        <!-- Add other age categories as needed -->
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="phone_number">Phone Number</label>
-                                    <input type="text" name="phone_number" class="form-control" required>
+                                    <input type="number" name="phone_number" class="form-control" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email</label>
@@ -66,8 +65,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="religion">Religion</label>
-                                    <input type="text" name="religion" class="form-control" required>
-                                </div>
+                                    <select name="religion" class="form-control" required>
+                                        <option value="Hindu">Hindu</option>
+                                        <option value="Maksad">Maksad</option>
+                                        <option value="Chamar">Chamar</option>
+                                    </select>                                </div>
                                 <div class="form-group">
                                     <label for="economic_status">Economic Status</label>
                                     <select name="economic_status" class="form-control" required>
@@ -77,15 +79,20 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
+                                    <label for="bpl_card">BPL Card</label>
+                                    <input type="checkbox" name="bpl_card" id="bpl_card" value="1">
+                                </div>
+                                <div class="form-group" id="bpl_card_number_group" style="display: none;">
                                     <label for="bpl_card_number">BPL Card Number</label>
-                                    <input type="text" name="bpl_card_number" class="form-control">
+                                    <input type="number" name="bpl_card_number" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label for="ayushman_card">Ayushman Card</label>
-                                    <select name="ayushman_card" class="form-control" required>
-                                        <option value="1">Yes</option>
-                                        <option value="0">No</option>
-                                    </select>
+                                    <input type="checkbox" name="ayushman_card" id="ayushman_card" value="1">
+                                </div>
+                                <div class="form-group" id="ayushman_card_number_group" style="display: none;">
+                                    <label for="ayushman_card_number">Ayushman Card Number</label>
+                                    <input type="number" name="ayushman_card_number" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label for="emergency_contact_name">Emergency Contact Name</label>
@@ -128,6 +135,42 @@
     document.addEventListener('DOMContentLoaded', function() {
         flatpickr('input[name="date_of_birth"]', {
             dateFormat: 'Y-m-d'
+        });
+
+        document.querySelector('input[name="date_of_birth"]').addEventListener('change', function() {
+            var dob = new Date(this.value);
+            var age = new Date().getFullYear() - dob.getFullYear();
+            var ageCategory = '';
+
+            if (age >= 0 && age <= 9) {
+                ageCategory = '0-9';
+            } else if (age >= 10 && age <= 19) {
+                ageCategory = '10-19';
+            } else if (age >= 20 && age <= 29) {
+                ageCategory = '20-29';
+            } else {
+                ageCategory = '30+'; // Add more categories as needed
+            }
+
+            document.getElementById('age_category').value = ageCategory;
+        });
+
+        document.getElementById('bpl_card').addEventListener('change', function() {
+            var bplCardNumberGroup = document.getElementById('bpl_card_number_group');
+            if (this.checked) {
+                bplCardNumberGroup.style.display = 'block';
+            } else {
+                bplCardNumberGroup.style.display = 'none';
+            }
+        });
+
+        document.getElementById('ayushman_card').addEventListener('change', function() {
+            var ayushmanCardNumberGroup = document.getElementById('ayushman_card_number_group');
+            if (this.checked) {
+                ayushmanCardNumberGroup.style.display = 'block';
+            } else {
+                ayushmanCardNumberGroup.style.display = 'none';
+            }
         });
     });
 </script>

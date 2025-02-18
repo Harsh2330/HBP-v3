@@ -9,6 +9,7 @@ use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class MedicalVisitController extends Controller
 {
@@ -18,113 +19,110 @@ class MedicalVisitController extends Controller
         $this->middleware('permission:medical-visit-create', ['only' => ['create','store']]);
         $this->middleware('permission:medical-visit-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:medical-visit-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:medical-visit-reschedule', ['only' => ['reschedule']]);
         $this->middleware('permission:medical-visit-update-status', ['only' => ['updateStatus']]);
     }
 
     // Display a listing of the medical visits
-    public function index()
+    public function index(Request $request)
     {
-        $medicalVisits = MedicalVisit::with(['patient', 'doctor', 'nurse'])->paginate(10); // Include 'nurse' relationship
+        $query = MedicalVisit::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->whereHas('patient', function ($q) use ($search) {
+                $q->where('pat_unique_id', 'like', "%{$search}%")
+                  ->orWhere('full_name', 'like', "%{$search}%");
+            })
+            ->orWhereHas('doctor', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            })
+            ->orWhereHas('nurse', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            })
+            ->orWhere('visit_date', 'like', "%{$search}%")
+            ->orWhere('is_approved', 'like', "%{$search}%");
+        }
+
+        $medicalVisits = $query->paginate(10);
+
         return view('medical_visit.index', compact('medicalVisits'));
     }
 
-    // Show the form for creating a new medical visit
     public function create()
     {
-        $patients = User::all();
-        $doctors = User::all();
-        $nurses = User::all();
-
-        return view('medical_visit.create', compact('patients', 'doctors', 'nurses'));
+        $patients = Patient::all();
+        return view('medical_visit.create', compact('patients'));
     }
 
-    // Store a newly created medical visit
     public function store(Request $request)
     {
         $request->validate([
-            'patient_id' => [
-                'required',
-                'exists:patients,id', // Ensure this validation rule is correct
-                Rule::unique('medical_visits')->where(function ($query) use ($request) {
-                    return $query->where('patient_id', $request->patient_id)
-                                 ->whereDate('visit_date', $request->visit_date);
-                }),
-            ],
-            'visit_date' => 'required|date',
-            'doctor_id' => 'required|exists:users,id',
-            'nurse_id' => 'required|exists:users,id',
-            // Add other validation rules as needed
+            'patient_id' => 'required|exists:patients,id',
+            'appointment_type' => 'required|string',
+            'primary_complaint' => 'required|string',
+            'symptoms' => 'nullable|array',
+            'is_emergency' => 'boolean',
+            'preferred_visit_date' => 'required|date',
+            'preferred_time_slot' => 'required|string',
         ]);
-
-        $patient = Patient::findOrFail($request->patient_id);
-        $doctor = User::findOrFail($request->doctor_id);
-        $nurse = User::findOrFail($request->nurse_id);
-
+        $symptoms = $request->input('symptoms', []);
+        $symptomsString = implode(', ', $symptoms);
         $medicalVisit = new MedicalVisit();
         $medicalVisit->patient_id = $request->patient_id;
-        $medicalVisit->doctor_id = $request->doctor_id;
-        $medicalVisit->nurse_id = $request->nurse_id;
-        $medicalVisit->unique_id = $patient->pat_unique_id;
-        $medicalVisit->visit_date = $request->visit_date;
-        $medicalVisit->doctor_name = $doctor->name;
-        $medicalVisit->nurse_name = $nurse->name;
-        $medicalVisit->created_by = Auth::id(); // Set the authenticated user's ID
+        // Removed visit_date assignment
+        $medicalVisit->appointment_type = $request->appointment_type;
+        $medicalVisit->primary_complaint = $request->primary_complaint;
+        $medicalVisit->symptoms = $symptomsString;  
+        $medicalVisit->is_emergency = $request->is_emergency ?? false;
+        $medicalVisit->created_by = Auth::id();
+        $medicalVisit->preferred_visit_date = $request->preferred_visit_date;
+        $medicalVisit->preferred_time_slot = $request->preferred_time_slot;
         $medicalVisit->save();
 
         AuditLog::create([
             'user_id' => auth()->id(),
             'action' => 'create',
-            'description' => 'Created a new medical visit for patient: ' . $patient->full_name,
+            'description' => 'Created a new medical visit for patient ID: ' . $request->patient_id,
         ]);
 
-        return redirect()->route('medical_visit.index')->with('success', 'Medical visit created successfully.');
+        return redirect()->route('medical_visit.index')->with('success', 'Medical visit scheduled successfully.');
     }
 
-    // Show the details of a specific medical visit
     public function show($id)
     {
-        $visit = MedicalVisit::with(['patient', 'doctor', 'nurse'])->findOrFail($id); // Include 'nurse' relationship
+        $visit = MedicalVisit::with(['patient', 'doctor', 'nurse'])->findOrFail($id);
         return view('medical_visit.show', compact('visit'));
     }
 
-    // Show the form for editing a specific medical visit
     public function edit($id)
     {
         $visit = MedicalVisit::findOrFail($id);
-        $patients = User::all();
-        $doctors = User::all();
-        $nurses = User::all();
-
-        return view('medical_visit.edit', compact('visit', 'patients', 'doctors', 'nurses'));
+        $patients = Patient::all();
+        return view('medical_visit.edit', compact('visit', 'patients'));
     }
 
-    // Update a specific medical visit
     public function update(Request $request, $id)
     {
         $request->validate([
             'diagnosis' => 'nullable|string',
             'simplified_diagnosis' => 'nullable|string',
-            'blood_pressure' => 'nullable|string',
+            'sugar_level' => 'nullable|string',
             'heart_rate' => 'nullable|string',
             'temperature' => 'nullable|string',
-            'weight' => 'nullable|string',
+            'oxygen_level' => 'nullable|string',
             'ongoing_treatments' => 'nullable|string',
             'medications_prescribed' => 'nullable|string',
             'procedures' => 'nullable|string',
             'doctor_notes' => 'nullable|string',
             'nurse_observations' => 'nullable|string',
-            'visit_date' => [
-                'required',
-                'date',
-                Rule::unique('medical_visits')->ignore($id)->where(function ($query) use ($request) {
-                    return $query->where('patient_id', $request->patient_id)
-                                 ->whereDate('visit_date', $request->visit_date);
-                }),
-            ],
+            'is_emergency' => 'boolean',
         ]);
 
         $visit = MedicalVisit::findOrFail($id);
         $visit->update($request->all());
+        $visit->is_emergency = $request->is_emergency ?? false;
+        $visit->save();
 
         AuditLog::create([
             'user_id' => auth()->id(),
@@ -135,7 +133,33 @@ class MedicalVisitController extends Controller
         return redirect()->route('medical_visit.show', $visit->id)->with('success', 'Medical visit updated successfully.');
     }
 
-    // Delete a specific medical visit
+    public function approve(Request $request, $id)
+    {
+        $visit = MedicalVisit::findOrFail($id);
+        $visit->is_approved = 'Approved';
+        $visit->time_slot = $request->input('time_slot');
+        $visit->doctor_id = $request->input('doctor_id');
+        $visit->nurse_id = $request->input('nurse_id');
+        $visit->visit_date = Carbon::parse($request->input('visit_date'))->format('Y-m-d H:i:s');
+        $visit->save();
+
+        AuditLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'approve',
+            'description' => 'Approved medical visit for patient: ' . $visit->patient->full_name,
+        ]);
+
+        return redirect()->route('medical_visit.index')->with('success', 'Medical visit approved successfully.');
+    }
+    public function updateStatus(Request $request, $id)
+    {
+        $visit = MedicalVisit::findOrFail($id);
+        $visit->medical_status = $request->input('medical_status');
+        $visit->save();
+
+        return redirect()->route('medical_visit.index')->with('success', 'Medical status updated successfully.');
+    }
+
     public function destroy($id)
     {
         $visit = MedicalVisit::findOrFail($id);
@@ -150,32 +174,40 @@ class MedicalVisitController extends Controller
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit deleted successfully.');
     }
 
-    // Approve a specific medical visit
-    public function approve($id)
+    public function calendar()
     {
-        $visit = MedicalVisit::findOrFail($id);
-        $visit->medical_status = 'Approved';
-        $visit->save();
+        $userId = Auth::id();
+        $medicalVisits = MedicalVisit::where('created_by', $userId)
+            ->orWhere('doctor_id', $userId)
+            ->orWhere('nurse_id', $userId)
+            ->with('patient')
+            ->get();
 
-        return redirect()->route('medical_visit.index')->with('success', 'Medical visit approved successfully.');
+        $events = $medicalVisits->map(function ($visit) {
+            return [
+                'title' => $visit->patient->full_name . ' - ' . $visit->treatment_name,
+                'start' => $visit->visit_date,
+                'status' => $visit->is_approved,
+                'backgroundColor' => $visit->is_approved === 'Approved' ? 'green' : 'yellow',
+                'borderColor' => $visit->is_approved === 'Approved' ? 'green' : 'yellow'
+            ];
+        });
+
+        return view('calendar', compact('events'));
     }
 
-    // Reject a specific medical visit
-    public function reject($id)
+    public function reschedule(Request $request, $id)
     {
+        $request->validate([
+            'visit_date' => 'required|date',
+            'time_slot' => 'required',
+        ]);
+
         $visit = MedicalVisit::findOrFail($id);
-        $visit->medical_status = 'Rejected';
+        $visit->visit_date = $request->input('visit_date');
+        $visit->time_slot = $request->input('time_slot');
         $visit->save();
 
-        return redirect()->route('medical_visit.index')->with('success', 'Medical visit rejected successfully.');
-    }
-
-    public function updateStatus(Request $request, $id)
-    {
-        $visit = MedicalVisit::findOrFail($id);
-        $visit->medical_status = $request->input('medical_status');
-        $visit->save();
-
-        return redirect()->route('medical_visit.index')->with('success', 'Medical status updated successfully.');
+        return redirect()->route('medical_visit.index')->with('success', 'Visit rescheduled successfully.');
     }
 }

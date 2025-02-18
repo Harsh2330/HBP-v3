@@ -21,8 +21,8 @@ class CreatePatientsTable extends Migration
             $table->text('full_address');
             $table->string('religion');
             $table->string('economic_status');
-            $table->string('bpl_card_number')->nullable();
-            $table->boolean('ayushman_card');
+            $table->string('bpl_card_number')->nullable()->default('No');
+            $table->string('ayushman_card')->nullable()->default('No');
             $table->string('emergency_contact_name');
             $table->string('emergency_contact_phone');
             $table->string('emergency_contact_relationship');

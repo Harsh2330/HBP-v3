@@ -21,6 +21,30 @@ Route::get('/', function () {
 Route::get('/about-us', function () {
     return view('Homepage.about');
 })->name('about-us');
+Route::get('/services', function () {
+    return view('Homepage.services');
+})->name('services');
+
+Route::get('/services/service1', function () {
+    return view('Services.Service1');
+})->name('services.service1');
+
+Route::get('/services/service2', function () {
+    return view('Services.Service2');
+})->name('services.service2');
+
+Route::get('/services/service3', function () {
+    return view('Services.Service3');
+})->name('services.service3');
+
+Route::get('/services/service4', function () {
+    return view('Services.Service4');
+})->name('services.service4');
+
+Route::get('/services/service5', function () {
+    return view('Services.Service5');
+})->name('services.service5');
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -36,6 +60,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::patch('/medical_visit/{id}/reject', [MedicalVisitController::class, 'reject'])->name('medical_visit.reject');
     Route::patch('/medical_visit/{id}/update_status', [MedicalVisitController::class, 'updateStatus'])->name('medical_visit.update_status');
     Route::delete('/medical_visit/{id}', [MedicalVisitController::class, 'destroy'])->name('medical_visit.destroy');
+    Route::post('/medical-visit/reschedule', [App\Http\Controllers\MedicalVisitController::class, 'reschedule'])->name('medical_visit.reschedule');
+    Route::patch('/medical_visit/{id}/reschedule', [MedicalVisitController::class, 'reschedule'])->name('medical_visit.reschedule');
     
     Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
     Route::get('/doctor/dashboard', [DoctorDashboardController::class, 'index'])->name('doctor.dashboard');
@@ -82,3 +108,4 @@ Route::post('/request-for-visit/store', [RequestForVisitController::class, 'stor
 Route::post('/request-for-visit/{id}/approve', [RequestForVisitController::class, 'approve'])->name('approve.visit');
 
 Route::resource('request_for_visit', RequestForVisitController::class);
+Route::get('/calendar', [App\Http\Controllers\MedicalVisitController::class, 'calendar'])->name('calendar');
