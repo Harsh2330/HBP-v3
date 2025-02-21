@@ -23,6 +23,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <script>
         $(document).ready(function() {
             $('.select2').select2();
@@ -31,4 +33,26 @@
             });
         });
     </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @if(session('success'))
+                toastr.success("{{ session('success') }}");
+            @endif
+            @if(session('error'))
+                toastr.error("{{ session('error') }}");
+            @endif
+            @if(session('warning'))
+                toastr.warning("{{ session('warning') }}");
+            @endif
+            @if(session('info'))
+                toastr.info("{{ session('info') }}");
+            @endif
+        });
+    </script>
+
 @stop
+
+<nav class="main-header navbar navbar-expand navbar-white navbar-light" topnav="true">
+    @include('adminlte::partials.navbar.navbar')
+</nav>
