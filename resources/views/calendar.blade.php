@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var event = info.event;
             var formData = {
                 _token: '{{ csrf_token() }}',
-                visit_date: event.start.toISOString().slice(0, 10),
+                visit_date: new Date(event.start.getTime() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
                 time_slot: event.start.toISOString().slice(11, 16)
             };
             $.ajax({
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var event = info.event;
             var formData = {
                 _token: '{{ csrf_token() }}',
-                visit_date: event.start.toISOString().slice(0, 10),
+                visit_date: new Date(event.start.getTime() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
                 time_slot: event.start.toISOString().slice(11, 16)
             };
             $.ajax({
