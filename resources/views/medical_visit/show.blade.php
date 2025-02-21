@@ -29,7 +29,7 @@
                                 <p><strong>Name:</strong> {{ $visit->patient->full_name }}</p>
                                 <p><strong>ID:</strong> {{ $visit->patient->pat_unique_id }}</p>
                                 <p><strong>Gender:</strong> {{ $visit->patient->gender }}</p>
-                                <p><strong>Age:</strong> {{ $visit->patient->date_of_birth	 }}</p>
+                                <p><strong>Age:</strong> {{ $visit->patient->date_of_birth }}</p>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="visit-details" role="tabpanel" aria-labelledby="visit-details-tab">

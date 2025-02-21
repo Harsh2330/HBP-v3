@@ -51,8 +51,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
-    Route::resource('users', UserController::class);
-    Route::resource('products', ProductController::class);
+    Route::resource('users', UserController::class);    
     Route::resource('medical_visit', MedicalVisitController::class);
     Route::get('medical_visit/{id}/edit', [MedicalVisitController::class, 'edit'])->name('medical_visit.edit');
     Route::patch('medical_visit/{id}', [MedicalVisitController::class, 'update'])->name('medical_visit.update');
@@ -109,3 +108,4 @@ Route::post('/request-for-visit/{id}/approve', [RequestForVisitController::class
 
 Route::resource('request_for_visit', RequestForVisitController::class);
 Route::get('/calendar', [App\Http\Controllers\MedicalVisitController::class, 'calendar'])->name('calendar');
+Route::patch('/medical_visit/{medical_visit}/reschedule', [MedicalVisitController::class, 'reschedule'])->name('medical_visit.reschedule');

@@ -180,20 +180,25 @@ class MedicalVisitController extends Controller
 
     public function calendar()
     {
-        $userId = Auth::id();
-        $medicalVisits = MedicalVisit::where('created_by', $userId)
-            ->orWhere('doctor_id', $userId)
-            ->orWhere('nurse_id', $userId)
-            ->with('patient')
-            ->get();
+        $user = Auth::user();
+        if ($user->hasRole('Admin')) {
+            $medicalVisits = MedicalVisit::with('patient')->get();
+        } else {
+            $userId = $user->id;
+            $medicalVisits = MedicalVisit::where('created_by', $userId)
+                ->orWhere('doctor_id', $userId)
+                ->orWhere('nurse_id', $userId)
+                ->with('patient')
+                ->get();
+        }
 
         $events = $medicalVisits->map(function ($visit) {
             return [
                 'title' => $visit->patient->full_name . ' - ' . $visit->patient->full_address,
-                'start' => $visit->visit_date,
+                'start' => $visit->visit_date ?? $visit->preferred_visit_date,
                 'status' => $visit->is_approved,
-                'backgroundColor' => $visit->is_approved === 'Approved' ? 'green' : 'yellow',
-                'borderColor' => $visit->is_approved === 'Approved' ? 'green' : 'yellow'
+                'backgroundColor' => $visit->is_approved === 'Approved' ? 'green' : ($visit->is_approved === 'Pending' ? 'orange' : 'yellow'),
+                'borderColor' => $visit->is_approved === 'Approved' ? 'green' : ($visit->is_approved === 'Pending' ? 'orange' : 'yellow')
             ];
         });
 
