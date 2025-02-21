@@ -372,6 +372,25 @@ return [
                 'url'  => 'calendar',
                 'icon' => 'fas fa-calendar-alt',
             ],
+            ['header' => 'Reports'],
+            [
+                'text' => 'Admin Report',
+                'url'  => 'admin/report',
+                'icon' => 'fas fa-fw fa-file-alt',
+                
+            ],
+            [
+                'text' => 'Doctor Report',
+                'url'  => 'doctor/report',
+                'icon' => 'fas fa-fw fa-file-medical',
+                
+            ],
+            [
+                'text' => 'User Report',
+                'url'  => 'user/report',
+                'icon' => 'fas fa-fw fa-file-user',
+               
+            ],
             
        
     ],

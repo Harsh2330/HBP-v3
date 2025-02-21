@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{HomeController, RoleController, UserController, ProductController, MedicalVisitController, RequestForVisitController, AdminDashboardController, UserDashboardController, DoctorDashboardController, NurseDashboardController};
 use App\Http\Controllers\Admin\PatientController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\AdminReportController;
+use App\Http\Controllers\DoctorReportController;
+use App\Http\Controllers\UserReportController;
 
 Route::view('/', 'Homepage.welcome')->name('welcome');
 Route::view('/about-us', 'Homepage.about')->name('about-us');
@@ -44,6 +47,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function() {
     Route::post('patient/{id}/approve', [PatientController::class, 'approve'])->name('patient.approve');
     Route::put('patient/{id}/storePatientData', [PatientController::class, 'storePatientData'])->name('patient.storePatientData');
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/report', [AdminReportController::class, 'generateReport'])->name('report');
 });
 
 // Patient Routes
@@ -55,3 +59,7 @@ Route::prefix('patient')->name('patient.')->middleware(['auth'])->group(function
 
 // API Route
 Route::get('/api/users-with-role/{role}', [UserController::class, 'getUsersWithRole']);
+
+// Report Routes
+Route::get('/doctor/report/{doctorId}', [DoctorReportController::class, 'generateReport'])->name('doctor.report');
+Route::get('/user/report', [UserReportController::class, 'generateReport'])->name('reports.user');
