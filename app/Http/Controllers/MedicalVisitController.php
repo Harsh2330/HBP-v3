@@ -66,11 +66,12 @@ class MedicalVisitController extends Controller
             'preferred_visit_date' => 'required|date',
             'preferred_time_slot' => 'required|string',
         ]);
+        $patient = Patient::findOrFail($request->patient_id);
         $symptoms = $request->input('symptoms', []);
         $symptomsString = implode(', ', $symptoms);
         $medicalVisit = new MedicalVisit();
         $medicalVisit->patient_id = $request->patient_id;
-        // Removed visit_date assignment
+        
         $medicalVisit->appointment_type = $request->appointment_type;
         $medicalVisit->primary_complaint = $request->primary_complaint;
         $medicalVisit->symptoms = $symptomsString;  
@@ -82,8 +83,8 @@ class MedicalVisitController extends Controller
 
         AuditLog::create([
             'user_id' => auth()->id(),
-            'action' => 'create',
-            'description' => 'Created a new medical visit for patient ID: ' . $request->patient_id,
+            'action' => 'request',
+            'description' => 'Requested a new medical visit for patient: ' . $patient->full_name . ' (ID: ' . $patient->id . ') on ' . $medicalVisit->preferred_visit_date . ' at ' . $medicalVisit->preferred_time_slot,
         ]);
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit scheduled successfully.');
@@ -131,7 +132,7 @@ class MedicalVisitController extends Controller
         AuditLog::create([
             'user_id' => auth()->id(),
             'action' => 'update',
-            'description' => 'Updated medical visit for patient: ' . $visit->patient->full_name,
+            'description' => 'Updated medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ')',
         ]);
 
         return redirect()->route('medical_visit.show', $visit->id)->with('success', 'Medical visit updated successfully.');
@@ -150,7 +151,7 @@ class MedicalVisitController extends Controller
         AuditLog::create([
             'user_id' => auth()->id(),
             'action' => 'approve',
-            'description' => 'Approved medical visit for patient: ' . $visit->patient->full_name,
+            'description' => 'Approved medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ') on ' . $visit->visit_date . ' at ' . $visit->time_slot,
         ]);
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit approved successfully.');
@@ -172,7 +173,7 @@ class MedicalVisitController extends Controller
         AuditLog::create([
             'user_id' => auth()->id(),
             'action' => 'delete',
-            'description' => 'Deleted medical visit for patient: ' . $visit->patient->full_name,
+            'description' => 'Deleted medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ')',
         ]);
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit deleted successfully.');
@@ -217,6 +218,12 @@ class MedicalVisitController extends Controller
         $visit->visit_date = $request->input('visit_date');
         $visit->time_slot = $request->input('time_slot');
         $visit->save();
+
+        AuditLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'reschedule',
+            'description' => 'Rescheduled medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ') to ' . $visit->visit_date . ' at ' . $visit->time_slot,
+        ]);
 
         return redirect()->route('medical_visit.index')->with('success', 'Visit rescheduled successfully.');
     }

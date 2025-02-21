@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container mt-5">
     <h1 class="text-center mb-4 text-primary font-weight-bold">Medical Visits Calendar</h1>
-    <div id="calendar"></div>
+    <div id="calendar" class="bg-white rounded-lg shadow p-4"></div>
 </div>
 
 <!-- Modal for adding/editing/rescheduling visits -->
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'PATCH',
                 data: formData,
                 success: function(response) {
-                    calendar.refetchEvents();
+                    location.reload();
                 },
                 error: function() {
                     info.revert();
@@ -159,12 +159,34 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'PATCH',
                 data: formData,
                 success: function(response) {
-                    calendar.refetchEvents();
+                    location.reload();
                 },
                 error: function() {
                     info.revert();
                 }
             });
+        },
+        eventRender: function(info) {
+            var event = info.event;
+            var element = info.el;
+            element.classList.add('p-2', 'rounded-lg', 'shadow-md', 'hover:shadow-lg', 'transition-shadow', 'duration-300');
+            if (event.extendedProps.status === 'Approved') {
+                element.classList.add('bg-success', 'text-white');
+            } else if (event.extendedProps.status === 'Pending') {
+                element.classList.add('bg-warning', 'text-white');
+            } else {
+                element.classList.add('bg-secondary', 'text-white');
+            }
+            // Add custom content to the event element
+            var content = `
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <h5 class="mb-0">${event.title}</h5>
+                        <small>${event.extendedProps.status}</small>
+                    </div>
+                </div>
+            `;
+            element.innerHTML = content;
         }
     });
     calendar.render();
@@ -196,13 +218,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-
-<style>
-    .text-primary {
-        color: #4e73df !important;
-    }
-    .font-weight-bold {
-        font-weight: bold !important;
-    }
-</style>
 @endsection
