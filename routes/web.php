@@ -109,3 +109,5 @@ Route::post('/request-for-visit/{id}/approve', [RequestForVisitController::class
 Route::resource('request_for_visit', RequestForVisitController::class);
 Route::get('/calendar', [App\Http\Controllers\MedicalVisitController::class, 'calendar'])->name('calendar');
 Route::patch('/medical_visit/{medical_visit}/reschedule', [MedicalVisitController::class, 'reschedule'])->name('medical_visit.reschedule');
+
+Route::get('/medical-visit/details/{id}', [App\Http\Controllers\MedicalVisitController::class, 'getVisitDetails'])->name('medical_visit.details');

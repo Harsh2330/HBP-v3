@@ -194,6 +194,7 @@ class MedicalVisitController extends Controller
 
         $events = $medicalVisits->map(function ($visit) {
             return [
+                'id' => $visit->id,
                 'title' => $visit->patient->full_name . ' - ' . $visit->patient->full_address,
                 'start' => $visit->visit_date ?? $visit->preferred_visit_date,
                 'status' => $visit->is_approved,
@@ -218,5 +219,11 @@ class MedicalVisitController extends Controller
         $visit->save();
 
         return redirect()->route('medical_visit.index')->with('success', 'Visit rescheduled successfully.');
+    }
+
+    public function getVisitDetails($id)
+    {
+        $visit = MedicalVisit::with(['patient', 'doctor', 'nurse'])->findOrFail($id);
+        return response()->json($visit);
     }
 }

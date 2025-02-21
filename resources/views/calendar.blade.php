@@ -60,6 +60,32 @@
     </div>
 </div>
 
+<!-- Modal for displaying visit details -->
+<div class="modal fade" id="visitDetailsModal" tabindex="-1" role="dialog" aria-labelledby="visitDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="visitDetailsModalLabel">Visit Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Patient:</strong> <span id="details_patient"></span></p>
+                <p><strong>Doctor:</strong> <span id="details_doctor"></span></p>
+                <p><strong>Nurse:</strong> <span id="details_nurse"></span></p>
+                <p><strong>Date:</strong> <span id="details_date"></span></p>
+                <p><strong>Time Slot:</strong> <span id="details_time_slot"></span></p>
+                <p><strong>Appointment Type:</strong> <span id="details_appointment_type"></span></p>
+                <p><strong>Primary Complaint:</strong> <span id="details_primary_complaint"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Ensure jQuery is loaded
@@ -88,14 +114,19 @@ document.addEventListener('DOMContentLoaded', function() {
             $('#preferred_visit_date').val(info.dateStr);
         },
         eventClick: function(info) {
-            var event = info.event;
-            $('#visitModal').modal('show');
-            $('#visit_id').val(event.id);
-            $('#patient_id').val(event.extendedProps.patient_id);
-            $('#preferred_visit_date').val(event.start.toISOString().slice(0, 10));
-            $('#preferred_time_slot').val(event.start.toISOString().slice(11, 16));
-            $('#appointment_type').val(event.extendedProps.appointment_type);
-            $('#primary_complaint').val(event.extendedProps.primary_complaint);
+            var visitId = info.event.id;
+            fetch(`/medical-visit/details/${visitId}`)
+                .then(response => response.json())
+                .then(data => {
+                    $('#details_patient').text(data.patient.full_name);
+                    $('#details_doctor').text(data.doctor.name);
+                    $('#details_nurse').text(data.nurse.name);
+                    $('#details_date').text(data.visit_date);
+                    $('#details_time_slot').text(data.time_slot);
+                    $('#details_appointment_type').text(data.appointment_type);
+                    $('#details_primary_complaint').text(data.primary_complaint);
+                    $('#visitDetailsModal').modal('show');
+                });
         },
         eventDrop: function(info) {
             var event = info.event;
