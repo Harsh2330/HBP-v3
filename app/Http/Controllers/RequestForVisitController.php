@@ -6,6 +6,7 @@ use App\Models\MedicalVisit;
 use App\Models\AuditLog; // Add this import
 use App\Models\User; // Add this import
 use Illuminate\Support\Facades\Auth; // Add this import
+use Carbon\Carbon; // Add this import
 
 class RequestForVisitController extends Controller
 {
@@ -41,7 +42,7 @@ class RequestForVisitController extends Controller
         $medicalVisit = MedicalVisit::create($validatedData);
 
         AuditLog::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'action' => 'create',
             'description' => 'Scheduled a new appointment for patient: ' . $medicalVisit->patient_name,
         ]);
@@ -65,7 +66,7 @@ class RequestForVisitController extends Controller
         $medicalVisit->save();
 
         AuditLog::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'action' => 'approve',
             'description' => 'Approved medical visit for patient: ' . $medicalVisit->patient->full_name,
         ]);

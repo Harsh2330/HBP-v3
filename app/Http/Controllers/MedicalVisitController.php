@@ -8,11 +8,13 @@ use App\Models\User;
 use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class MedicalVisitController extends Controller
 {
+    
     function __construct()
     {
         $this->middleware('permission:medical-visit-list|medical-visit-create|medical-visit-edit|medical-visit-delete', ['only' => ['index','show']]);
@@ -82,7 +84,7 @@ class MedicalVisitController extends Controller
         $medicalVisit->save();
 
         AuditLog::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'action' => 'request',
             'description' => 'Requested a new medical visit for patient: ' . $patient->full_name . ' (ID: ' . $patient->id . ') on ' . $medicalVisit->preferred_visit_date . ' at ' . $medicalVisit->preferred_time_slot,
         ]);
@@ -130,7 +132,7 @@ class MedicalVisitController extends Controller
         $visit->save();
 
         AuditLog::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'action' => 'update',
             'description' => 'Updated medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ')',
         ]);
@@ -149,7 +151,7 @@ class MedicalVisitController extends Controller
         $visit->save();
 
         AuditLog::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'action' => 'approve',
             'description' => 'Approved medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ') on ' . $visit->visit_date . ' at ' . $visit->time_slot,
         ]);
@@ -171,7 +173,7 @@ class MedicalVisitController extends Controller
         $visit->delete();
 
         AuditLog::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'action' => 'delete',
             'description' => 'Deleted medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ')',
         ]);
@@ -220,7 +222,7 @@ class MedicalVisitController extends Controller
         $visit->save();
 
         AuditLog::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'action' => 'reschedule',
             'description' => 'Rescheduled medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ') to ' . $visit->visit_date . ' at ' . $visit->time_slot,
         ]);
