@@ -42,14 +42,6 @@ class PatientController extends Controller
         return view('patient.show', compact('patient'));
     }
 
-    // public function approve($id)
-    // {
-    //     $patient = Patient::findOrFail($id);
-    //     $patient->is_approved = true;
-    //     $patient->save();
-    //     return redirect()->route('admin.patient.list');
-    // }
-
     public function edit($id)
     {
         $patient = Patient::findOrFail($id);
@@ -85,7 +77,7 @@ class PatientController extends Controller
             'description' => 'Created a new patient: ' . $patient->full_name,
         ]);
         Log::info('Audit log created for patient creation', ['user_id' => auth()->id(), 'action' => 'create']);
-        return redirect()->route('admin.patient.index');
+        return redirect()->route('admin.patient.index')->with('success', 'Patient created successfully.');
     }
 
     public function update(Request $request, $id)
@@ -103,7 +95,7 @@ class PatientController extends Controller
             'description' => 'Updated patient: ' . $patient->full_name . ' with fields: ' . implode(', ', array_keys($data)),
         ]);
         Log::info('Audit log created for patient update', ['user_id' => auth()->id(), 'action' => 'update']);
-        return redirect()->route('admin.patient.show', $id);
+        return redirect()->route('admin.patient.show', $id)->with('success', 'Patient updated successfully.');
     }
 
     public function destroy($id)
@@ -117,7 +109,7 @@ class PatientController extends Controller
             'description' => 'Deleted patient: ' . $patientName,
         ]);
         Log::info('Audit log created for patient deletion', ['user_id' => auth()->id(), 'action' => 'delete']);
-        return redirect()->route('admin.patient.index');
+        return redirect()->route('admin.patient.index')->with('success', 'Patient deleted successfully.');
     }
 
     public function profile()
