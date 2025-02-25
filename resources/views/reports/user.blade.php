@@ -28,6 +28,7 @@
                     <button type="submit" class="btn btn-primary bg-blue-600 text-white py-2 px-4 rounded-md">Filter</button>
                 </form>
                 <a href="{{ route('reports.export', ['patient_id' => $selectedPatientId, 'start_date' => $startDate, 'end_date' => $endDate]) }}" class="btn btn-secondary bg-green-600 text-white py-2 px-4 rounded-md">Export to Excel</a>
+                <a href="{{ route('reports.export.csv', ['patient_id' => $selectedPatientId, 'start_date' => $startDate, 'end_date' => $endDate]) }}" class="btn btn-secondary bg-yellow-600 text-white py-2 px-4 rounded-md">Export to CSV</a>
                 @if($selectedPatientId && !empty($userVisits))
                 <h3 class="text-blue-600 font-bold text-xl mt-6">Patient Profile</h3>
                 <p>Name: {{ $patients->find($selectedPatientId)->full_name }}</p>

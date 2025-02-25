@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\DoctorReportExport;
+use App\Exports\DoctorReportCsvExport;
 
 class DoctorReportController extends Controller
 {
@@ -56,6 +57,20 @@ class DoctorReportController extends Controller
     {
         $doctorId = Auth::id();
         return Excel::download(new DoctorReportExport($doctorId), 'doctor_report.xlsx');
+    }
+
+    public function exportReportCsv(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        
+        return Excel::download(new DoctorReportCsvExport($startDate, $endDate), 'doctor_report.csv');
+    }
+
+    public function exportLoggedInDoctorReportCsv()
+    {
+        $doctorId = Auth::id();
+        return Excel::download(new DoctorReportCsvExport($doctorId), 'doctor_report.csv');
     }
 
     private function getSummaryStatistics($doctorId)

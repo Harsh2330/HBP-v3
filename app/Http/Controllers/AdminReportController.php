@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AdminReportExport;
+use App\Exports\AdminReportCsvExport;
 
 class AdminReportController extends Controller
 {
@@ -83,5 +84,13 @@ class AdminReportController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
         return Excel::download(new AdminReportExport($startDate, $endDate), 'admin_report.xlsx');
+    }
+
+    public function exportAdminReportCsv(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        
+        return Excel::download(new AdminReportCsvExport($startDate, $endDate), 'admin_report.csv');
     }
 }
