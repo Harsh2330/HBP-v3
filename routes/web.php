@@ -1,10 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\{HomeController, RoleController, UserController, ProductController, MedicalVisitController, RequestForVisitController, AdminDashboardController, UserDashboardController, DoctorDashboardController, NurseDashboardController};
 use App\Http\Controllers\Admin\PatientController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\AdminReportController;
+use App\Http\Controllers\DoctorReportController;
+use App\Http\Controllers\UserReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
@@ -17,100 +19,64 @@ use App\Http\Controllers\NurseDashboardController;
 use App\Http\Controllers\MessageController;
 
 
-Route::get('/', function () {
-    return view('Homepage.welcome');
-})->name('welcome');;
-Route::get('/about-us', function () {
-    return view('Homepage.about');
-})->name('about-us');
-Route::get('/services', function () {
-    return view('Homepage.services');
-})->name('services');
+Route::view('/', 'Homepage.welcome')->name('welcome');
+Route::view('/about-us', 'Homepage.about')->name('about-us');
+Route::view('/services', 'Homepage.services')->name('services');
 
-Route::get('/services/service1', function () {
-    return view('Services.Service1');
-})->name('services.service1');
-
-Route::get('/services/service2', function () {
-    return view('Services.Service2');
-})->name('services.service2');
-
-Route::get('/services/service3', function () {
-    return view('Services.Service3');
-})->name('services.service3');
-
-Route::get('/services/service4', function () {
-    return view('Services.Service4');
-})->name('services.service4');
-
-Route::get('/services/service5', function () {
-    return view('Services.Service5');
-})->name('services.service5');
+// Services Routes
+foreach (range(1, 5) as $num) {
+    Route::view("/services/service{$num}", "Services.Service{$num}")->name("services.service{$num}");
+}
 
 Auth::routes();
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::group(['middleware' => ['auth']], function() {
-    Route::resource('roles', RoleController::class);
-    Route::resource('users', UserController::class);
-    Route::resource('products', ProductController::class);
-    Route::resource('medical_visit', MedicalVisitController::class);
-    Route::get('medical_visit/{id}/edit', [MedicalVisitController::class, 'edit'])->name('medical_visit.edit');
-    Route::patch('medical_visit/{id}', [MedicalVisitController::class, 'update'])->name('medical_visit.update');
+Route::middleware(['auth'])->group(function() {
+    Route::resources([
+        'roles' => RoleController::class,
+        'users' => UserController::class,
+        'medical_visit' => MedicalVisitController::class,
+        'request_for_visit' => RequestForVisitController::class,
+    ]);
+    
     Route::patch('/medical_visit/{id}/approve', [MedicalVisitController::class, 'approve'])->name('medical_visit.approve');
     Route::patch('/medical_visit/{id}/reject', [MedicalVisitController::class, 'reject'])->name('medical_visit.reject');
     Route::patch('/medical_visit/{id}/update_status', [MedicalVisitController::class, 'updateStatus'])->name('medical_visit.update_status');
-    Route::delete('/medical_visit/{id}', [MedicalVisitController::class, 'destroy'])->name('medical_visit.destroy');
-    Route::post('/medical-visit/reschedule', [App\Http\Controllers\MedicalVisitController::class, 'reschedule'])->name('medical_visit.reschedule');
     Route::patch('/medical_visit/{id}/reschedule', [MedicalVisitController::class, 'reschedule'])->name('medical_visit.reschedule');
-    
+    Route::get('/calendar', [MedicalVisitController::class, 'calendar'])->name('calendar');
+    Route::get('/medical-visit/details/{id}', [MedicalVisitController::class, 'getVisitDetails'])->name('medical_visit.details');
+
+    // Dashboard Routes
     Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
     Route::get('/doctor/dashboard', [DoctorDashboardController::class, 'index'])->name('doctor.dashboard');
     Route::get('/nurse/dashboard', [NurseDashboardController::class, 'index'])->name('nurse.dashboard');
+
+    Route::get('/doctor/report', [DoctorReportController::class, 'generateLoggedInDoctorReport'])->name('doctor.report.loggedin');
 });
 
-// Admin routes
+// Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function() {
     Route::resource('patient', PatientController::class);
-    Route::post('patient/{user}/approve', [PatientController::class, 'approve'])->name('patient.approve');
-    Route::post('patient', [PatientController::class, 'store'])->name('patient.store');
+    Route::post('patient/{id}/approve', [PatientController::class, 'approve'])->name('patient.approve');
     Route::put('patient/{id}/storePatientData', [PatientController::class, 'storePatientData'])->name('patient.storePatientData');
-    Route::get('patient-list', [PatientController::class, 'list'])->name('patient.list');
-    Route::delete('patient/{id}', [PatientController::class, 'destroy'])->name('patient.destroy'); // Add this line
-Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard'); // Ensure this line is correct
+    Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/report', [AdminReportController::class, 'generateReport'])->name('report');
 });
 
-Route::prefix('admin')->group(function () {
-    Route::get('patient/list', [PatientController::class, 'list'])->name('admin.patient.list');
-    Route::get('patient/create', [PatientController::class, 'create'])->name('admin.patient.create');
-    Route::post('patient/store', [PatientController::class, 'store'])->name('admin.patient.store');
-    Route::get('patient/{id}/show', [PatientController::class, 'show'])->name('admin.patient.show');
-    Route::get('patient/{id}/edit', [PatientController::class, 'edit'])->name('admin.patient.edit');
-    Route::put('patient/{id}', [PatientController::class, 'update'])->name('admin.patient.update');
-    Route::delete('patient/{id}', [PatientController::class, 'destroy'])->name('admin.patient.destroy');
-    Route::post('patient/{id}/approve', [PatientController::class, 'approve'])->name('admin.patient.approve');
-    Route::get('patient', [PatientController::class, 'index'])->name('admin.patient.index');
-});
-
-// Add patient panel routes
+// Patient Routes
 Route::prefix('patient')->name('patient.')->middleware(['auth'])->group(function() {
     Route::get('dashboard', [HomeController::class, 'patientIndex'])->name('dashboard');
     Route::get('profile', [PatientController::class, 'profile'])->name('profile');
     Route::post('profile', [PatientController::class, 'updateProfile'])->name('profile.update');
 });
 
-// API route to fetch users with a specified role
+// API Route
 Route::get('/api/users-with-role/{role}', [UserController::class, 'getUsersWithRole']);
 
-// Add the route for request_for_visit
-Route::get('/request_for_visit', [RequestForVisitController::class, 'index'])->name('request_for_visit');
-Route::get('/request-for-visit/create', [RequestForVisitController::class, 'create'])->name('request_for_visit.create');
-Route::post('/request-for-visit/store', [RequestForVisitController::class, 'store'])->name('request_for_visit.store');
-Route::post('/request-for-visit/{id}/approve', [RequestForVisitController::class, 'approve'])->name('approve.visit');
-
-Route::resource('request_for_visit', RequestForVisitController::class);
-Route::get('/calendar', [App\Http\Controllers\MedicalVisitController::class, 'calendar'])->name('calendar');
+// Report Routes
+Route::get('/doctor/report/{doctorId}', [DoctorReportController::class, 'generateReport'])->name('doctor.report');
+Route::get('/user/report', [UserReportController::class, 'generateReport'])->name('reports.user');
+Route::get('/reports/admin', [AdminReportController::class, 'generateReport'])->name('reports.admin');
 
 //Message
 Route::middleware(['auth'])->group(function () {

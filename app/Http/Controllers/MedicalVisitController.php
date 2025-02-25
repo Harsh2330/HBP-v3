@@ -8,11 +8,13 @@ use App\Models\User;
 use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class MedicalVisitController extends Controller
 {
+    
     function __construct()
     {
         $this->middleware('permission:medical-visit-list|medical-visit-create|medical-visit-edit|medical-visit-delete', ['only' => ['index','show']]);
@@ -66,24 +68,25 @@ class MedicalVisitController extends Controller
             'preferred_visit_date' => 'required|date',
             'preferred_time_slot' => 'required|string',
         ]);
+        $patient = Patient::findOrFail($request->patient_id);
         $symptoms = $request->input('symptoms', []);
         $symptomsString = implode(', ', $symptoms);
         $medicalVisit = new MedicalVisit();
         $medicalVisit->patient_id = $request->patient_id;
-        // Removed visit_date assignment
+        
         $medicalVisit->appointment_type = $request->appointment_type;
         $medicalVisit->primary_complaint = $request->primary_complaint;
         $medicalVisit->symptoms = $symptomsString;  
-        $medicalVisit->is_emergency = $request->is_emergency ?? false;
+        $medicalVisit->is_emergency = $request->appointment_type === 'Emergency Visit';
         $medicalVisit->created_by = Auth::id();
         $medicalVisit->preferred_visit_date = $request->preferred_visit_date;
         $medicalVisit->preferred_time_slot = $request->preferred_time_slot;
         $medicalVisit->save();
 
         AuditLog::create([
-            'user_id' => auth()->id(),
-            'action' => 'create',
-            'description' => 'Created a new medical visit for patient ID: ' . $request->patient_id,
+            'user_id' => Auth::id(),
+            'action' => 'request',
+            'description' => 'Requested a new medical visit for patient: ' . $patient->full_name . ' (ID: ' . $patient->id . ') on ' . $medicalVisit->preferred_visit_date . ' at ' . $medicalVisit->preferred_time_slot,
         ]);
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit scheduled successfully.');
@@ -125,13 +128,13 @@ class MedicalVisitController extends Controller
         $visit = MedicalVisit::findOrFail($id);
         $visit->update($request->all());
         $visit->symptoms = $symptomsString;
-        $visit->is_emergency = $request->is_emergency ?? false;
+        $visit->is_emergency = $request->appointment_type === 'Emergency Visit';
         $visit->save();
 
         AuditLog::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'action' => 'update',
-            'description' => 'Updated medical visit for patient: ' . $visit->patient->full_name,
+            'description' => 'Updated medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ')',
         ]);
 
         return redirect()->route('medical_visit.show', $visit->id)->with('success', 'Medical visit updated successfully.');
@@ -148,9 +151,9 @@ class MedicalVisitController extends Controller
         $visit->save();
 
         AuditLog::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'action' => 'approve',
-            'description' => 'Approved medical visit for patient: ' . $visit->patient->full_name,
+            'description' => 'Approved medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ') on ' . $visit->visit_date . ' at ' . $visit->time_slot,
         ]);
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit approved successfully.');
@@ -170,9 +173,9 @@ class MedicalVisitController extends Controller
         $visit->delete();
 
         AuditLog::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'action' => 'delete',
-            'description' => 'Deleted medical visit for patient: ' . $visit->patient->full_name,
+            'description' => 'Deleted medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ')',
         ]);
 
         return redirect()->route('medical_visit.index')->with('success', 'Medical visit deleted successfully.');
@@ -180,20 +183,26 @@ class MedicalVisitController extends Controller
 
     public function calendar()
     {
-        $userId = Auth::id();
-        $medicalVisits = MedicalVisit::where('created_by', $userId)
-            ->orWhere('doctor_id', $userId)
-            ->orWhere('nurse_id', $userId)
-            ->with('patient')
-            ->get();
+        $user = Auth::user();
+        if ($user->hasRole('Admin')) {
+            $medicalVisits = MedicalVisit::with('patient')->get();
+        } else {
+            $userId = $user->id;
+            $medicalVisits = MedicalVisit::where('created_by', $userId)
+                ->orWhere('doctor_id', $userId)
+                ->orWhere('nurse_id', $userId)
+                ->with('patient')
+                ->get();
+        }
 
         $events = $medicalVisits->map(function ($visit) {
             return [
+                'id' => $visit->id,
                 'title' => $visit->patient->full_name . ' - ' . $visit->patient->full_address,
-                'start' => $visit->visit_date,
+                'start' => $visit->visit_date ?? $visit->preferred_visit_date,
                 'status' => $visit->is_approved,
-                'backgroundColor' => $visit->is_approved === 'Approved' ? 'green' : 'yellow',
-                'borderColor' => $visit->is_approved === 'Approved' ? 'green' : 'yellow'
+                'backgroundColor' => $visit->is_approved === 'Approved' ? 'green' : ($visit->is_approved === 'Pending' ? 'orange' : 'yellow'),
+                'borderColor' => $visit->is_approved === 'Approved' ? 'green' : ($visit->is_approved === 'Pending' ? 'orange' : 'yellow')
             ];
         });
 
@@ -212,6 +221,18 @@ class MedicalVisitController extends Controller
         $visit->time_slot = $request->input('time_slot');
         $visit->save();
 
+        AuditLog::create([
+            'user_id' => Auth::id(),
+            'action' => 'reschedule',
+            'description' => 'Rescheduled medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ') to ' . $visit->visit_date . ' at ' . $visit->time_slot,
+        ]);
+
         return redirect()->route('medical_visit.index')->with('success', 'Visit rescheduled successfully.');
+    }
+
+    public function getVisitDetails($id)
+    {
+        $visit = MedicalVisit::with(['patient', 'doctor', 'nurse'])->findOrFail($id);
+        return response()->json($visit);
     }
 }

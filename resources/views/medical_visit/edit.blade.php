@@ -149,6 +149,8 @@
                             </div>
                         </div>
 
+                        <input type="hidden" name="is_emergency" id="is_emergency" value="{{ $visit->is_emergency ? 1 : 0 }}">
+
                         <button type="submit" class="btn btn-primary">Update</button>
                         <a href="{{ route('medical_visit.index') }}" class="btn btn-secondary">Back to List</a>
                     </form>
@@ -191,6 +193,11 @@ document.getElementById('patient_id').addEventListener('change', function() {
     var selectedOption = this.options[this.selectedIndex];
     var uniqueId = selectedOption.getAttribute('data-unique-id');
     document.getElementById('unique_id').value = uniqueId;
+});
+
+document.getElementById('appointment_type').addEventListener('change', function() {
+    var isEmergency = this.value === 'Emergency Visit';
+    document.getElementById('is_emergency').value = isEmergency ? 1 : 0;
 });
 
 document.addEventListener('DOMContentLoaded', function() {

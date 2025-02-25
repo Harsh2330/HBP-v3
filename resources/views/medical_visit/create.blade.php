@@ -54,6 +54,7 @@
                                     <option value="Other" {{ old('appointment_type') == 'Other' ? 'selected' : '' }}>Other</option>
                                 </select>
                             </div>
+                            <input type="hidden" name="is_emergency" id="is_emergency" value="0">
                         </div>
 
                         <div class="medical-information mb-4">
@@ -136,6 +137,11 @@ document.getElementById('patient_id').addEventListener('change', function() {
     var selectedOption = this.options[this.selectedIndex];
     var uniqueId = selectedOption.getAttribute('data-unique-id');
     document.getElementById('unique_id').value = uniqueId;
+});
+
+document.getElementById('appointment_type').addEventListener('change', function() {
+    var isEmergency = this.value === 'Emergency Visit';
+    document.getElementById('is_emergency').value = isEmergency ? 1 : 0;
 });
 
 document.addEventListener('DOMContentLoaded', function() {

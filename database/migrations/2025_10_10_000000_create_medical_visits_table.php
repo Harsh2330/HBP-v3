@@ -31,7 +31,7 @@ class CreateMedicalVisitsTable extends Migration
             $table->text('procedures')->nullable()->default(null);
             $table->text('doctor_notes')->nullable()->default(null);
             $table->text('nurse_observations')->nullable()->default(null);  
-            $table->string('medical_status')->default('todo'); 
+            $table->string('medical_status')->default('pending'); 
             $table->string('is_approved')->default("pending"); 
             $table->unsignedBigInteger('created_by'); 
             $table->string('treatment_name')->nullable(); 
