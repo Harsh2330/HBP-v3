@@ -33,7 +33,13 @@ class AdminReportController extends Controller
         }
         $appointments = $query->orderBy('visit_date', 'asc')->get();
 
-        $doctorPerformance = User::role('Doctor')->withCount('medicalVisits')->get();
+        $doctorPerformance = User::role('Doctor')->get()->map(function ($doctor) {
+            $doctor->patients_seen = MedicalVisit::where('doctor_id', $doctor->id)->count();
+            $doctor->pending_visits = MedicalVisit::where('doctor_id', $doctor->id)->where('medical_status', 'pending')->count();
+            $doctor->completed_visits = MedicalVisit::where('doctor_id', $doctor->id)->where('medical_status', 'Completed')->count();
+            $doctor->emergency_visits = MedicalVisit::where('doctor_id', $doctor->id)->where('is_emergency', true)->count();
+            return $doctor;
+        });
 
         // Additional data for the new sections
         $malePatients = Patient::where('gender', 'Male')->count();
@@ -74,11 +80,7 @@ class AdminReportController extends Controller
         ));
     }
 
-    public function exportReport(Request $request)
-    {
-        // ...existing code...
-    }
-
+  
     public function exportAdminReport(Request $request)
     {
         $startDate = $request->input('start_date');
