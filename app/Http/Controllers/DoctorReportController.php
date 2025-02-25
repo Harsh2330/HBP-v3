@@ -11,16 +11,24 @@ use App\Exports\DoctorReportExport;
 
 class DoctorReportController extends Controller
 {
-    public function generateReport($doctorId)
+    public function generateReport($doctorId, Request $request)
     {
         $doctor = User::find($doctorId);
-        $doctorVisits = MedicalVisit::where('doctor_id', $doctorId)->with(['patient', 'nurse'])->get();
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $query = MedicalVisit::where('doctor_id', $doctorId)->with(['patient', 'nurse']);
+        if ($startDate && $endDate) {
+            $query->whereBetween('visit_date', [$startDate, $endDate]);
+        }
+        $doctorVisits = $query->get();
+
         $summary = $this->getSummaryStatistics($doctorId);
         $vitalStats = $this->getVitalStatsSummary($doctorId);
         $treatments = $this->getTreatmentsAndProcedures($doctorId);
         $followUps = $this->getPendingFollowUps($doctorId);
 
-        return view('reports.doctor', compact('doctor', 'doctorVisits', 'summary', 'vitalStats', 'treatments', 'followUps'));
+        return view('reports.doctor', compact('doctor', 'doctorVisits', 'summary', 'vitalStats', 'treatments', 'followUps', 'startDate', 'endDate'));
     }
 
     public function generateLoggedInDoctorReport()
@@ -36,9 +44,12 @@ class DoctorReportController extends Controller
         return view('reports.doctor', compact('doctor', 'doctorVisits', 'summary', 'vitalStats', 'treatments', 'followUps'));
     }
 
-    public function exportReport($doctorId)
+    public function exportReport(Request $request)
     {
-        return Excel::download(new DoctorReportExport($doctorId), 'doctor_report.xlsx');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        
+        return Excel::download(new DoctorReportExport($startDate, $endDate), 'doctor_report.xlsx');
     }
 
     public function exportLoggedInDoctorReport()

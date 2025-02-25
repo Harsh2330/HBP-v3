@@ -25,7 +25,23 @@ class UserReportExport implements FromView
     public function view(): View
     {
         return view('exports.user_report', [
-            'userVisits' => $this->userVisits,
+            'userVisits' => $this->userVisits->map(function ($visit) {
+                return [
+                    'Visit ID' => $visit->id,
+                    'Visit Date' => $visit->visit_date,
+                    'Doctor Name' => $visit->doctor->name,
+                    'Symptoms Reported' => $visit->symptoms,
+                    'Diagnosis' => $visit->diagnosis,
+                    'Medications Prescribed' => $visit->medications_prescribed,
+                    'Ongoing Treatments' => $visit->ongoing_treatments,
+                    'Procedures' => $visit->procedures,
+                    'Sugar Level' => $visit->sugar_level,
+                    'Heart Rate' => $visit->heart_rate,
+                    'Temperature' => $visit->temperature,
+                    'Oxygen Level' => $visit->oxygen_level,
+                    'Doctor Notes' => $visit->doctor_notes,
+                ];
+            }),
             'patients' => $this->patients,
             'selectedPatientId' => $this->selectedPatientId,
             'startDate' => $this->startDate,

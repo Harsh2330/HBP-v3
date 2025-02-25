@@ -19,18 +19,27 @@ class AdminReportExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        $query = MedicalVisit::with(['patient', 'doctor']);
+        $query = MedicalVisit::with(['patient', 'doctor', 'nurse']);
         if ($this->startDate && $this->endDate) {
             $query->whereBetween('visit_date', [$this->startDate, $this->endDate]);
         }
         return $query->orderBy('visit_date', 'asc')->get()
             ->map(function ($visit) {
                 return [
-                    'Visit Date' => $visit->visit_date,
+                    'Medical Visit ID' => $visit->id,
                     'Patient Name' => $visit->patient->full_name,
-                    'Doctor Assigned' => $visit->doctor->name,
+                    'Patient ID' => $visit->patient->pat_unique_id,
+                    'Doctor Name' => $visit->doctor->name,
+                    'Nurse Name' => $visit->nurse->name,
+                    'Visit Date' => $visit->visit_date,
                     'Appointment Type' => $visit->appointment_type,
-                    'Status' => $visit->is_approved,
+                    'Medical Status' => $visit->medical_status,
+                    'Approval Status' => $visit->is_approved,
+                    'Diagnosis' => $visit->diagnosis,
+                    'Medications Prescribed' => $visit->medications_prescribed,
+                    'Procedures' => $visit->procedures,
+                    'Emergency Case?' => $visit->is_emergency,
+                    'Created By' => $visit->created_by,
                 ];
             });
     }
@@ -38,11 +47,20 @@ class AdminReportExport implements FromCollection, WithHeadings
     public function headings(): array
     {
         return [
-            'Visit Date',
+            'Medical Visit ID',
             'Patient Name',
-            'Doctor Assigned',
+            'Patient ID',
+            'Doctor Name',
+            'Nurse Name',
+            'Visit Date',
             'Appointment Type',
-            'Status',
+            'Medical Status',
+            'Approval Status',
+            'Diagnosis',
+            'Medications Prescribed',
+            'Procedures',
+            'Emergency Case?',
+            'Created By',
         ];
     }
 }
