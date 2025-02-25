@@ -68,19 +68,19 @@
                 <p>Top 5 Most Diagnosed Conditions:</p>
                 <ul class="list-disc list-inside">
                     @foreach($topDiagnoses as $diagnosis)
-                    <li>{{ $diagnosis->name }} ({{ $diagnosis->count }})</li>
+                    <li>{{ $diagnosis->name }}</li>
                     @endforeach
                 </ul>
                 <p>Top 5 Most Prescribed Medications:</p>
                 <ul class="list-disc list-inside">
                     @foreach($topMedications as $medication)
-                    <li>{{ $medication->name }} ({{ $medication->count }})</li>
+                    <li>{{ $medication->name }}</li>
                     @endforeach
                 </ul>
                 <p>Common Procedures Done:</p>
                 <ul class="list-disc list-inside">
                     @foreach($commonProcedures as $procedure)
-                    <li>{{ $procedure->name }} ({{ $procedure->count }})</li>
+                    <li>{{ $procedure->name }}</li>
                     @endforeach
                 </ul>
 

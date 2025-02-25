@@ -39,6 +39,8 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
     Route::get('/doctor/dashboard', [DoctorDashboardController::class, 'index'])->name('doctor.dashboard');
     Route::get('/nurse/dashboard', [NurseDashboardController::class, 'index'])->name('nurse.dashboard');
+
+    Route::get('/doctor/report', [DoctorReportController::class, 'generateLoggedInDoctorReport'])->name('doctor.report.loggedin');
 });
 
 // Admin Routes

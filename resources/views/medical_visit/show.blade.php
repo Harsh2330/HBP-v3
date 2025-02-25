@@ -77,10 +77,6 @@
                     <a href="{{ route('medical_visit.edit', $visit->id) }}" class="btn btn-primary mt-4">Update Visit</a>
                     @endcan
 
-                    @can('medical-visit-reschedule', $visit)
-                    <button class="btn btn-warning mt-4" data-toggle="modal" data-target="#rescheduleModal-{{ $visit->id }}">Reschedule Visit</button>
-                    @endcan
-
                     <a href="{{ route('medical_visit.index') }}" class="btn btn-secondary mt-4">Back to List</a>
 
                     <div class="modal fade" id="rescheduleModal-{{ $visit->id }}" tabindex="-1" role="dialog" aria-labelledby="rescheduleModalLabel-{{ $visit->id }}" aria-hidden="true">

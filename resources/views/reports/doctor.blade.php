@@ -7,45 +7,61 @@
         <div class="col-lg-12">
             <div class="card shadow-lg transition-card">
                 <div class="card-body">
-                    @foreach($doctorVisits as $visit)
-                    <h3 class="text-primary font-weight-bold">Patient Information</h3>
-                    <p>Patient Name: {{ $visit->patient->full_name }}</p>
-                    <p>Patient ID: {{ $visit->patient->pat_unique_id }}</p>
-                    <p>Gender: {{ $visit->patient->gender }}</p>
-                    <p>Age Category: {{ $visit->patient->age_category }}</p>
-                    <p>Contact Number: {{ $visit->patient->phone_number }}</p>
-                    <p>Emergency Contact: {{ $visit->patient->emergency_contact_name }}, {{ $visit->patient->emergency_contact_relationship }}, {{ $visit->patient->emergency_contact_phone }}</p>
+                    <h3 class="text-primary font-weight-bold">Doctor Information</h3>
+                    <p>Doctor Name: {{ $doctor->name ?? 'N/A' }}</p>
+                    <p>Doctor ID: {{ $doctor->id ?? 'N/A' }}</p>
+                    <p>Specialization: {{ $doctor->specialty ?? 'N/A' }}</p>
 
-                    <h3 class="text-primary font-weight-bold">Visit Details</h3>
-                    <p>Visit Date: {{ $visit->visit_date }}</p>
-                    <p>Appointment Type: {{ $visit->appointment_type }}</p>
-                    <p>Primary Complaint: {{ $visit->primary_complaint }}</p>
-                    <p>Symptoms: {{ $visit->symptoms }}</p>
-                    <p>Doctor Assigned: {{ $visit->doctor->name }}</p>
-                    <p>Nurse Assigned: {{ $visit->nurse->name }}</p>
-                    <p>Medical Status: {{ $visit->medical_status }}</p>
+                    <h3 class="text-primary font-weight-bold">Summary Statistics</h3>
+                    <p>Total Patients Seen: {{ $summary->total_patients ?? 'N/A' }}</p>
+                    <p>Emergency Cases Handled: {{ $summary->emergency_cases ?? 'N/A' }}</p>
+                    <p>Pending Visit Approvals: {{ $summary->pending_approvals ?? 'N/A' }}</p>
+                    <p>Completed Visits: {{ $summary->completed_visits ?? 'N/A' }}</p>
 
-                    <h3 class="text-primary font-weight-bold">Medical Diagnosis & Vitals</h3>
-                    <p>Diagnosis: {{ $visit->diagnosis }}</p>
-                    <p>Simplified Diagnosis: {{ $visit->simplified_diagnosis }}</p>
-                    <p>Sugar Level: {{ $visit->sugar_level }}</p>
-                    <p>Heart Rate: {{ $visit->heart_rate }}</p>
-                    <p>Temperature: {{ $visit->temperature }}</p>
-                    <p>Oxygen Level: {{ $visit->oxygen_level }}</p>
+                    <h3 class="text-primary font-weight-bold">Patient Visit Details</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Visit Date</th>
+                                <th>Patient Name</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Complaint</th>
+                                <th>Diagnosis</th>
+                                <th>Medications</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($doctorVisits as $visit)
+                            <tr>
+                                <td>{{ $visit->visit_date ?? 'N/A' }}</td>
+                                <td>{{ $visit->patient->full_name ?? 'N/A' }}</td>
+                                <td>{{ $visit->patient->age_category ?? 'N/A' }}</td>
+                                <td>{{ $visit->patient->gender ?? 'N/A' }}</td>
+                                <td>{{ $visit->primary_complaint ?? 'N/A' }}</td>
+                                <td>{{ $visit->diagnosis ?? 'N/A' }}</td>
+                                <td>{{ $visit->medications_prescribed ?? 'N/A' }}</td>
+                                <td>{{ $visit->medical_status ?? 'N/A' }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
 
-                    <h3 class="text-primary font-weight-bold">Treatment Plan</h3>
-                    <p>Medications Prescribed: {{ $visit->medications_prescribed }}</p>
-                    <p>Ongoing Treatments: {{ $visit->ongoing_treatments }}</p>
-                    <p>Procedures Done: {{ $visit->procedures }}</p>
-                    <p>Doctor’s Notes: {{ $visit->doctor_notes }}</p>
-                    <p>Nurse Observations: {{ $visit->nurse_observations }}</p>
+                    <h3 class="text-primary font-weight-bold">Vital Stats Summary</h3>
+                    <p>Average Heart Rate: {{ $vitalStats->avg_heart_rate ?? 'N/A' }}</p>
+                    <p>Average Sugar Level: {{ $vitalStats->avg_sugar_level ?? 'N/A' }}</p>
+                    <p>Average Temperature: {{ $vitalStats->avg_temperature ?? 'N/A' }}</p>
+                    <p>Average Oxygen Level: {{ $vitalStats->avg_oxygen_level ?? 'N/A' }}</p>
 
-                    <h3 class="text-primary font-weight-bold">Follow-up Details</h3>
-                    <p>Next Preferred Visit Date: {{ $visit->preferred_visit_date }}</p>
-                    <p>Preferred Time Slot: {{ $visit->preferred_time_slot }}</p>
-                    <p>Is Emergency?: {{ $visit->is_emergency ? 'Yes' : 'No' }}</p>
-                    <hr>
-                    @endforeach
+                    <h3 class="text-primary font-weight-bold">Treatments & Procedures Done</h3>
+                    <p>Common Diagnoses Treated: {{ $treatments->common_diagnoses ?? 'N/A' }}</p>
+                    <p>Most Prescribed Medications: {{ $treatments->most_prescribed_medications ?? 'N/A' }}</p>
+                    <p>Procedures Performed: {{ $treatments->procedures_performed ?? 'N/A' }}</p>
+
+                    <h3 class="text-primary font-weight-bold">Pending Follow-Ups & Recommendations</h3>
+                    <p>Upcoming Follow-Up Appointments: {{ $followUps->upcoming_appointments ?? 'N/A' }}</p>
+                    <p>Recommendations for Patients: {{ $followUps->recommendations ?? 'N/A' }}</p>
                 </div>
             </div>
         </div>

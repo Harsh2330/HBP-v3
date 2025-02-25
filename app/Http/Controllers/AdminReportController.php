@@ -43,23 +43,23 @@ class AdminReportController extends Controller
         $seniorsCount = Patient::whereIn('age_category', ['60-69', '70-79', '80+'])->count();
 
         $topDiagnoses = DB::table('medical_visits')
-            ->select('diagnosis as name', DB::raw('count(*) as count'))
+            ->select('diagnosis as name')
             ->groupBy('diagnosis')
-            ->orderBy('count', 'desc')
+            ->orderBy('visit_date', 'desc')
             ->limit(5)
             ->get();
 
         $topMedications = DB::table('medical_visits')
-            ->select('medications_prescribed as name', DB::raw('count(*) as count'))
+            ->select('medications_prescribed as name')
             ->groupBy('medications_prescribed')
-            ->orderBy('count', 'desc')
+            ->orderBy('visit_date', 'desc')
             ->limit(5)
             ->get();
 
         $commonProcedures = DB::table('medical_visits')
-            ->select('procedures as name', DB::raw('count(*) as count'))
+            ->select('procedures as name')
             ->groupBy('procedures')
-            ->orderBy('count', 'desc')
+            ->orderBy('visit_date', 'desc')
             ->limit(5)
             ->get();
 
