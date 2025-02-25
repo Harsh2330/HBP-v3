@@ -49,6 +49,12 @@
                                         <option value="0-9">0-9</option>
                                         <option value="10-19">10-19</option>
                                         <option value="20-29">20-29</option>
+                                        <option value="30-39">30-39</option>
+                                        <option value="40-49">40-49</option>
+                                        <option value="50-59">50-59</option>
+                                        <option value="60-69">60-69</option>
+                                        <option value="70-79">70-79</option>
+                                        <option value="80+">80+</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -148,8 +154,18 @@
                 ageCategory = '10-19';
             } else if (age >= 20 && age <= 29) {
                 ageCategory = '20-29';
+            } else if (age >= 30 && age <= 39) {
+                ageCategory = '30-39';
+            } else if (age >= 40 && age <= 49) {
+                ageCategory = '40-49';
+            } else if (age >= 50 && age <= 59) {
+                ageCategory = '50-59';
+            } else if (age >= 60 && age <= 69) {
+                ageCategory = '60-69';
+            } else if (age >= 70 && age <= 79) {
+                ageCategory = '70-79';
             } else {
-                ageCategory = '30+'; // Add more categories as needed
+                ageCategory = '80+'; // Add more categories as needed
             }
 
             document.getElementById('age_category').value = ageCategory;
