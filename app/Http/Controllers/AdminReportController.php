@@ -7,6 +7,8 @@ use App\Models\MedicalVisit;
 use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AdminReportExport;
 
 class AdminReportController extends Controller
 {
@@ -69,5 +71,17 @@ class AdminReportController extends Controller
             'childrenCount', 'teenagersCount', 'adultsCount', 'seniorsCount', 'startDate', 'endDate',
             'topDiagnoses', 'topMedications', 'commonProcedures'
         ));
+    }
+
+    public function exportReport(Request $request)
+    {
+        // ...existing code...
+    }
+
+    public function exportAdminReport(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        return Excel::download(new AdminReportExport($startDate, $endDate), 'admin_report.xlsx');
     }
 }

@@ -21,6 +21,8 @@
                     <a href="{{ route('reports.admin') }}" class="btn btn-secondary bg-gray-600 text-white py-2 px-4 rounded-md">Clear Filter</a>
                 </form>
 
+                <a href="{{ route('admin.report.export', ['start_date' => $startDate, 'end_date' => $endDate]) }}" class="btn btn-secondary bg-green-600 text-white py-2 px-4 rounded-md mb-4">Export to Excel</a>
+
                 <h3 class="text-blue-600 font-bold text-xl mt-6">Summary Statistics</h3>
                 <p>Total Patients Registered: {{ $totalPatients ?? 'N/A' }}</p>
                 <p>Total Visits This Month: {{ $totalVisits ?? 'N/A' }}</p>

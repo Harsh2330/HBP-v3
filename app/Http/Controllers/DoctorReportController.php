@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\MedicalVisit;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DoctorReportExport;
 
 class DoctorReportController extends Controller
 {
@@ -32,6 +34,17 @@ class DoctorReportController extends Controller
         $followUps = $this->getPendingFollowUps($doctorId);
 
         return view('reports.doctor', compact('doctor', 'doctorVisits', 'summary', 'vitalStats', 'treatments', 'followUps'));
+    }
+
+    public function exportReport($doctorId)
+    {
+        return Excel::download(new DoctorReportExport($doctorId), 'doctor_report.xlsx');
+    }
+
+    public function exportLoggedInDoctorReport()
+    {
+        $doctorId = Auth::id();
+        return Excel::download(new DoctorReportExport($doctorId), 'doctor_report.xlsx');
     }
 
     private function getSummaryStatistics($doctorId)

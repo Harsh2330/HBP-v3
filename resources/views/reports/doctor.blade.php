@@ -12,6 +12,8 @@
                     <p>Doctor ID: {{ $doctor->id ?? 'N/A' }}</p>
                     <p>Specialization: {{ $doctor->specialty ?? 'N/A' }}</p>
 
+                    <a href="{{ route('doctor.report.export', ['doctorId' => $doctor->id]) }}" class="btn btn-secondary bg-green-600 text-white py-2 px-4 rounded-md mb-4">Export to Excel</a>
+
                     <h3 class="text-primary font-weight-bold">Summary Statistics</h3>
                     <p>Total Patients Seen: {{ $summary->total_patients ?? 'N/A' }}</p>
                     <p>Emergency Cases Handled: {{ $summary->emergency_cases ?? 'N/A' }}</p>

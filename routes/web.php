@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminReportController;
 use App\Http\Controllers\DoctorReportController;
 use App\Http\Controllers\UserReportController;
+use App\Http\Controllers\MessageController;
 
 Route::view('/', 'Homepage.welcome')->name('welcome');
 Route::view('/about-us', 'Homepage.about')->name('about-us');
@@ -66,6 +67,10 @@ Route::get('/api/users-with-role/{role}', [UserController::class, 'getUsersWithR
 Route::get('/doctor/report/{doctorId}', [DoctorReportController::class, 'generateReport'])->name('doctor.report');
 Route::get('/user/report', [UserReportController::class, 'generateReport'])->name('reports.user');
 Route::get('/reports/admin', [AdminReportController::class, 'generateReport'])->name('reports.admin');
+Route::get('/reports/export', [UserReportController::class, 'exportReport'])->name('reports.export');
+Route::get('/doctor-report/export/{doctorId}', [DoctorReportController::class, 'exportReport'])->name('doctor.report.export');
+Route::get('/doctor-report/export', [DoctorReportController::class, 'exportLoggedInDoctorReport'])->name('doctor.report.export.loggedin');
+Route::get('/admin-report/export', [AdminReportController::class, 'exportAdminReport'])->name('admin.report.export');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/messages', [MessageController::class, 'index'])->name('messages');
