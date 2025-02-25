@@ -77,7 +77,7 @@ class MedicalVisitController extends Controller
         $medicalVisit->appointment_type = $request->appointment_type;
         $medicalVisit->primary_complaint = $request->primary_complaint;
         $medicalVisit->symptoms = $symptomsString;  
-        $medicalVisit->is_emergency = $request->is_emergency ?? false;
+        $medicalVisit->is_emergency = $request->appointment_type === 'Emergency Visit';
         $medicalVisit->created_by = Auth::id();
         $medicalVisit->preferred_visit_date = $request->preferred_visit_date;
         $medicalVisit->preferred_time_slot = $request->preferred_time_slot;
@@ -128,7 +128,7 @@ class MedicalVisitController extends Controller
         $visit = MedicalVisit::findOrFail($id);
         $visit->update($request->all());
         $visit->symptoms = $symptomsString;
-        $visit->is_emergency = $request->is_emergency ?? false;
+        $visit->is_emergency = $request->appointment_type === 'Emergency Visit';
         $visit->save();
 
         AuditLog::create([

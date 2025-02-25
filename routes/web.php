@@ -63,3 +63,4 @@ Route::get('/api/users-with-role/{role}', [UserController::class, 'getUsersWithR
 // Report Routes
 Route::get('/doctor/report/{doctorId}', [DoctorReportController::class, 'generateReport'])->name('doctor.report');
 Route::get('/user/report', [UserReportController::class, 'generateReport'])->name('reports.user');
+Route::get('/reports/admin', [AdminReportController::class, 'generateReport'])->name('reports.admin');
