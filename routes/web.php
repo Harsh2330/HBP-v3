@@ -14,6 +14,8 @@ use App\Http\Controllers\AdminDashboardController; // Add this import
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\DoctorDashboardController;
 use App\Http\Controllers\NurseDashboardController;
+use App\Http\Controllers\MessageController;
+
 
 Route::get('/', function () {
     return view('Homepage.welcome');
@@ -109,3 +111,10 @@ Route::post('/request-for-visit/{id}/approve', [RequestForVisitController::class
 
 Route::resource('request_for_visit', RequestForVisitController::class);
 Route::get('/calendar', [App\Http\Controllers\MedicalVisitController::class, 'calendar'])->name('calendar');
+
+//Message
+Route::middleware(['auth'])->group(function () {
+    Route::get('/messages', [MessageController::class, 'index'])->name('messages');
+    Route::get('/messages/{receiverId}', [MessageController::class, 'fetchMessages']);
+    Route::post('/messages/send', [MessageController::class, 'sendMessage']);
+});
