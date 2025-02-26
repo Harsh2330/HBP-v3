@@ -13,6 +13,13 @@ use App\Exports\AdminReportCsvExport;
 
 class AdminReportController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:admin-report-list|admin-report-create|admin-report-export', ['only' => ['index', 'generateReport']]);
+        $this->middleware('permission:admin-report-create', ['only' => ['generateReport']]);  
+        $this->middleware('permission:admin-report-export', ['only' => ['exportAdminReport', 'exportAdminReportCsv']]);
+
+    }
     public function generateReport(Request $request)
     {
         $dateRange = $request->input('date_range', 'monthly');

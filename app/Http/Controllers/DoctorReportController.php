@@ -12,6 +12,14 @@ use App\Exports\DoctorReportCsvExport;
 
 class DoctorReportController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:doctor-report-list|doctor-report-create|doctor-report-export', ['only' => ['index', 'generateReport']]);
+        $this->middleware('permission:doctor-report-create', ['only' => ['generateReport']]);  
+        $this->middleware('permission:doctor-report-export', ['only' => ['exportReport', 'exportReportCsv']]); 
+
+       
+    }
     public function generateReport($doctorId, Request $request)
     {
         $doctor = User::find($doctorId);

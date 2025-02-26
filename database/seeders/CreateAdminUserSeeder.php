@@ -58,7 +58,10 @@ class CreateAdminUserSeeder extends Seeder
             'patient-delete',
             'medical-visit-list',
            'medical-visit-create',
-           'medical-visit-delete'
+           'medical-visit-delete',
+           'user-report-list',
+                'user-report-create',
+                'user-report-export',
         ])->pluck('id','id')->all(); // Get basic permissions
         $doctorPermissions = Permission::whereIn('name', [
             'doctor-dashboard',
@@ -66,13 +69,19 @@ class CreateAdminUserSeeder extends Seeder
            'medical-visit-create',
            'medical-visit-edit',
            'medical-visit-delete',
+           'doctor-report-list',
+           'doctor-report-create',
+           'doctor-report-export',
         ])->pluck('id','id')->all(); // Get doctor permissions
         $nursePermissions = Permission::whereIn('name', [
             'nurse-dashboard',
             'medical-visit-list',
            'medical-visit-create',
            'medical-visit-edit',
-           'medical-visit-delete'
+           'medical-visit-delete',
+           'doctor-report-list',
+                'doctor-report-create',
+                'doctor-report-export',
         ])->pluck('id','id')->all(); // Get nurse permissions
 
         $role->syncPermissions($permissions);

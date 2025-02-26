@@ -308,7 +308,8 @@ return [
     'icon_color' => 'warning',                // The initial icon color (optional).
     'label' => 0,                             // The initial label for the badge (optional).
     'label_color' => 'danger',                // The initial badge color (optional).
-    'url' => 'notifications/show',            // The url to access all notifications/elements (required).
+    // 'url' => 'notifications/show',            // The url to access all notifications/elements (required).
+    'url' => 'messages',                             // The url to access all notifications/elements (required).
     'topnav_right' => true,                   // Or "topnav => true" to place on the left (required).
     'dropdown_mode' => true,                  // Enables the dropdown mode (optional).
     'dropdown_flabel' => 'All notifications', // The label for the dropdown footer link (optional).
@@ -399,18 +400,21 @@ return [
                 'text' => 'Admin Report',
                 'url'  => 'admin/report',
                 'icon' => 'fas fa-fw fa-file-alt',
+                'permission' => 'admin-report-list',
                 
             ],
             [
                 'text' => 'Doctor Report',
                 'url'  => 'doctor/report',
                 'icon' => 'fas fa-fw fa-file-medical',
+                'permission' => 'doctor-report-list',
                 
             ],
             [
                 'text' => 'User Report',
                 'url'  => 'user/report',
-                'icon' => 'fas fa-fw fa-file-user',
+                'icon' => '	fas fa-fw fa-file-medical	',
+                'permission' => 'user-report-list',
                
             ],
             

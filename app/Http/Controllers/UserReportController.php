@@ -12,6 +12,14 @@ use App\Exports\UserReportCsvExport;
 
 class UserReportController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:user-report-list|user-report-create|user-report-export', ['only' => ['index', 'generateReport']]);
+        $this->middleware('permission:user-report-create', ['only' => ['generateReport']]);
+        $this->middleware('permission:user-report-export', ['only' => ['exportReport', 'exportReportCsv']]);
+
+        
+    }
     public function generateReport(Request $request)
     {
         $userId = Auth::id();
