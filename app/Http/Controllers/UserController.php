@@ -158,7 +158,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id): RedirectResponse
+    public function destroy($id)
     {
         $user = User::find($id);
         $userName = $user->name;
@@ -170,8 +170,7 @@ class UserController extends Controller
             'description' => 'Deleted user: ' . $userName,
         ]);
 
-        return redirect()->route('users.index')
-                        ->with('success','User deleted successfully');
+        return response()->json(['success' => true]);
     }
 
     public function getUsersWithRole($role)
