@@ -17,33 +17,6 @@ class CreateAdminUserSeeder extends Seeder
     {
         $currentYear = date('Y');
 
-        $usersData = [
-            [
-                'name' => 'Parmar Viral', 
-                'email' => 'admin@gmail.com',
-                'password' => bcrypt('123456'),
-                'date_of_birth' => '1990-01-01',
-                'phone_number' => '9876543210',
-            ],
-            [
-                'name' => 'Tarun Machhi', 
-                'email' => 'tarunmachhi29@gmail.com',
-                'password' => bcrypt('12341234'),
-                'date_of_birth' => '2005-05-21',
-                'phone_number' => '8799554970',
-            ]
-        ];
-
-        foreach ($usersData as $userData) {
-            $lastUser = User::whereYear('created_at', $currentYear)->orderBy('id', 'desc')->first();
-            $sequenceNumber = $lastUser ? intval(substr($lastUser->unique_id, -4)) + 1 : 1;
-            $uniqueId = sprintf('ADM-%s-%04d', $currentYear, $sequenceNumber);
-
-            $userData['unique_id'] = $uniqueId;
-
-            $user = User::create($userData);
-        }
-
         $role = Role::create(['name' => 'Admin']);
         $userRole = Role::create(['name' => 'User']); // Create User role
         $doctorRole = Role::create(['name' => 'doctor']); // Create Doctor role
@@ -88,6 +61,34 @@ class CreateAdminUserSeeder extends Seeder
         $userRole->syncPermissions($userPermissions); // Assign basic permissions to User role
         $doctorRole->syncPermissions($doctorPermissions); // Assign doctor permissions to Doctor role
         $nurseRole->syncPermissions($nursePermissions); // Assign nurse permissions to Nurse role
+
+        $usersData = [
+            [
+                'name' => 'Parmar Viral', 
+                'email' => 'admin@gmail.com',
+                'password' => bcrypt('123456'),
+                'date_of_birth' => '1990-01-01',
+                'phone_number' => '9876543210',
+            ],
+            [
+                'name' => 'Tarun Machhi', 
+                'email' => 'tarunmachhi29@gmail.com',
+                'password' => bcrypt('12341234'),
+                'date_of_birth' => '2005-05-21',
+                'phone_number' => '8799554970',
+            ]
+        ];
+
+        foreach ($usersData as $userData) {
+            $lastUser = User::whereYear('created_at', $currentYear)->orderBy('id', 'desc')->first();
+            $sequenceNumber = $lastUser ? intval(substr($lastUser->unique_id, -4)) + 1 : 1;
+            $uniqueId = sprintf('ADM-%s-%04d', $currentYear, $sequenceNumber);
+
+            $userData['unique_id'] = $uniqueId;
+
+            $user = User::create($userData);
+            $user->assignRole([$doctorRole->id]); // Assign User role to default users
+        }
 
         $user->assignRole([$role->id]);
     }
