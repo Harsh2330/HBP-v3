@@ -31,7 +31,7 @@
     <!-- Home Section starts -->
     <section class="home" id="home">
         <div class="image">
-            <img src="/image/palliative.png" alt="team.jpg.jpg">
+            <img src="/image/IMG_1961.jpg" alt="team.jpg.jpg">
         </div>
         <div class="content">
             <h3>HOME BASED PALLIATIVE</h3>

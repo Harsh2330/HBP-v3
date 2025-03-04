@@ -18,14 +18,14 @@
                 height: 200px;
                 border-radius: 50%;
                 animation: float 6s ease-in-out infinite;
+                z-index: 2; /* Bring shapes to the front */
+                background-color:rgba(122, 169, 250, 0.92); /* Change to desired color */
             }
             .shape1 {
-                background-color:rgba(88, 117, 210, 0.82); /* Change to desired color */
                 top: -50px;
                 left: -50px;
             }
             .shape2 {
-                background-color:rgba(88, 117, 210, 0.82); /* Change to desired color */
                 bottom: -50px;
                 right: -50px;
                 animation-delay: 3s;
@@ -50,7 +50,7 @@
             <div class="shape2"></div>
 
             <div class="form">
-                <img src="/image/patients.jpg" alt="" class="form__img" style="width: 650px; height: auto; margin-top: -1rem;">
+                <img src="/image/72490574_9775039.jpg" alt="" class="form__img" style="width: 700px; height: auto; margin-top: -1rem;">
 
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
