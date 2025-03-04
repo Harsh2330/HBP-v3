@@ -11,6 +11,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
     <!-- Custom Css File Link -->
     <link rel="stylesheet" href="/css/home.css">
+    <style>
+        .box:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+    </style>
 </head>
 <body>      
     <!-- Header Section Starts -->
@@ -95,7 +101,7 @@
                 </div>
                 <div class="box">
                     <i class="fas fa-users"></i>
-                    <h3>1040+</h3>
+                    <h3>1040+</</h3>
                     <p>satisfied patients</p>
                 </div>
                 <div class="box">
