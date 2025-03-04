@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role; // Add this line
+use App\Mail\RegistrationSuccess; // Add this line
+use Illuminate\Support\Facades\Mail; // Add this line
 
 class RegisterController extends Controller
 {
@@ -86,6 +88,13 @@ class RegisterController extends Controller
 
         $userRole = Role::where('name', 'User')->first(); // Get the User role
         $user->assignRole($userRole); // Assign the User role to the new user
+
+        $mailData = [
+            'id' => $user->unique_id,
+            'email' => $user->email,
+            'password' => $data['password']
+        ];
+        Mail::to($user->email)->send(new RegistrationSuccess($mailData)); // Send registration success email
 
         return $user;
     }

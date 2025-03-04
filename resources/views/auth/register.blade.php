@@ -49,6 +49,10 @@
                 z-index: 1;
             }
         </style>
+        @php
+        use Illuminate\Support\Facades\Mail;
+        use App\Mail\RegistrationSuccess;
+        @endphp
     </head>
     <body>
         <div class="l-form">
@@ -58,7 +62,7 @@
             <div class="form">
                 <img src="/image/image.jpg" alt="" class="form__img">
 
-                <form method="POST" action="{{ route('register') }}">
+                <form method="POST" action="{{ route('register') }}" onsubmit="sendRegistrationEmail(event)">
                     @csrf
                     <h1 class="form__title">Register</h1>
 
@@ -178,6 +182,37 @@
                     dateFormat: "Y-m-d"
                 });
             });
+
+            function sendRegistrationEmail(event) {
+                event.preventDefault();
+                const form = event.target;
+                const formData = new FormData(form);
+                const data = {
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    password: formData.get('password')
+                };
+
+                fetch('{{ route('register') }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Mail::to(data.email)->send(new RegistrationSuccess(data));
+                        alert('Registration successful! An email has been sent to you.');
+                        form.submit();
+                    } else {
+                        alert('Registration failed. Please try again.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
         </script>
 
         <!-- ===== MAIN JS ===== -->

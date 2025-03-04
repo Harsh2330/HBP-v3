@@ -11,6 +11,8 @@ use Illuminate\Validation\Rule;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Mail\VisitScheduleMail;
+use Illuminate\Support\Facades\Mail;
 
 class MedicalVisitController extends Controller
 {
@@ -149,6 +151,9 @@ class MedicalVisitController extends Controller
         $visit->nurse_id = $request->input('nurse_id');
         $visit->visit_date = Carbon::parse($request->input('visit_date'))->format('Y-m-d H:i:s');
         $visit->save();
+
+        // Send visit schedule mail
+        Mail::to($visit->patient->email)->send(new VisitScheduleMail($visit));
 
         AuditLog::create([
             'user_id' => Auth::id(),

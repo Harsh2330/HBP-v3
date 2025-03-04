@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminReportController;
 use App\Http\Controllers\DoctorReportController;
 use App\Http\Controllers\UserReportController;
 use App\Http\Controllers\MessageController;
+use Illuminate\Support\Facades\Password;
 
 Route::view('/', 'Homepage.welcome')->name('welcome');
 Route::view('/about-us', 'Homepage.about')->name('about-us');
@@ -80,4 +81,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/messages', [MessageController::class, 'index'])->name('messages');
     Route::get('/messages/{receiverId}', [MessageController::class, 'fetchMessages']);
     Route::post('/messages/send', [MessageController::class, 'sendMessage']);
+    Route::post('/schedule-visit', [App\Http\Controllers\VisitController::class, 'scheduleVisit'])->name('schedule.visit');
 });
+
+Route::get('/test-email', [App\Http\Controllers\TestEmailController::class, 'sendTestEmail']);
+Route::post('/password/email', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+
