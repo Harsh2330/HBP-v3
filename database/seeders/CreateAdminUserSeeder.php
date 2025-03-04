@@ -17,6 +17,51 @@ class CreateAdminUserSeeder extends Seeder
     {
         $currentYear = date('Y');
 
+        $role = Role::create(['name' => 'Admin']);
+        $userRole = Role::create(['name' => 'User']); // Create User role
+        $doctorRole = Role::create(['name' => 'doctor']); // Create Doctor role
+        $nurseRole = Role::create(['name' => 'nurse']); // Create Nurse role
+
+        $permissions = Permission::pluck('id','id')->all();
+        $userPermissions = Permission::whereIn('name', [
+            'user-dashboard',
+            'patient-list',
+            'patient-create',
+            'patient-edit',
+            'patient-delete',
+            'medical-visit-list',
+           'medical-visit-create',
+           'medical-visit-delete',
+           'user-report-list',
+                'user-report-create',
+                'user-report-export',
+        ])->pluck('id','id')->all(); // Get basic permissions
+        $doctorPermissions = Permission::whereIn('name', [
+            'doctor-dashboard',
+            'medical-visit-list',
+           'medical-visit-create',
+           'medical-visit-edit',
+           'medical-visit-delete',
+           'doctor-report-list',
+           'doctor-report-create',
+           'doctor-report-export',
+        ])->pluck('id','id')->all(); // Get doctor permissions
+        $nursePermissions = Permission::whereIn('name', [
+            'nurse-dashboard',
+            'medical-visit-list',
+           'medical-visit-create',
+           'medical-visit-edit',
+           'medical-visit-delete',
+           'doctor-report-list',
+                'doctor-report-create',
+                'doctor-report-export',
+        ])->pluck('id','id')->all(); // Get nurse permissions
+
+        $role->syncPermissions($permissions);
+        $userRole->syncPermissions($userPermissions); // Assign basic permissions to User role
+        $doctorRole->syncPermissions($doctorPermissions); // Assign doctor permissions to Doctor role
+        $nurseRole->syncPermissions($nursePermissions); // Assign nurse permissions to Nurse role
+
         $usersData = [
             [
                 'name' => 'Parmar Viral', 
@@ -42,43 +87,8 @@ class CreateAdminUserSeeder extends Seeder
             $userData['unique_id'] = $uniqueId;
 
             $user = User::create($userData);
+            $user->assignRole([$doctorRole->id]); // Assign User role to default users
         }
-
-        $role = Role::create(['name' => 'Admin']);
-        $userRole = Role::create(['name' => 'User']); // Create User role
-        $doctorRole = Role::create(['name' => 'doctor']); // Create Doctor role
-        $nurseRole = Role::create(['name' => 'nurse']); // Create Nurse role
-
-        $permissions = Permission::pluck('id','id')->all();
-        $userPermissions = Permission::whereIn('name', [
-            'user-dashboard',
-            'patient-list',
-            'patient-create',
-            'patient-edit',
-            'patient-delete',
-            'medical-visit-list',
-           'medical-visit-create',
-           'medical-visit-delete'
-        ])->pluck('id','id')->all(); // Get basic permissions
-        $doctorPermissions = Permission::whereIn('name', [
-            'doctor-dashboard',
-            'medical-visit-list',
-           'medical-visit-create',
-           'medical-visit-edit',
-           'medical-visit-delete',
-        ])->pluck('id','id')->all(); // Get doctor permissions
-        $nursePermissions = Permission::whereIn('name', [
-            'nurse-dashboard',
-            'medical-visit-list',
-           'medical-visit-create',
-           'medical-visit-edit',
-           'medical-visit-delete'
-        ])->pluck('id','id')->all(); // Get nurse permissions
-
-        $role->syncPermissions($permissions);
-        $userRole->syncPermissions($userPermissions); // Assign basic permissions to User role
-        $doctorRole->syncPermissions($doctorPermissions); // Assign doctor permissions to Doctor role
-        $nurseRole->syncPermissions($nursePermissions); // Assign nurse permissions to Nurse role
 
         $user->assignRole([$role->id]);
     }

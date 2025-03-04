@@ -24,9 +24,9 @@
                 <th class="py-2 px-4 text-left text-sm font-medium text-gray-700" width="280px">Action</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="user-table-body">
             @foreach ($data as $key => $user)
-            <tr class="border-b">
+            <tr class="border-b" id="user-row-{{ $user->id }}">
                 <td class="py-2 px-4">{{ ++$i }}</td>
                 <td class="py-2 px-4">{{ $user->name }}</td>
                 <td class="py-2 px-4">{{ $user->email }}</td>
@@ -41,11 +41,7 @@
                 <td class="py-2 px-4">
                     <a class="btn btn-info btn-sm" href="{{ route('users.show',$user->id) }}"><i class="fas fa-list"></i> Show</a>
                     <a class="btn btn-primary btn-sm" href="{{ route('users.edit',$user->id) }}"><i class="	fas fa-pencil-alt"></i> Edit</a>
-                    <form method="POST" action="{{ route('users.destroy', $user->id) }}" style="display:inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Delete</button>
-                    </form>
+                    <button class="btn btn-danger btn-sm delete-user" data-id="{{ $user->id }}"><i class="fas fa-trash"></i> Delete</button>
                 </td>
             </tr>
             @endforeach
@@ -54,4 +50,29 @@
 
     {!! $data->links('pagination::bootstrap-5') !!}
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.delete-user').forEach(button => {
+            button.addEventListener('click', function() {
+                const userId = this.getAttribute('data-id');
+                fetch(`/users/${userId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById(`user-row-${userId}`).remove();
+                    } else {
+                        alert('Error deleting user');
+                    }
+                });
+            });
+        });
+    });
+</script>
 @endsection

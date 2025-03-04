@@ -7,9 +7,19 @@ use App\Models\MedicalVisit;
 use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AdminReportExport;
+use App\Exports\AdminReportCsvExport;
 
 class AdminReportController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:admin-report-list|admin-report-create|admin-report-export', ['only' => ['index', 'generateReport']]);
+        $this->middleware('permission:admin-report-create', ['only' => ['generateReport']]);  
+        $this->middleware('permission:admin-report-export', ['only' => ['exportAdminReport', 'exportAdminReportCsv']]);
+
+    }
     public function generateReport(Request $request)
     {
         $dateRange = $request->input('date_range', 'monthly');
@@ -30,7 +40,13 @@ class AdminReportController extends Controller
         }
         $appointments = $query->orderBy('visit_date', 'asc')->get();
 
-        $doctorPerformance = User::role('Doctor')->withCount('medicalVisits')->get();
+        $doctorPerformance = User::role('Doctor')->get()->map(function ($doctor) {
+            $doctor->patients_seen = MedicalVisit::where('doctor_id', $doctor->id)->count();
+            $doctor->pending_visits = MedicalVisit::where('doctor_id', $doctor->id)->where('medical_status', 'pending')->count();
+            $doctor->completed_visits = MedicalVisit::where('doctor_id', $doctor->id)->where('medical_status', 'Completed')->count();
+            $doctor->emergency_visits = MedicalVisit::where('doctor_id', $doctor->id)->where('is_emergency', true)->count();
+            return $doctor;
+        });
 
         // Additional data for the new sections
         $malePatients = Patient::where('gender', 'Male')->count();
@@ -69,5 +85,21 @@ class AdminReportController extends Controller
             'childrenCount', 'teenagersCount', 'adultsCount', 'seniorsCount', 'startDate', 'endDate',
             'topDiagnoses', 'topMedications', 'commonProcedures'
         ));
+    }
+
+  
+    public function exportAdminReport(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        return Excel::download(new AdminReportExport($startDate, $endDate), 'admin_report.xlsx');
+    }
+
+    public function exportAdminReportCsv(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        
+        return Excel::download(new AdminReportCsvExport($startDate, $endDate), 'admin_report.csv');
     }
 }
