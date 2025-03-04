@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -48,5 +51,30 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function login(Request $request)
+    {
+        $this->validateLogin($request);
+
+        $user = \App\Models\User::where('email', $request->login)->orWhere('unique_id', $request->login)->first();
+
+        if (!$user) {
+            return back()->withErrors(['login' => 'The provided email or unique ID does not exist.']);
+        }
+
+        if (!Auth::attempt(['email' => $user->email, 'password' => $request->password])) {
+            return back()->withErrors(['password' => 'The provided password is incorrect.']);
+        }
+
+        return $this->sendLoginResponse($request);
+    }
+
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            'login' => 'required|string',
+            'password' => 'required|string',
+        ]);
     }
 }
