@@ -64,6 +64,7 @@
 
     <!-- Service section Starts  -->
     <section class="services" id="services">
+        <div class="Container2">
         <h1 class="heading">our <span>services</span></h1>
         <div class="box-container">
             
@@ -86,7 +87,7 @@
                 <i class="fas fa-ambulance"></i>
                 <h3>ambulance service</h3>
                 <p>Emergency medical transportation services.</p>
-            </div>
+            </div><br>
             <div class="box">
                     <i class="fas fa-user-md"></i>
                     <h3>140+</h3>
@@ -107,6 +108,7 @@
                     <h3>80+</h3>
                     <p>available hospitals</p>
                 </div>
+        </div>
         </div>
     </section>
     <!-- Service section End  -->
@@ -136,6 +138,7 @@
 
     <!-- Doctors section Starts  -->
     <section class="doctors" id="doctors">
+        <div class="Container2">
         <h1  class="heading">our <span>doctors</span></h1>
         <div class="box-container">
             <div class="box">
@@ -204,6 +207,7 @@
                     <a href="#" class="fab fa-instagram"></a>
                 </div>
             </div>
+        </div>
         </div>
     </section>
     <!-- Doctors section Ends  -->
