@@ -23,15 +23,15 @@
                 width: 200px;
                 height: 200px;
                 border-radius: 50%;
+                z-index: 2; /* Bring shapes to the front */
                 animation: float 6s ease-in-out infinite;
+                background-color:rgba(122, 169, 250, 0.92); /* Change to desired color */
             }
             .shape1 {
-                background-color:rgba(88, 117, 210, 0.82); /* Change to desired color */
                 top: -50px;
                 left: -50px;
             }
             .shape2 {
-                background-color:rgba(88, 117, 210, 0.82); /* Change to desired color */
                 bottom: -50px;
                 right: -50px;
                 animation-delay: 3s;
@@ -60,7 +60,7 @@
             <div class="shape2"></div>
 
             <div class="form">
-                <img src="/image/image.jpg" alt="" class="form__img">
+                <img src="/image/IMG_1963.png" alt="" class="form__img">
 
                 <form method="POST" action="{{ route('register') }}" onsubmit="sendRegistrationEmail(event)">
                     @csrf
