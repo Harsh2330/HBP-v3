@@ -70,7 +70,7 @@
             
             <div class="box">
                 <i class="fas fa-spa"></i>
-                <h3>message therapy</h3>
+                <h3>massage therapy</h3>
                 <p>Relaxing and therapeutic massage services.</p>
             </div>
             <div class="box">
