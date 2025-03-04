@@ -142,7 +142,7 @@
         <h1  class="heading">our <span>doctors</span></h1>
         <div class="box-container">
             <div class="box">
-                <img src="/image/doctor.png" alt="">
+                <img src="/image/b43ec4bf-37d0-45a2-8780-c7fd0c809e00_removalai_preview.png" alt="">
                 <h3>Dr. Dhruv </h3>
                 <span>expert doctor</span>
                 <div class="share">
@@ -153,7 +153,7 @@
                 </div>
             </div>
             <div class="box">
-            <img src="/image/doctor.png" alt="">
+            <img src="/image/surgeon_13297756.png" alt="">
             <h3>Dr. Tarun</h3>
                 <span>expert doctor</span>
                 <div class="share">
@@ -164,7 +164,7 @@
                 </div>
             </div>
             <div class="box">
-            <img src="/image/doctor.png" alt="">
+            <img src="/image/doctor_12712374.png" alt="">
             <h3> Dr. Darshna</h3>
                 <span>expert doctor</span>
                 <div class="share">
@@ -175,7 +175,7 @@
                 </div>
             </div>
             <div class="box">
-            <img src="/image/doctor.png" alt="">
+            <img src="/image/b43ec4bf-37d0-45a2-8780-c7fd0c809e00_removalai_preview.png" alt="">
             <h3>Dr. Aditya</h3>
                 <span>expert doctor</span>
                 <div class="share">
@@ -186,7 +186,7 @@
                 </div>
             </div>
             <div class="box">
-            <img src="/image/doctor.png" alt="">
+            <img src="/image/d70b67e7-0b4c-4ffc-9847-92ab1ae58aed_removalai_preview.png" alt="">
             <h3>Dr. Sakshi</h3>
                 <span>expert doctor</span>
                 <div class="share">
@@ -197,7 +197,7 @@
                 </div>
             </div>
             <div class="box">
-            <img src="/image/doctor.png" alt="">
+            <img src="/image/doctor_1021566.png" alt="">
             <h3>Dr. Waghmare</h3>
                 <span>expert doctor</span>
                 <div class="share">
