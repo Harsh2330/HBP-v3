@@ -42,6 +42,17 @@
                 position: relative;
                 z-index: 1;
             }
+            .error {
+                color: red;
+                font-size: 0.875em;
+                margin-top: 0.25rem;
+                position: absolute;
+                top: 2.5rem;
+                left: 0;
+            }
+            .form__div-input {
+                position: relative;
+            }
         </style>
     </head>
     <body>
@@ -63,8 +74,14 @@
 
                         <div class="form__div-input">
                             <label for="login" class="form__label">Email or Unique ID</label>
-                            <input class="form__input" type="text" name="login" :value="old('login')" required autofocus>
+                            <input class="form__input" type="text" name="login" required autofocus>
                             @error('login')
+                                <span class="error">{{ $message }}</span>
+                            @enderror
+                            @error('email')
+                                <span class="error">{{ $message }}</span>
+                            @enderror
+                            @error('unique_id')
                                 <span class="error">{{ $message }}</span>
                             @enderror
                         </div>
@@ -83,7 +100,9 @@
                             @enderror
                         </div>
                     </div>
-                    <a href="{{ route('password.request') }}" class="form__forgot">Forgot Password?</a>
+                    
+                        <a href="{{ route('password.request') }}" class="form__forgot">Forgot Password?</a>
+                    
 
                     <button type="submit" class="form__button">
                         Log in
