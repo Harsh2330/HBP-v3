@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
 class Patient extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'full_name', // Ensure this line is included
         'gender',

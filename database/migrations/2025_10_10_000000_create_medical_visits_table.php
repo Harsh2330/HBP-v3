@@ -40,6 +40,8 @@ class CreateMedicalVisitsTable extends Migration
             $table->date('preferred_visit_date')->nullable()->default(null); // New column
             $table->string('preferred_time_slot')->nullable()->default(null); // New column
             $table->timestamps();
+            $table->softDeletes();
+            
         });
 
         // Explicitly define the foreign key constraints after creating the table
