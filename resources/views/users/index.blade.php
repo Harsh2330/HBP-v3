@@ -13,7 +13,7 @@
         </div>
     @endsession
 
-    <table class="min-w-full bg-white">
+    <table id="users-table" class="min-w-full bg-white">
         <thead>
             <tr>
                 <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">No</th>
@@ -53,6 +53,13 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        $('#users-table').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "destroy": true
+        });
+
         document.querySelectorAll('.delete-user').forEach(button => {
             button.addEventListener('click', function() {
                 const userId = this.getAttribute('data-id');
