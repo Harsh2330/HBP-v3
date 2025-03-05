@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Permission\Traits\HasRoles;
 
 class Patient extends Model
@@ -13,7 +14,7 @@ class Patient extends Model
     protected $guard_name = 'web';
     
     protected $fillable = [
-        'full_name', // Ensure this line is included
+        'full_name',
         'gender',
         'date_of_birth',
         'age_category',
@@ -27,7 +28,7 @@ class Patient extends Model
         'emergency_contact_name',
         'emergency_contact_phone',
         'emergency_contact_relationship',
-        'is_approved', // Ensure this line is included
+        'is_approved',
         'user_unique_id',
         'pat_unique_id',
     ];

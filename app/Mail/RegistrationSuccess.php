@@ -10,21 +10,26 @@ class RegistrationSuccess extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $data;
+    public $mailData;
 
-    public function __construct($data)
+    /**
+     * Create a new message instance.
+     *
+     * @return void
+     */
+    public function __construct($mailData)
     {
-        $this->data = $data;
+        $this->mailData = $mailData;
     }
 
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
     public function build()
     {
         return $this->view('emails.registration_success')
-                    ->with([
-                        'userId' => $this->data['id'],
-                        'email' => $this->data['email'],
-                        'password' => $this->data['password'],
-                        'message' => 'You are registered successfully'
-                    ]);
+                    ->with('mailData', $this->mailData);
     }
 }
