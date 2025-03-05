@@ -19,6 +19,10 @@ foreach (range(1, 5) as $num) {
     Route::view("/services/service{$num}", "Services.Service{$num}")->name("services.service{$num}");
 }
 
+Route::get('/about-details', function () {
+    return view('about-details');
+})->name('about.details');
+
 Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 

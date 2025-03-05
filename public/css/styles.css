@@ -169,7 +169,7 @@ img{
     border: none;
     margin-bottom: 3rem;
     background-color: var(--first-color);
-    background-color:rgba(75, 114, 179, 0.799); /* Change to desired color */
+    color: #fff;
     border-radius: .5rem;
     cursor: pointer;
     transition: .3s;
@@ -179,7 +179,7 @@ img{
 }
 
 .form__button--signup {
-    background-color:rgba(75, 114, 179, 0.799); /* Change to desired color */
+    background-color: #002350; /* Change to desired color */
     color: white;
 }
 .form__button--signup:hover {
