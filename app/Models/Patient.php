@@ -3,10 +3,15 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Permission\Traits\HasRoles;
 
 class Patient extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory, HasRoles;
+
+    protected $guard_name = 'web';
+    
     protected $fillable = [
         'full_name', // Ensure this line is included
         'gender',

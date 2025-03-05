@@ -30,27 +30,8 @@ class MedicalVisitController extends Controller
     // Display a listing of the medical visits
     public function index(Request $request)
     {
-        $query = MedicalVisit::query();
-
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->whereHas('patient', function ($q) use ($search) {
-                $q->where('pat_unique_id', 'like', "%{$search}%")
-                  ->orWhere('full_name', 'like', "%{$search}%");
-            })
-            ->orWhereHas('doctor', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-            })
-            ->orWhereHas('nurse', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-            })
-            ->orWhere('visit_date', 'like', "%{$search}%")
-            ->orWhere('is_approved', 'like', "%{$search}%");
-        }
-
-        $medicalVisits = $query->paginate(10);
-
-        return view('medical_visit.index', compact('medicalVisits'));
+        $data = MedicalVisit::latest()->paginate(100);
+        return view('medical_visit.index', compact('data'));
     }
 
     public function create()
@@ -183,7 +164,7 @@ class MedicalVisitController extends Controller
             'description' => 'Deleted medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ')',
         ]);
 
-        return redirect()->route('medical_visit.index')->with('success', 'Medical visit deleted successfully.');
+        return response()->json(['success' => true]);
     }
 
     public function calendar()
@@ -232,10 +213,8 @@ class MedicalVisitController extends Controller
             'description' => 'Rescheduled medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ') to ' . $visit->visit_date . ' at ' . $visit->time_slot,
         ]);
 
-        return response()->json([
-            'new_date' => $visit->visit_date,
-            'new_time' => $visit->time_slot
-        ]);
+        return redirect()->route('medical_visit.index')->with('success', 'Medical visit rescheduled successfully.');
+
     }
 
     public function getVisitDetails($id)
