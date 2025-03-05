@@ -112,7 +112,7 @@
                             <h3 class="text-lg font-semibold">Medical Visits List</h3>
                             
                             <form action="{{ route('medical_visit.index') }}" method="GET" class="flex gap-2 items-center"> <!-- Updated class -->
-                                <input type="text" name="search" class="p-2 border rounded w-full" placeholder="Search Medical history">
+                                <input type="text" name="search" class="p-2 border rounded w-full text-black" placeholder="Search Medical history">
                                 <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Search</button>
                                 <button id="settingsButton" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Filters</button> <!-- Moved inside form -->
                             </form>
