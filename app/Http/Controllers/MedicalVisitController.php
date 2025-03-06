@@ -30,7 +30,7 @@ class MedicalVisitController extends Controller
     // Display a listing of the medical visits
     public function index(Request $request)
     {
-        $data = MedicalVisit::latest()->paginate(100);
+        $data = MedicalVisit::all();
         return view('medical_visit.index', compact('data'));
     }
 

@@ -102,7 +102,7 @@
                 <i class="fas fa-ambulance"></i>
                 <h3>ambulance service</h3>
                 <p>Emergency medical transportation services.</p>
-            </div><br>
+            </div>
             <div class="box">
                     <i class="fas fa-user-md"></i>
                     <h3>140+</h3>
@@ -145,7 +145,7 @@
                 <a href="#" class="btn">learn more <span class="fas fa-chevron-right"></span> </a>
             </div>
             <div class="image">
-                <img src="./image/about-img.svg" alt="">
+                <img src="./image/IMG_1979.JPG" alt="">
             </div>
         </div>
     </section>

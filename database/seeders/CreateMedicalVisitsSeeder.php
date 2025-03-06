@@ -44,7 +44,7 @@ class CreateMedicalVisitsSeeder extends Seeder
                 'procedures' => $faker->sentence,
                 'doctor_notes' => $faker->paragraph,
                 'nurse_observations' => $faker->paragraph,
-                'is_approved' => $faker->randomElement(['approved']),
+                'is_approved' => $faker->randomElement(['Approved']),
                 'created_by' => $doctor->id,
                 'treatment_name' => $faker->word,
                 'primary_complaint' => $faker->sentence,

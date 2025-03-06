@@ -45,7 +45,6 @@
         </tbody>
     </table>
 
-    {!! $data->links('pagination::bootstrap-5') !!}
 </div>
 
 @foreach ($data as $key => $visit)
