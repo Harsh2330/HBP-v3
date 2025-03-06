@@ -1,50 +1,95 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto">
-    <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold">Medical Visits Management</h2>
-        <a class="btn btn-success mb-2" href="{{ route('medical_visit.create') }}"><i class="fa fa-plus"></i> Create New Visit</a>
-    </div>
+<div class="content">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-2xl font-bold">Medical Visits Management</h1>
+                <a class="btn btn-success mb-2" href="{{ route('medical_visit.create') }}"><i class="fa fa-plus"></i> Create New Visit</a>
+            </div>
+        </div>
+    </section>
 
-    @session('success')
-    <div class="alert alert-success" role="alert">
-        {{ $value }}
-    </div>
-    @endsession
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
 
-    <table id="medical-visits-table" class="min-w-full bg-white">
-        <thead>
-            <tr>
-                <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Patient Unique ID</th>
-                <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Patient Name</th>
-                <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Visit Date</th>
-                <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Doctor</th>
-                <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Nurse</th>
-                <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Appointment Status</th>
-                <th class="py-2 px-4 text-left text-sm font-medium text-gray-700" width="280px">Action</th>
-            </tr>
-        </thead>
-        <tbody id="medical-visit-table-body">
-            @foreach ($data as $key => $visit)
-            <tr class="border-b" id="visit-row-{{ $visit->id }}">
-                <td class="py-2 px-1">{{ $visit->patient->pat_unique_id }}</td>
-                <td class="py-2 px-1">{{ $visit->patient->full_name }}</td>
-                <td class="py-2 px-1">{{ $visit->visit_date ?? 'N/A'  }}</td>
-                <td class="py-2 px-1">{{ $visit->doctor->name ?? 'N/A' }}</td>
-                <td class="py-2 px-1">{{ $visit->nurse->name ?? 'N/A' }}</td>
-                <td class="py-2 px-1">{{ $visit->is_approved }}</td>
-                <td class="py-2 px-4">
-                    <a class="btn btn-info btn-sm" href="{{ route('medical_visit.show',$visit->id) }}"><i class="fas fa-list"></i> Show</a>
-                    <a class="btn btn-primary btn-sm" href="{{ route('medical_visit.edit',$visit->id) }}"><i class="	fas fa-pencil-alt"></i> Edit</a>
-                    <button class="btn btn-danger btn-sm delete-visit" data-id="{{ $visit->id }}"><i class="fas fa-trash"></i> Delete</button>
-                    <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#rescheduleModal-{{ $visit->id }}"><i class="fas fa-calendar-alt"></i> Reschedule</button>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+            to {
+                transform: translateX(0);
+            }
+        }
 
+        .slide-in {
+            animation: slideIn 2s;
+        }
+
+        .emergency {
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+    </style>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container mx-auto">
+            <div class="flex justify-center">
+                <div class="w-full">
+                    <div class="bg-white shadow-lg rounded-lg"> <!-- Tailwind classes for card -->
+                        <div class="bg-teal-500 text-white p-4 rounded-t-lg"> <!-- Tailwind classes for header -->
+                            <h3 class="text-lg font-semibold">Medical Visits List</h3>
+                        </div>
+                        <div class="p-4">
+                            @session('success')
+                            <div class="alert alert-success" role="alert">
+                                {{ $value }}
+                            </div>
+                            @endsession
+
+                            @if($data)
+                            <table id='medical-visits-table'  class="min-w-full bg-white">
+                                <thead>
+                                    <tr>
+                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Patient Unique ID</th>
+                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Patient Name</th>
+                                        <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Visit Date</th>
+                                        <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Doctor</th>
+                                        <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Nurse</th>
+                                        <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Appointment Status</th>
+                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700" width="280px">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($data as $key => $visit)
+                                    <tr class="border-b {{ $visit->is_emergency ? 'emergency' : '' }}" id="visit-row-{{ $visit->id }}">
+                                        <td class="py-2 px-4">{{ $visit->patient->pat_unique_id }}</td>
+                                        <td class="py-2 px-4">{{ $visit->patient->full_name }}</td>
+                                        <td class="py-2 px-1">{{ $visit->visit_date ?? 'N/A'  }}</td>
+                                        <td class="py-2 px-1">{{ $visit->doctor->name ?? 'N/A' }}</td>
+                                        <td class="py-2 px-1">{{ $visit->nurse->name ?? 'N/A' }}</td>
+                                        <td class="py-2 px-1">{{ $visit->is_approved }}</td>
+                                        <td class="py-2 px-4">
+                                            <a class="btn btn-info btn-sm" href="{{ route('medical_visit.show',$visit->id) }}"><i class="fas fa-list"></i> Show</a>
+                                            <a class="btn btn-primary btn-sm" href="{{ route('medical_visit.edit',$visit->id) }}"><i class="	fas fa-pencil-alt"></i> Edit</a>
+                                            <button class="btn btn-danger btn-sm delete-visit" data-id="{{ $visit->id }}"><i class="fas fa-trash"></i> Delete</button>
+                                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#rescheduleModal-{{ $visit->id }}"><i class="fas fa-calendar-alt"></i> Reschedule</button>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                           
+                            @else
+                            <p>No medical visits available.</p>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 
 @foreach ($data as $key => $visit)
