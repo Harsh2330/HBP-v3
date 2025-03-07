@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Add DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+
 <div class="content p-6 bg-gray-100 min-h-screen">
     <section class="mb-6">
         <div class="container mx-auto">
@@ -45,6 +49,17 @@
     </section>
 </div>
 
+<!-- Add jQuery and DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         $('#patients-table').DataTable({
@@ -52,9 +67,12 @@
             "searching": true,
             "ordering": true,
             "destroy": true,
-            "dom": '<"top"lf>rt<"bottom"ip><"clear">', // Move search bar to "top"
+            "dom": '<"top"lfB>rt<"bottom"ip><"clear">', // Add export buttons to "top"
+            "buttons": [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
             "renderer": "semanticUI"
-        });
+        }).buttons().container().appendTo('#patients-table_wrapper .col-md-6:eq(0)');
 
         $('#patients-table_filter input')
             .attr('placeholder', 'Search Patients...')
