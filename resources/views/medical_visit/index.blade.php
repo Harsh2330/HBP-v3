@@ -5,7 +5,17 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container mx-auto">
+            
             <div class="flex justify-between items-center mb-4">
+            <tr>
+                                        <th><input type="text" placeholder="Search Patient ID" class="column-search"></th>
+                                        <th><input type="text" placeholder="Search Patient Name" class="column-search"></th>
+                                        <th><input type="text" placeholder="Search Visit Date" class="column-search"></th>
+                                        <th><input type="text" placeholder="Search Doctor" class="column-search"></th>
+                                        <th><input type="text" placeholder="Search Nurse" class="column-search"></th>
+                                        
+                                        
+                                    </tr>
                 <h1 class="text-2xl font-bold">Medical Visits Management</h1>
                 <a class="btn btn-success mb-2" href="{{ route('medical_visit.create') }}"><i class="fa fa-plus"></i> Create New Visit</a>
             </div>
@@ -71,9 +81,11 @@
                                         <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Medical Status</th>
                                         <th class="py-2 px-4 text-left text-sm font-medium text-gray-700" width="280px">Action</th>
                                     </tr>
+                                    
                                 </thead>
                                 <tbody>
                                     @foreach ($data as $key => $visit)
+                                    @if ($visit->patient)
                                     <tr class="border-b {{ $visit->is_emergency ? 'emergency' : '' }}" id="visit-row-{{ $visit->id }}">
                                         <td class="py-2 px-4">{{ $visit->patient->pat_unique_id }}</td>
                                         <td class="py-2 px-4">{{ $visit->patient->full_name }}</td>
@@ -114,6 +126,7 @@
                                             @endcan
                                         </td>
                                     </tr>
+                                    @endif
                                     @endforeach
                                 </tbody>
                             </table>
@@ -170,24 +183,33 @@
             "dom": '<"top"lf>rt<"bottom"p><"clear">' // Move search bar to "top"
         });
 
+        // Add column search functionality
+        $('#medical-visits-table thead tr:eq(1) th').each(function (i) {
+            var title = $(this).text();
+            $(this).find('input').on('keyup change', function () {
+                if ($('#medical-visits-table').DataTable().column(i).search() !== this.value) {
+                    $('#medical-visits-table').DataTable()
+                        .column(i)
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
 
         $('#medical-visits-table_filter').detach().appendTo('#customSearchContainer');
 
-        $('#medical-visits-table_filter').detach().appendTo('#customSearchContainer');
+        // Remove the default "Search:" label
+        $('#medical-visits-table_filter label').contents().filter(function() {
+            return this.nodeType === 3; // Select text nodes
+        }).remove();
 
-// Remove the default "Search:" label
-$('#medical-visits-table_filter label').contents().filter(function() {
-    return this.nodeType === 3; // Select text nodes
-}).remove();
-
-// Style the search input field
-$('#medical-visits-table_filter input')
-    .attr('placeholder', 'Search Medical Visits...')
-    .css({
-        'color': 'black', // Change font color to black
-        'font-weight': 'bold' // Make text bold (optional)
-    });
-
+        // Style the search input field
+        $('#medical-visits-table_filter input')
+            .attr('placeholder', 'Search Medical Visits...')
+            .css({
+                'color': 'black', // Change font color to black
+                'font-weight': 'bold' // Make text bold (optional)
+            });
 
         document.querySelectorAll('.delete-visit').forEach(button => {
             button.addEventListener('click', function() {
@@ -205,6 +227,28 @@ $('#medical-visits-table_filter input')
                             document.getElementById(`visit-row-${visitId}`).remove();
                         } else {
                             alert('Error deleting visit');
+                        }
+                    });
+            });
+        });
+
+        // Handle patient deletion
+        document.querySelectorAll('.delete-patient').forEach(button => {
+            button.addEventListener('click', function() {
+                const patientId = this.getAttribute('data-id');
+                fetch(`/patients/${patientId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.querySelectorAll(`[data-patient-id="${patientId}"]`).forEach(row => row.remove());
+                        } else {
+                            alert('Error deleting patient');
                         }
                     });
             });
