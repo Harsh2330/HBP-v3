@@ -164,9 +164,7 @@ class MedicalVisitController extends Controller
             'description' => 'Deleted medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ')',
         ]);
 
-        
-
-        return response()->json(['success' => true]);
+        return redirect()->route('medical_visit.index')->with('success', 'Medical visit deleted successfully.');
     }
 
     public function calendar()
