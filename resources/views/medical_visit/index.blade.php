@@ -3,7 +3,15 @@
 @section('content')
 <div class="content">
     <!-- Content Header (Page header) -->
-
+    <section class="content-header">
+        <div class="container mx-auto">
+            
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-2xl font-bold">Medical Visits Management</h1>
+                <a class="btn btn-success mb-2" href="{{ route('medical_visit.create') }}"><i class="fa fa-plus"></i> Create New Visit</a>
+            </div>
+        </div>
+    </section>
 
     <style>
         @keyframes slideIn {
@@ -87,9 +95,9 @@
                                     <tr class="border-b {{ $visit->is_emergency ? 'emergency' : '' }}" id="visit-row-{{ $visit->id }}">
                                         <td class="py-2 px-4">{{ $visit->patient->pat_unique_id }}</td>
                                         <td class="py-2 px-4">{{ $visit->patient->full_name }}</td>
-                                        <td class="py-2 px-1">{{ $visit->visit_date ?? 'N/A'  }}</td>
-                                        <td class="py-2 px-1">{{ $visit->doctor->name ?? 'N/A' }}</td>
-                                        <td class="py-2 px-1">{{ $visit->nurse->name ?? 'N/A' }}</td>
+                                        <td class="py-2 px-1">{{ $visit->visit_date }}</td>
+                                        <td class="py-2 px-1">{{ $visit->doctor->name}}</td>
+                                        <td class="py-2 px-1">{{ $visit->nurse->name}}</td>
                                         <td class="py-2 px-1">{{ $visit->is_approved }}</td>
                                         @can('medical-visit-update-status', $visit)
                                             <td class="py-2 px-1">
