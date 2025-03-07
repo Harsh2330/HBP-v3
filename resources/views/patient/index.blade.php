@@ -11,46 +11,56 @@
         </div>
     </section>
 
-    <section>
-        <div class="container mx-auto">
-            <div class="bg-white p-6 rounded shadow">
-                <h2 class="text-lg font-semibold text-gray-600 mb-4">Search Patient</h2>
-                <form action="{{ route('admin.patient.index') }}" method="GET" class="flex gap-2">
-                    <input type="text" name="search" class="p-2 border rounded w-full" placeholder="Search by Patient name">
-                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Search</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
     <section class="mt-6">
         <div class="container mx-auto">
             <div class="bg-white p-6 rounded shadow">
-                <h2 class="text-lg font-semibold text-gray-600 mb-4">Users List</h2>
-                <div class="grid md:grid-cols-3 gap-6">
-                    @foreach($patients as $patient)
-                                                
-                        @if(Auth::user()->hasRole('Admin') || Auth::user()->id == $patient->user_unique_id)
-                            <div class="bg-white p-4 rounded-lg shadow border border-blue-300">
-                                <h3 class="text-lg font-bold text-gray-700">{{ $patient->full_name }}</h3>
-                                <p class="text-gray-600"><strong>Email:</strong> {{ $patient->email }}</p>
-                                <div class="mt-4 flex gap-2">
-                                    <a href="{{ route('admin.patient.show', $patient->id) }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">View</a>
-                                    <form action="{{ route('admin.patient.destroy', $patient->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
-                                    </form>
-                                </div>
-                            </div>
-                        @endif
-                    @endforeach
-                </div>
-                <div class="mt-4">
-                    {{ $patients->links() }}
-                </div>
+                <h2 class="text-lg font-semibold text-gray-600 mb-4">Patients List</h2>
+                <table id="patients-table" class="min-w-full bg-white">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Full Name</th>
+                            <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Email</th>
+                            <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($patients as $patient)
+                        <tr>
+                            <td class="py-2 px-4">{{ $patient->full_name }}</td>
+                            <td class="py-2 px-4">{{ $patient->email }}</td>
+                            <td class="py-2 px-4">
+                                <a href="{{ route('admin.patient.show', $patient->id) }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">View</a>
+                                <form action="{{ route('admin.patient.destroy', $patient->id) }}" method="POST" class="inline-block">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $('#patients-table').DataTable({
+            "paging": true,     
+            "searching": true,
+            "ordering": true,
+            "destroy": true,
+            "dom": '<"top"lf>rt<"bottom"ip><"clear">' // Move search bar to "top"
+        });
+
+        $('#patients-table_filter input')
+            .attr('placeholder', 'Search Patients...')
+            .css({
+                'color': 'black',
+                'font-weight': 'bold'
+            });
+    });
+</script>
 @endsection
