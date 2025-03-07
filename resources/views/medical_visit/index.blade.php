@@ -180,7 +180,7 @@
             "searching": true,
             "ordering": true,
             "destroy": true,
-            "dom": '<"top"lf>rt<"bottom"p><"clear">' // Move search bar to "top"
+            "dom": '<"top"lf>rt<"bottom"ip><"clear">' // Move search bar to "top"
         });
 
         // Add column search functionality
