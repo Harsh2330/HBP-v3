@@ -3,24 +3,7 @@
 @section('content')
 <div class="content">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <div class="container mx-auto">
-            
-            <div class="flex justify-between items-center mb-4">
-            <tr>
-                                        <th><input type="text" placeholder="Search Patient ID" class="column-search"></th>
-                                        <th><input type="text" placeholder="Search Patient Name" class="column-search"></th>
-                                        <th><input type="text" placeholder="Search Visit Date" class="column-search"></th>
-                                        <th><input type="text" placeholder="Search Doctor" class="column-search"></th>
-                                        <th><input type="text" placeholder="Search Nurse" class="column-search"></th>
-                                        
-                                        
-                                    </tr>
-                <h1 class="text-2xl font-bold">Medical Visits Management</h1>
-                <a class="btn btn-success mb-2" href="{{ route('medical_visit.create') }}"><i class="fa fa-plus"></i> Create New Visit</a>
-            </div>
-        </div>
-    </section>
+
 
     <style>
         @keyframes slideIn {
@@ -46,6 +29,19 @@
             padding: 8px;
             border-radius: 5px;
             border: 1px solid #ccc;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
         }
 
     </style>
@@ -78,7 +74,9 @@
                                         <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Doctor</th>
                                         <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Nurse</th>
                                         <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Appointment Status</th>
+                                        @can('medical-visit-update-status')
                                         <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Medical Status</th>
+                                       @endcan  
                                         <th class="py-2 px-4 text-left text-sm font-medium text-gray-700" width="280px">Action</th>
                                     </tr>
                                     
