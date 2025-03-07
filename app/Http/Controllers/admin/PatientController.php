@@ -25,7 +25,10 @@ class PatientController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $patients = Patient::where('full_name', 'like', "%$search%")->paginate(10);
+        $userId = Auth::id(); // Get the logged-in user's ID
+        $patients = Patient::where('user_unique_id', $userId)
+            ->where('full_name', 'like', "%$search%")
+            ->get(); // Fetch all patients without pagination
         return view('patient.index', compact('patients'));
     }
 
