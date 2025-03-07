@@ -164,6 +164,8 @@ class MedicalVisitController extends Controller
             'description' => 'Deleted medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ')',
         ]);
 
+        
+
         return response()->json(['success' => true]);
     }
 

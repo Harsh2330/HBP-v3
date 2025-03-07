@@ -31,8 +31,9 @@ class UserController extends Controller
     public function index(Request $request): View
     {
         $data = User::latest()->paginate(5);
+        $users = User::all(); 
   
-        return view('users.index',compact('data'))
+        return view('users.index',compact('data', 'users'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
     }
     

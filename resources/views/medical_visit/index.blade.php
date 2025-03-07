@@ -30,6 +30,14 @@
         .emergency {
             background-color: rgba(255, 0, 0, 0.1);
         }
+
+        #medical-visits-table_filter input {
+            width: 600px !important; /* Adjust width as needed */
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
     </style>
 
     <!-- Main content -->
@@ -38,9 +46,11 @@
             <div class="flex justify-center">
                 <div class="w-full">
                     <div class="bg-white shadow-lg rounded-lg"> <!-- Tailwind classes for card -->
-                        <div class="bg-teal-500 text-white p-4 rounded-t-lg"> <!-- Tailwind classes for header -->
-                            <h3 class="text-lg font-semibold">Medical Visits List</h3>
-                        </div>
+                    <div class="bg-teal-500 text-white p-4 rounded-t-lg flex justify-between items-center">
+                        <h3 class="text-lg font-semibold">Medical Visits List</h3>
+                        <div id="customSearchContainer"></div>
+                    </div>
+
                         <div class="p-4">
                             @session('success')
                             <div class="alert alert-success" role="alert">
@@ -129,8 +139,28 @@
             "paging": true,
             "searching": true,
             "ordering": true,
-            "destroy": true
+            "destroy": true,
+            "dom": '<"top"f>rt<"bottom"lp><"clear">' // Move search bar to "top"
         });
+
+
+        $('#medical-visits-table_filter').detach().appendTo('#customSearchContainer');
+
+        $('#medical-visits-table_filter').detach().appendTo('#customSearchContainer');
+
+// Remove the default "Search:" label
+$('#medical-visits-table_filter label').contents().filter(function() {
+    return this.nodeType === 3; // Select text nodes
+}).remove();
+
+// Style the search input field
+$('#medical-visits-table_filter input')
+    .attr('placeholder', 'Search Medical Visits...')
+    .css({
+        'color': 'black', // Change font color to black
+        'font-weight': 'bold' // Make text bold (optional)
+    });
+
 
         document.querySelectorAll('.delete-visit').forEach(button => {
             button.addEventListener('click', function() {
