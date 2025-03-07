@@ -186,8 +186,12 @@
             "searching": true,
             "ordering": true,
             "destroy": true,
-            "dom": '<"top"lf>rt<"bottom"ip><"clear">' // Move search bar to "top"
-        });
+            "dom": '<"top"lfB>rt<"bottom"ip><"clear">', // Add export buttons to "top"
+            "buttons": [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            "renderer": "semanticUI"
+        }).buttons().container().appendTo('#medical-visits-table_wrapper .col-md-6:eq(0)');
 
         // Add column search functionality
         $('#medical-visits-table thead tr:eq(1) th').each(function (i) {
