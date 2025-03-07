@@ -67,6 +67,7 @@
                                     });
                                     @endphp
                                     @foreach($pendingVisits as $visit)
+                                    @if($visit->patient)
                                     <tr class="border-b {{ $visit->is_emergency ? 'emergency' : '' }}">
                                         <td class="py-2 px-4">{{ $visit->patient->pat_unique_id }}</td>
                                         <td class="py-2 px-4">{{ $visit->patient->full_name }} {{ $visit->patient->middle_name}} {{ $visit->patient->last_name}}</td>
@@ -75,6 +76,7 @@
                                         <td class="py-2 px-4">{{ $visit->is_approved ? 'Pending' : 'Approved' }}</td>
                                         <td class="py-2 px-4"><button class="btn btn-primary" data-toggle="modal" data-target="#approveModal-{{ $visit->id }}">Approve</button></td>
                                     </tr>
+                                    @endif
                                     @endforeach
                                 </tbody>
                             </table>
@@ -160,6 +162,26 @@
         function updateNurseName(select, inputId) {
             const selectedOption = select.options[select.selectedIndex];
             document.getElementById(inputId).value = selectedOption.textContent;
+        }
+
+        // New function to delete non-approved visits when a patient is deleted
+        function deleteNonApprovedVisits(patientId) {
+            fetch(`/api/patients/${patientId}/delete-non-approved-visits`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    console.error('Error deleting non-approved visits:', data.message);
+                }
+            })
+            .catch(error => console.error('Error deleting non-approved visits:', error));
         }
     });
 </script>
