@@ -39,6 +39,19 @@
             border: 1px solid #ccc;
         }
 
+        table {
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
     </style>
 
     <!-- Main content -->
@@ -69,7 +82,9 @@
                                         <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Doctor</th>
                                         <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Nurse</th>
                                         <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Appointment Status</th>
+                                        @can('medical-visit-update-status')
                                         <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Medical Status</th>
+                                       @endcan  
                                         <th class="py-2 px-4 text-left text-sm font-medium text-gray-700" width="280px">Action</th>
                                     </tr>
                                     

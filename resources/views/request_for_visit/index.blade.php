@@ -32,6 +32,19 @@
         .emergency {
             background-color: rgba(255, 0, 0, 0.1);
         }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
     </style>
 
     <!-- Main content -->
