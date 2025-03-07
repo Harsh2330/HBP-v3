@@ -68,6 +68,7 @@
                                         <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Doctor</th>
                                         <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Nurse</th>
                                         <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Appointment Status</th>
+                                        <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Medical Status</th>
                                         <th class="py-2 px-4 text-left text-sm font-medium text-gray-700" width="280px">Action</th>
                                     </tr>
                                 </thead>
@@ -80,6 +81,19 @@
                                         <td class="py-2 px-1">{{ $visit->doctor->name ?? 'N/A' }}</td>
                                         <td class="py-2 px-1">{{ $visit->nurse->name ?? 'N/A' }}</td>
                                         <td class="py-2 px-1">{{ $visit->is_approved }}</td>
+                                        @can('medical-visit-update-status', $visit)
+                                            <td class="py-2 px-1">
+                                                <form action="{{ route('medical_visit.update_status', $visit->id) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <select name="medical_status" onchange="this.form.submit()" class="action-buttons">
+                                                        <option value="Pending" {{ $visit->medical_status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                                        <option value="Completed" {{ $visit->medical_status == 'Completed' ? 'selected' : '' }}>Completed</option>
+                                                        <option value="Cancelled" {{ $visit->medical_status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                                    </select>
+                                                </form>
+                                            </td>
+                                        @endcan
                                         <td class="py-2 px-4">
                                             @can('medical-visit-create', $visit)
                                             <a class="btn btn-info btn-sm" href="{{ route('medical_visit.show',$visit->id) }}"><i class="fas fa-list"></i> Show</a>
@@ -153,7 +167,7 @@
             "searching": true,
             "ordering": true,
             "destroy": true,
-            "dom": '<"top"f>rt<"bottom"lp><"clear">' // Move search bar to "top"
+            "dom": '<"top"lf>rt<"bottom"p><"clear">' // Move search bar to "top"
         });
 
 
