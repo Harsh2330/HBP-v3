@@ -30,7 +30,7 @@
         }
 
         .emergency {
-            background-color: rgba(255, 0, 0, 0.1);
+            background-color: rgba(146, 193, 150, 0.2)!important;
         }
 
         table {
@@ -53,19 +53,19 @@
             <div class="flex justify-center">
                 <div class="w-full">
                     <div class="bg-white shadow-lg rounded-lg"> <!-- Tailwind classes for card -->
-                        <div class="bg-teal-500 text-white p-4 rounded-t-lg"> <!-- Tailwind classes for header -->
+                        <div class="bg-teal-500 text-white p-4 rounded-t-lg flex justify-between items-center"> <!-- Tailwind classes for header -->
                             <h3 class="text-lg font-semibold">Medical Visits List</h3>
+                            <div id="customSearchContainer"></div>
                         </div>
                         <div class="p-4">
                             @if($medicalVisits)
-                            <table class="min-w-full bg-white">
+                            <table id="medicalVisitsTable" class="min-w-full bg-white">
                                 <thead>
                                     <tr>
                                         <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Patient Unique ID</th>
                                         <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Patient Name</th>
                                         <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Preferred Visit Date</th>
                                         <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Preferred Time Slot</th>
-                                       
                                         <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Approval Status</th>
                                         <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Action</th>
                                     </tr>
@@ -196,6 +196,47 @@
             })
             .catch(error => console.error('Error deleting non-approved visits:', error));
         }
+
+        // Initialize DataTable with additional configurations
+        $('#medicalVisitsTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "destroy": true,
+            "dom": '<"top"lfB>rt<"bottom"ip><"clear">', // Add export buttons to "top"
+            "buttons": [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            "renderer": "semanticUI"
+        }).buttons().container().appendTo('#medicalVisitsTable_wrapper .col-md-6:eq(0)');
+
+        // Add column search functionality
+        $('#medicalVisitsTable thead tr:eq(1) th').each(function (i) {
+            var title = $(this).text();
+            $(this).find('input').on('keyup change', function () {
+                if ($('#medicalVisitsTable').DataTable().column(i).search() !== this.value) {
+                    $('#medicalVisitsTable').DataTable()
+                        .column(i)
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+        $('#medicalVisitsTable_filter').detach().appendTo('#customSearchContainer');
+
+        // Remove the default "Search:" label
+        $('#medicalVisitsTable_filter label').contents().filter(function() {
+            return this.nodeType === 3; // Select text nodes
+        }).remove();
+
+        // Style the search input field
+        $('#medicalVisitsTable_filter input')
+            .attr('placeholder', 'Search Medical Visits...')
+            .css({
+                'color': 'black', // Change font color to black
+                'font-weight': 'bold' // Make text bold (optional)
+            });
     });
 </script>
 @endsection

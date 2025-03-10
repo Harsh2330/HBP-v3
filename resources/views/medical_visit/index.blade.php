@@ -29,7 +29,7 @@
         }
 
         .emergency {
-            background-color: rgba(255, 0, 0, 0.1);
+            background-color: rgba(146, 193, 150, 0.2)!important;
         }
 
         #medical-visits-table_filter input {
@@ -71,6 +71,18 @@
                                 {{ $value }}
                             </div>
                             @endsession
+
+                            <div class="flex mb-4">
+                                <input type="date" id="start-date" class="form-control mr-2" placeholder="Start Date">
+                                <input type="date" id="end-date" class="form-control mr-2" placeholder="End Date">
+                                <select id="doctor-select" class="form-control mr-2">
+                                    <option value="">Select Doctor</option>
+                                    @foreach ($doctors as $doctor)
+                                        <option value="{{ $doctor->name }}">{{ $doctor->name }}</option>
+                                    @endforeach
+                                </select>
+                                <button id="filter-date-range" class="btn btn-primary">Filter</button>
+                            </div>
 
                             @if($data)
                             <table id='medical-visits-table'  class="min-w-full bg-white">
@@ -181,7 +193,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        $('#medical-visits-table').DataTable({
+        var table = $('#medical-visits-table').DataTable({
             "paging": true,
             "searching": true,
             "ordering": true,
@@ -272,6 +284,38 @@
                 var modal = document.querySelector(target);
                 $(modal).modal('show');
             });
+        });
+
+        // Date range and doctor filter
+        $('#filter-date-range').on('click', function() {
+            var startDate = $('#start-date').val();
+            var endDate = $('#end-date').val();
+            var selectedDoctor = $('#doctor-select').val();
+            console.log('Filter button clicked');
+            console.log('Start Date:', startDate);
+            console.log('End Date:', endDate);
+            console.log('Selected Doctor:', selectedDoctor);
+            $.fn.dataTable.ext.search = []; // Clear any existing filters
+            if (startDate || endDate || selectedDoctor) {   
+                $.fn.dataTable.ext.search.push(
+                    function(settings, data, dataIndex) {
+                        var visitDate = new Date(data[2]); // Use the correct column index for visit date
+                        var start = startDate ? new Date(startDate) : null;
+                        var end = endDate ? new Date(endDate) : null;
+                        var doctor = data[3]; // Use the correct column index for doctor
+                        console.log('Visit Date:', visitDate);
+                        if ((start && visitDate < start) || (end && visitDate > end)) {
+                            return false;
+                        }
+                        if (selectedDoctor && doctor !== selectedDoctor) {
+                            return false;
+                        }
+                        return true;
+                    }
+                );
+            }
+            table.draw(); // Trigger the draw event to show filtered entries
+            console.log('Table redrawn');
         });
     });
 </script>

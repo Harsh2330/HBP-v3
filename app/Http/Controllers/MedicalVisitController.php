@@ -31,7 +31,8 @@ class MedicalVisitController extends Controller
     public function index(Request $request)
     {
         $data = MedicalVisit::all();
-        return view('medical_visit.index', compact('data'));
+        $doctors = User::role('Doctor')->get(); // Assuming you have a role 'Doctor'
+        return view('medical_visit.index', compact('data', 'doctors'));
     }
 
     public function create()
