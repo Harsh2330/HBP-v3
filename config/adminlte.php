@@ -336,86 +336,145 @@ return [
         ],
         ['header' => 'account_settings'],
         [
-            'text' => 'Admin Dashboard',
-            'url' => 'admin/dashboard',
+            'text' => 'Dashboard',
             'icon' => 'fas fa-fw fa-tachometer-alt',
-            'permission' => 'admin-dashboard',
+            'submenu' => [
+            [
+                'text' => 'Admin Dashboard',
+                'url' => 'admin/dashboard',
+                'icon' => 'fas fa-fw fa-tachometer-alt',
+                'shift' => 'ml-3',
+                'permission' => 'admin-dashboard',
             ],
             [
-            'text' => 'Doctor Dashboard',
-            'url' => 'doctor/dashboard',
-            'icon' => 'fas fa-fw fa-stethoscope',
-            'permission' => 'doctor-dashboard',
+                'text' => 'Doctor Dashboard',
+                'url' => 'doctor/dashboard',
+                'icon' => 'fas fa-fw fa-stethoscope',
+                'shift' => 'ml-3',
+                'permission' => 'doctor-dashboard',
             ],
             [
-            'text' => 'Nurse Dashboard',
-            'url' => 'nurse/dashboard',
-            'icon' => 'fas fa-fw fa-user-nurse',
-            'permission' => 'nurse-dashboard',
+                'text' => 'Nurse Dashboard',
+                'url' => 'nurse/dashboard',
+                'icon' => 'fas fa-fw fa-user-nurse',
+                'shift' => 'ml-3',
+                'permission' => 'nurse-dashboard',
             ],
             [
-            'text' => 'User Dashboard',
-            'url' => 'user/dashboard',
-            'icon' => 'fas fa-fw fa-user',
-            'permission' => 'user-dashboard',
+                'text' => 'User Dashboard',
+                'url' => 'user/dashboard',
+                'icon' => 'fas fa-fw fa-user',
+                'shift' => 'ml-3',
+                'permission' => 'user-dashboard',
+            ],
+            ],
+        ],
+            [
+                'text' => 'Roles',
+                'icon' => 'fas fa-fw fa-user-shield',
+                'submenu' => [
+                    [
+                        'text' => 'Add Role',
+                        'url' => 'roles/create',
+                        'icon' => 'fas fa-fw fa-plus-circle',
+                        'permission' => 'role-create',
+                    ],
+                    [
+                        'text' => 'View Roles',
+                        'url' => 'roles',
+                        'icon' => 'fas fa-fw fa-eye',
+                        'permission' => 'role-list',
+                    ],
+                ],
             ],
             [
-            'text' => 'Roles',
-            'url' => 'roles',
-            'icon' => 'fas fa-fw fa-user-shield',
-            'permission' => 'role-list',
+                'text' => 'Manage Users',
+                'icon' => 'fas fa-fw fa-users-cog',
+                'submenu' => [
+                    [
+                        'text' => 'Add User',
+                        'url' => 'users/create',
+                        'icon' => 'fas fa-fw fa-user-plus',
+                        'permission' => 'user-create',
+                    ],
+                    [
+                        'text' => 'View Users',
+                        'url' => 'users',
+                        'icon' => 'fas fa-fw fa-eye',
+                        'permission' => 'user-list',
+                    ],
+                ],
             ],
             [
-            'text' => 'Manage Users',
-            'url' => 'users',
-            'icon' => 'fas fa-fw fa-users-cog',
-            'permission' => 'user-list',
-            ],
-            [
-            'text' => 'Appointments',
-            'url' => 'medical_visit',
-            'icon' => 'fas fa-fw fa-calendar-alt',
-            'permission' => 'medical-visit-list',
-            ],
-            [
-            'text' => 'Request for visit',
-            'url' => 'request_for_visit',
-            'icon' => 'fas fa-fw fa-calendar-check',
-            'permission' => 'req-list',
+                'text' => 'Appointments',
+                'icon' => 'fas fa-fw fa-calendar-alt',
+                'submenu' => [
+                    [
+                        'text' => 'Medical Visits',
+                        'url' => 'medical_visit',
+                        'icon' => 'fas fa-fw fa-calendar-alt',
+                        'permission' => 'medical-visit-list',
+                    ],
+                    [
+                        'text' => 'Request for Visit',
+                        'url' => 'request_for_visit',
+                        'icon' => 'fas fa-fw fa-calendar-check',
+                        'permission' => 'req-list',
+                    ],
+                    [
+                        'text' => 'Calendar',
+                        'url' => 'calendar',
+                        'icon' => 'fas fa-calendar-alt',
+                    ],
+                ],
             ],
 
             [
-            'text' => 'Patients',
-            'url' => 'admin/patient',
-            'icon' => 'fas fa-fw fa-procedures',
-            'permission' => 'patient-list',
+                'text' => 'Patients',
+                'icon' => 'fas fa-fw fa-procedures',
+                'submenu' => [
+                    [
+                        'text' => 'Add Patient',
+                        'url' => 'admin/patient/create',
+                        'icon' => 'fas fa-fw fa-user-plus',
+                        'permission' => 'patient-create',
+                    ],
+                    [
+                        'text' => 'View Patients',
+                        'url' => 'admin/patient',
+                        'icon' => 'fas fa-fw fa-procedures',
+                        'permission' => 'patient-list',
+                    ],
+                ],
             ],
+           
+            
             [
-                'text' => 'Calendar',
-                'url'  => 'calendar',
-                'icon' => 'fas fa-calendar-alt',
-            ],
-            ['header' => 'Reports'],
-            [
-                'text' => 'Admin Report',
-                'url'  => 'admin/report',
-                'icon' => 'fas fa-fw fa-file-alt',
-                'permission' => 'admin-report-list',
-                
-            ],
-            [
-                'text' => 'Doctor Report',
-                'url'  => 'doctor/report',
-                'icon' => 'fas fa-fw fa-file-medical',
-                'permission' => 'doctor-report-list',
-                
-            ],
-            [
-                'text' => 'User Report',
-                'url'  => 'user/report',
-                'icon' => '	fas fa-fw fa-file-medical	',
-                'permission' => 'user-report-list',
-               
+                'text' => 'Reports',
+                'icon' => 'fas fa-fw fa-file',
+                'submenu' => [
+                    [
+                        'text' => 'Admin Report',
+                        'url'  => 'admin/report',
+                        'icon' => 'fas fa-fw fa-file-alt',
+                        'permission' => 'admin-report-list',
+                        
+                    ],
+                    [
+                        'text' => 'Doctor Report',
+                        'url'  => 'doctor/report',
+                        'icon' => 'fas fa-fw fa-file-medical',
+                        'permission' => 'doctor-report-list',
+                        
+                    ],
+                    [
+                        'text' => 'User Report',
+                        'url'  => 'user/report',
+                        'icon' => 'fas fa-fw fa-file-medical',
+                        'permission' => 'user-report-list',
+                        
+                    ],
+                ],
             ],
             
             [

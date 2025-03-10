@@ -28,6 +28,10 @@
             animation: slideIn 2s;
         }
 
+  
+   
+
+
         .emergency {
             background-color: rgba(255, 0, 0, 0.1);
         }
@@ -74,21 +78,21 @@
 
                             @if($data)
                             <table id='medical-visits-table'  class="min-w-full bg-white">
-                                <thead>
-                                    <tr>
-                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Patient Unique ID</th>
-                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Patient Name</th>
-                                        <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Visit Date</th>
-                                        <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Doctor</th>
-                                        <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Nurse</th>
-                                        <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Appointment Status</th>
-                                        @can('medical-visit-update-status')
-                                        <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Medical Status</th>
-                                       @endcan  
-                                        <th class="py-2 px-4 text-left text-sm font-medium text-gray-700" width="280px">Action</th>
-                                    </tr>
-                                    
-                                </thead>
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Patient Unique ID</th>
+                                    <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Patient Name</th>
+                                    <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Visit Date</th>
+                                    <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Doctor</th>
+                                    <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Nurse</th>
+                                    <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Appointment Status</th>
+                                    @can('medical-visit-update-status')
+                                    <th class="py-2 px-1 text-left text-sm font-medium text-gray-700">Medical Status</th>
+                                    @endcan
+                                    <th class="py-2 px-4 text-left text-sm font-medium text-gray-700" width="280px">Action</th>    
+                                </tr>
+                            </thead>
+
                                 <tbody>
                                     @foreach ($data as $key => $visit)
                                     @if ($visit->patient)
@@ -181,98 +185,113 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        $('#medical-visits-table').DataTable({
-            "paging": true,
-            "searching": true,
-            "ordering": true,
-            "destroy": true,
-            "dom": '<"top"lfB>rt<"bottom"ip><"clear">', // Add export buttons to "top"
-            "buttons": [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ],
-            "renderer": "semanticUI"
-        }).buttons().container().appendTo('#medical-visits-table_wrapper .col-md-6:eq(0)');
+    var table = $('#medical-visits-table').DataTable({
+        "paging": true,
+        "searching": true,
+        "ordering": true,
+        "destroy": true,
+        "dom": '<"top"lfB>rt<"bottom"ip><"clear">',
+        "buttons": [
+            {
+            extend: 'csvHtml5',
+            text: 'CSV',
+            exportOptions: {
+                columns: [0, 1, 2, 3, 4] // Specify the column indexes you want
+            }
+            },
+            {
+            extend: 'excelHtml5',
+            text: 'Excel',
+            exportOptions: {
+                columns: [0, 1, 2, 3, 4] // Specify the column indexes you want
+            },
+            customize: function (xlsx) {
+                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                $('row c[r^="C"]', sheet).attr('s', '2'); // Example customization
+            }
+            },
+            {
+            extend: 'pdfHtml5',
+            text: 'PDF',
+            exportOptions: {
+                columns: [0, 1, 2, 3, 4] // Specify the column indexes you want
+            },
+            customize: function (doc) {
+                doc.content[1].table.widths = ['20%', '20%', '15%', '15%', '15%', '15%']; // Adjust column widths if needed
+            }
+            }
+        ]
+    });
 
-        // Add column search functionality
-        $('#medical-visits-table thead tr:eq(1) th').each(function (i) {
-            var title = $(this).text();
-            $(this).find('input').on('keyup change', function () {
-                if ($('#medical-visits-table').DataTable().column(i).search() !== this.value) {
-                    $('#medical-visits-table').DataTable()
-                        .column(i)
-                        .search(this.value)
-                        .draw();
-                }
-            });
+   
+
+    $('#medical-visits-table_filter').detach().appendTo('#customSearchContainer');
+
+    // Remove the default "Search:" label
+    $('#medical-visits-table_filter label').contents().filter(function() {
+        return this.nodeType === 3; // Select text nodes
+    }).remove();
+
+    // Style the search input field
+    $('#medical-visits-table_filter input')
+        .attr('placeholder', 'Search Medical Visits...')
+        .css({
+            'color': 'black',
+            'font-weight': 'bold'
         });
 
-        $('#medical-visits-table_filter').detach().appendTo('#customSearchContainer');
-
-        // Remove the default "Search:" label
-        $('#medical-visits-table_filter label').contents().filter(function() {
-            return this.nodeType === 3; // Select text nodes
-        }).remove();
-
-        // Style the search input field
-        $('#medical-visits-table_filter input')
-            .attr('placeholder', 'Search Medical Visits...')
-            .css({
-                'color': 'black', // Change font color to black
-                'font-weight': 'bold' // Make text bold (optional)
-            });
-
-        document.querySelectorAll('.delete-visit').forEach(button => {
-            button.addEventListener('click', function() {
-                const visitId = this.getAttribute('data-id');
-                fetch(`/medical_visits/${visitId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            document.getElementById(`visit-row-${visitId}`).remove();
-                        } else {
-                            alert('Error deleting visit');
-                        }
-                    });
-            });
-        });
-
-        // Handle patient deletion
-        document.querySelectorAll('.delete-patient').forEach(button => {
-            button.addEventListener('click', function() {
-                const patientId = this.getAttribute('data-id');
-                fetch(`/patients/${patientId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            document.querySelectorAll(`[data-patient-id="${patientId}"]`).forEach(row => row.remove());
-                        } else {
-                            alert('Error deleting patient');
-                        }
-                    });
-            });
-        });
-
-        // Handle reschedule modal
-        var rescheduleButtons = document.querySelectorAll('[data-toggle="modal"]');
-        rescheduleButtons.forEach(function (button) {
-            button.addEventListener('click', function () {
-                var target = button.getAttribute('data-target');
-                var modal = document.querySelector(target);
-                $(modal).modal('show');
-            });
+    document.querySelectorAll('.delete-visit').forEach(button => {
+        button.addEventListener('click', function() {
+            const visitId = this.getAttribute('data-id');
+            fetch(`/medical_visits/${visitId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById(`visit-row-${visitId}`).remove();
+                    } else {
+                        alert('Error deleting visit');
+                    }
+                });
         });
     });
+
+    document.querySelectorAll('.delete-patient').forEach(button => {
+        button.addEventListener('click', function() {
+            const patientId = this.getAttribute('data-id');
+            fetch(`/patients/${patientId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.querySelectorAll(`[data-patient-id="${patientId}"]`).forEach(row => row.remove());
+                    } else {
+                        alert('Error deleting patient');
+                    }
+                });
+        });
+    });
+
+    // Handle reschedule modal
+    var rescheduleButtons = document.querySelectorAll('[data-toggle="modal"]');
+    rescheduleButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            var target = button.getAttribute('data-target');
+            var modal = document.querySelector(target);
+            $(modal).modal('show');
+        });
+    });
+});
+
 </script>
 @endsection
