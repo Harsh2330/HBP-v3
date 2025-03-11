@@ -121,9 +121,9 @@
                 fetch(`/medical-visit/details/${visitId}`)
                     .then(response => response.json())
                     .then(data => {
-                        $('#details_patient').text(data.patient.full_name);
-                        $('#details_doctor').text(data.doctor.name);
-                        $('#details_nurse').text(data.nurse.name);
+                        $('#details_patient').text(data.patient ? data.patient.full_name : 'N/A');
+                        $('#details_doctor').text(data.doctor ? data.doctor.name : 'N/A');
+                        $('#details_nurse').text(data.nurse ? data.nurse.name : 'N/A');
                         $('#details_date').text(data.visit_date);
                         $('#details_time_slot').text(data.time_slot);
                         $('#details_appointment_type').text(data.appointment_type);
