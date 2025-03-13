@@ -186,7 +186,7 @@ class MedicalVisitController extends Controller
         $events = $medicalVisits->map(function ($visit) {
             return [
                 'id' => $visit->id,
-                'title' => ($visit->patient ? $visit->patient->full_name : 'Unknown') . ' - ' . ($visit->patient ? $visit->patient->full_address : 'Unknown Address'),
+                'title' => $visit->patient->full_name . ' - ' . $visit->patient->full_address,
                 'start' => $visit->visit_date ?? $visit->preferred_visit_date,
                 'status' => $visit->is_approved,
                 'backgroundColor' => $visit->is_approved === 'Approved' ? 'green' : ($visit->is_approved === 'Pending' ? 'orange' : 'yellow'),
@@ -215,10 +215,8 @@ class MedicalVisitController extends Controller
             'description' => 'Rescheduled medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ') to ' . $visit->visit_date . ' at ' . $visit->time_slot,
         ]);
 
-        return response()->json([
-            'new_date' => $visit->visit_date,
-            'new_time' => $visit->time_slot
-        ]);
+        return redirect()->route('medical_visit.index')->with('success', 'Medical visit rescheduled successfully.');
+
     }
 
     public function getVisitDetails($id)
