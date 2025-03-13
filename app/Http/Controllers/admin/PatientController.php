@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; // Add this import
 use Illuminate\Support\Facades\Log; // Add this import
 use Illuminate\Support\Facades\Auth; // Add this import
+use App\DataTables\PatientDataTable; // Add this import
+use Yajra\DataTables\Facades\DataTables; // Add this import
 
 class PatientController extends Controller
 {         
@@ -24,12 +26,10 @@ class PatientController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->input('search');
-        $userId = Auth::id(); // Get the logged-in user's ID
-        $patients = Patient::where('user_unique_id', $userId)
-            ->where('full_name', 'like', "%$search%")
-            ->get(); // Fetch all patients without pagination
-        return view('patient.index', compact('patients'));
+        if ($request->ajax()) {
+            return $this->getData($request);
+        }
+        return view('patient.index');
     }
 
     public function list(Request $request)
@@ -142,5 +142,18 @@ class PatientController extends Controller
         $patient->update($request->all());
 
         return redirect()->route('patient.profile')->with('success', 'Profile updated successfully.');
+    }
+
+   
+
+    public function getData(Request $request)
+    {
+        $patients = Patient::query();
+        return DataTables::of($patients)
+            ->addColumn('actions', function ($patient) {
+                return view('patient.partials.actions', compact('patient'))->render();
+            })
+            ->rawColumns(['actions'])
+            ->make(true);
     }
 }

@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Mail\VisitScheduleMail;
 use Illuminate\Support\Facades\Mail;
+use App\DataTables\MedicalVisitDataTable;
+use Yajra\DataTables\Facades\DataTables;
 
 class MedicalVisitController extends Controller
 {
@@ -28,11 +30,10 @@ class MedicalVisitController extends Controller
     }
 
     // Display a listing of the medical visits
-    public function index(Request $request)
+    public function index(MedicalVisitDataTable $dataTable)
     {
-        $data = MedicalVisit::all();
         $doctors = User::role('Doctor')->get(); // Assuming you have a role 'Doctor'
-        return view('medical_visit.index', compact('data', 'doctors'));
+        return $dataTable->render('medical_visit.index', compact('doctors'));
     }
 
     public function create()
@@ -222,5 +223,18 @@ class MedicalVisitController extends Controller
     {
         $visit = MedicalVisit::with(['patient', 'doctor', 'nurse'])->findOrFail($id);
         return response()->json($visit);
+    }
+
+    public function getData()
+    {
+        $query = MedicalVisit::with(['patient', 'doctor', 'nurse'])->select('medical_visits.*');
+        return DataTables::eloquent($query)
+            ->addColumn('action', function($visit) {
+                return view('medical_visit.action', compact('visit'))->render();
+            })
+            ->editColumn('is_approved', function ($visit) {
+                return $visit->is_approved ? 'Approved' : 'Pending';
+            })
+            ->toJson();
     }
 }

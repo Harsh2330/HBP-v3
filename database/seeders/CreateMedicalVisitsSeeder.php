@@ -20,7 +20,8 @@ class CreateMedicalVisitsSeeder extends Seeder
         $doctors = User::role('Doctor')->get();
         $nurses = User::role('Nurse')->get();
 
-        foreach ($patients as $patient) {
+        for ($i = 0; $i < 1500; $i++) {
+            $patient = $patients->random();
             $doctor = $doctors->random();
             $nurse = $nurses->random();
             $visitDate = $faker->dateTimeBetween('now', '+1 year');

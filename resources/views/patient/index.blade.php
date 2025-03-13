@@ -28,20 +28,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($patients as $patient)
-                        <tr class="hover:bg-gray-100">
-                            <td class="py-2 px-4 border-b border-gray-300">{{ $patient->full_name }}</td>
-                            <td class="py-2 px-4 border-b border-gray-300">{{ $patient->email }}</td>
-                            <td class="py-2 px-4 border-b border-gray-300">
-                                <a href="{{ route('admin.patient.show', $patient->id) }}" class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">View</a>
-                                <form action="{{ route('admin.patient.destroy', $patient->id) }}" method="POST" class="inline-block">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
+                        <!-- DataTables will populate this section -->
                     </tbody>
                 </table>
             </div>
@@ -63,6 +50,14 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         $('#patients-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{ route('admin.patient.getData') }}',
+            columns: [
+                { data: 'full_name', name: 'full_name' },
+                { data: 'email', name: 'email' },
+                { data: 'actions', name: 'actions', orderable: false, searchable: false }
+            ],
             "paging": true,     
             "searching": true,
             "ordering": true,

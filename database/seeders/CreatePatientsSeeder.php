@@ -21,7 +21,7 @@ class CreatePatientsSeeder extends Seeder
         // Ensure the Patient role exists with the correct guard name
         $patientRole = Role::firstOrCreate(['name' => 'Patient', 'guard_name' => 'web']);
 
-        for ($i = 1; $i <= 70; $i++) {
+        for ($i = 1; $i <= 10000; $i++) {
             $age = $faker->numberBetween(0, 90);
             $ageCategory = floor($age / 10) * 10 . '-' . (floor($age / 10) * 10 + 9);
             if ($age >= 80) {

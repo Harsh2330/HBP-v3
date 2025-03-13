@@ -40,6 +40,7 @@ Route::middleware(['auth'])->group(function() {
     Route::patch('/medical_visit/{id}/reschedule', [MedicalVisitController::class, 'reschedule'])->name('medical_visit.reschedule');
     Route::get('/calendar', [MedicalVisitController::class, 'calendar'])->name('calendar');
     Route::get('/medical-visit/details/{id}', [MedicalVisitController::class, 'getVisitDetails'])->name('medical_visit.details');
+    Route::get('/medical_visits/data', [MedicalVisitController::class, 'getData'])->name('medical_visits.data'); // Corrected route definition
 
     // Dashboard Routes
     Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
@@ -56,6 +57,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function() {
     Route::put('patient/{id}/storePatientData', [PatientController::class, 'storePatientData'])->name('patient.storePatientData');
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/report', [AdminReportController::class, 'generateReport'])->name('report');
+    Route::get('patients/data', [PatientController::class, 'getData'])->name('patient.getData');
 });
 
 // Patient Routes
@@ -63,6 +65,7 @@ Route::prefix('patient')->name('patient.')->middleware(['auth'])->group(function
     Route::get('dashboard', [HomeController::class, 'patientIndex'])->name('dashboard');
     Route::get('profile', [PatientController::class, 'profile'])->name('profile');
     Route::post('profile', [PatientController::class, 'updateProfile'])->name('profile.update');
+    Route::get('data', [PatientController::class, 'getData'])->name('patient.data'); // Ensure this line is correct
 });
 
 // API Route

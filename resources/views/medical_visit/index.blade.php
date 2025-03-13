@@ -28,10 +28,6 @@
             animation: slideIn 2s;
         }
 
-  
-   
-
-
         .emergency {
             background-color: rgba(146, 193, 150, 0.2)!important;
         }
@@ -88,7 +84,6 @@
                                 <button id="filter-date-range" class="btn btn-primary">Filter</button>
                             </div>
 
-                            @if($data)
                             <table id='medical-visits-table'  class="min-w-full bg-white">
                             <thead>
                                 <tr>
@@ -104,58 +99,7 @@
                                     <th class="py-2 px-4 text-left text-sm font-medium text-gray-700" width="280px">Action</th>    
                                 </tr>
                             </thead>
-
-                                <tbody>
-                                    @foreach ($data as $key => $visit)
-                                    @if ($visit->patient)
-                                    <tr class="border-b {{ $visit->is_emergency ? 'emergency' : '' }}" id="visit-row-{{ $visit->id }}">
-                                        <td class="py-2 px-4">{{ $visit->patient->pat_unique_id }}</td>
-                                        <td class="py-2 px-4">{{ $visit->patient->full_name }}</td>
-                                        <td class="py-2 px-1">{{ $visit->visit_date }}</td>
-                                        <td class="py-2 px-1">{{ $visit->doctor->name}}</td>
-                                        <td class="py-2 px-1">{{ $visit->nurse->name}}</td>
-                                        <td class="py-2 px-1">{{ $visit->is_approved }}</td>
-                                        @can('medical-visit-update-status', $visit)
-                                            <td class="py-2 px-1">
-                                                <form action="{{ route('medical_visit.update_status', $visit->id) }}" method="POST" class="inline">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <select name="medical_status" onchange="this.form.submit()" class="action-buttons">
-                                                        <option value="Pending" {{ $visit->medical_status == 'Pending' ? 'selected' : '' }}>Pending</option>
-                                                        <option value="Completed" {{ $visit->medical_status == 'Completed' ? 'selected' : '' }}>Completed</option>
-                                                        <option value="Cancelled" {{ $visit->medical_status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
-                                                    </select>
-                                                </form>
-                                            </td>
-                                        @endcan
-                                        <td class="py-2 px-4">
-                                            @can('medical-visit-create', $visit)
-                                            <a class="btn btn-info btn-sm" href="{{ route('medical_visit.show',$visit->id) }}"><i class="fas fa-list"></i> Show</a>
-                                            @endcan
-                                            @can('medical-visit-edit', $visit)
-                                            <a class="btn btn-primary btn-sm" href="{{ route('medical_visit.edit',$visit->id) }}"><i class="	fas fa-pencil-alt"></i> Edit</a>
-                                            @endcan
-                                            
-                                            @can('medical-visit-delete', $visit)
-                                            <form action="{{ route('medical_visit.destroy', $visit->id) }}" method="POST" class="inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                            <button class="btn btn-danger btn-sm delete-visit" data-id="{{ $visit->id }}"><i class="fas fa-trash"></i> Delete</button>
-                                            </form>
-                                            @endcan
-                                            @can('medical-visit-reschedule', $visit)
-                                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#rescheduleModal-{{ $visit->id }}"><i class="fas fa-calendar-alt"></i> Reschedule</button>
-                                            @endcan
-                                        </td>
-                                    </tr>
-                                    @endif
-                                    @endforeach
-                                </tbody>
                             </table>
-                           
-                            @else
-                            <p>No medical visits available.</p>
-                            @endif
                         </div>
                     </div>
                 </div>
@@ -164,40 +108,22 @@
     </section>
 </div>
 
-@foreach ($data as $key => $visit)
-<div class="modal fade" id="rescheduleModal-{{ $visit->id }}" tabindex="-1" role="dialog" aria-labelledby="rescheduleModalLabel-{{ $visit->id }}" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="rescheduleModalLabel-{{ $visit->id }}">Reschedule Medical Visit</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('medical_visit.reschedule', $visit->id) }}" method="POST">
-                    @csrf
-                    @method('PATCH')
-                    <div class="form-group">
-                        <label for="visit_date">Visit Date</label>
-                        <input type="date" name="visit_date" id="visit_date" class="form-control" value="{{ $visit->visit_date }}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="time_slot">Time Slot</label>
-                        <input type="time" name="time_slot" id="time_slot" class="form-control" value="{{ $visit->time_slot }}" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Reschedule</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-@endforeach
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
     var table = $('#medical-visits-table').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "ajax": "{{ route('medical_visits.data') }}",
+        "columns": [
+            { "data": "patient.pat_unique_id" },
+            { "data": "patient.full_name" },
+            { "data": "visit_date" },
+            { "data": "doctor.name" },
+            { "data": "nurse.name" },
+            { "data": "is_approved" },
+            { "data": "medical_status" },
+            { "data": "action", "orderable": false, "searchable": false }
+        ],
         "paging": true,
         "searching": true,
         "ordering": true,
@@ -234,32 +160,6 @@
             }
         ]
     });
-
-   
-        var table = $('#medical-visits-table').DataTable({
-            "paging": true,
-            "searching": true,
-            "ordering": true,
-            "destroy": true,
-            "dom": '<"top"lfB>rt<"bottom"ip><"clear">', // Add export buttons to "top"
-            "buttons": [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ],
-            "renderer": "semanticUI"
-        }).buttons().container().appendTo('#medical-visits-table_wrapper .col-md-6:eq(0)');
-
-        // Add column search functionality
-        $('#medical-visits-table thead tr:eq(1) th').each(function (i) {
-            var title = $(this).text();
-            $(this).find('input').on('keyup change', function () {
-                if ($('#medical-visits-table').DataTable().column(i).search() !== this.value) {
-                    $('#medical-visits-table').DataTable()
-                        .column(i)
-                        .search(this.value)
-                        .draw();
-                }
-            });
-        });
 
     $('#medical-visits-table_filter').detach().appendTo('#customSearchContainer');
 
