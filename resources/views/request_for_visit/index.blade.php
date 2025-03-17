@@ -58,7 +58,6 @@
                             <div id="customSearchContainer"></div>
                         </div>
                         <div class="p-4">
-                            @if($medicalVisits)
                             <table id="medicalVisitsTable" class="min-w-full bg-white">
                                 <thead>
                                     <tr>
@@ -71,31 +70,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                    $pendingVisits = $medicalVisits->filter(function($visit) {
-                                    return $visit->is_approved == 'pending';
-                                    });
-                                    $emergencyVisits = $medicalVisits->filter(function($visit) {
-                                    return $visit->is_emergency == true;
-                                    });
-                                    @endphp
-                                    @foreach($pendingVisits as $visit)
-                                    @if($visit->patient)
-                                    <tr class="border-b {{ $visit->is_emergency ? 'emergency' : '' }}">
-                                        <td class="py-2 px-4">{{ $visit->patient->pat_unique_id }}</td>
-                                        <td class="py-2 px-4">{{ $visit->patient->full_name }} {{ $visit->patient->middle_name}} {{ $visit->patient->last_name}}</td>
-                                        <td class="py-2 px-1">{{ $visit->preferred_visit_date }}</td>
-                                        <td class="py-2 px-1">{{ $visit->preferred_time_slot }}</td>
-                                        <td class="py-2 px-4">{{ $visit->is_approved ? 'Pending' : 'Approved' }}</td>
-                                        <td class="py-2 px-4"><button class="btn btn-primary" data-toggle="modal" data-target="#approveModal-{{ $visit->id }}">Approve</button></td>
-                                    </tr>
-                                    @endif
-                                    @endforeach
                                 </tbody>
                             </table>
-                            @else
-                            <p>No medical visits available.</p>
-                            @endif
                         </div>
                     </div>
                 </div>
@@ -104,53 +80,8 @@
     </section>
 </div>
 
-@foreach($pendingVisits as $visit)
-<div class="modal fade" id="approveModal-{{ $visit->id }}" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel-{{ $visit->id }}" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="approveModalLabel-{{ $visit->id }}">Approve Medical Visit</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('medical_visit.approve', $visit->id) }}" method="POST">
-                    @csrf
-                    @method('PATCH')
-                    <div class="form-group">
-                        <label for="visit_date">Visit Date</label>
-                        <input type="date" name="visit_date" id="visit_date" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="time_slot">Time Slot</label>
-                        <input type="time" name="time_slot" id="time_slot" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="doctor_id">Doctor</label>
-                        <select name="doctor_id" id="doctor_id-{{ $visit->id }}" class="form-control" required onchange="updateDoctorName(this, 'doctor_name-{{ $visit->id }}')">
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="nurse_id">Nurse</label>
-                        <select name="nurse_id" id="nurse_id-{{ $visit->id }}" class="form-control" required onchange="updateNurseName(this, 'nurse_name-{{ $visit->id }}')">
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-success mt-2">Approve</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-@endforeach
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        @foreach($pendingVisits as $visit)
-        fetchUsersWithRole('doctor', 'doctor_id-{{ $visit->id }}');
-        fetchUsersWithRole('nurse', 'nurse_id-{{ $visit->id }}');
-        @endforeach
-
         function fetchUsersWithRole(role, id) {
             fetch(`/api/users-with-role/${role}`)
                 .then(response => response.json())
@@ -207,7 +138,18 @@
             "buttons": [
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ],
-            "renderer": "semanticUI"
+            "renderer": "semanticUI",
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('request_for_visit.index') }}",
+            columns: [
+                { data: 'patient.pat_unique_id', name: 'patient.pat_unique_id' },
+                { data: 'patient.full_name', name: 'patient.full_name' },
+                { data: 'preferred_visit_date', name: 'preferred_visit_date' },
+                { data: 'preferred_time_slot', name: 'preferred_time_slot' },
+                { data: 'is_approved', name: 'is_approved' },
+                { data: 'action', name: 'action', orderable: false, searchable: false },
+            ]
         }).buttons().container().appendTo('#medicalVisitsTable_wrapper .col-md-6:eq(0)');
 
         // Add column search functionality
