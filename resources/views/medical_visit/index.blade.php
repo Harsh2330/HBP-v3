@@ -113,7 +113,12 @@
     var table = $('#medical-visits-table').DataTable({
         "processing": true,
         "serverSide": true,
-        "ajax": "{{ route('medical_visits.data') }}",
+        "ajax": {
+            "url": "{{ route('medical_visits.data') }}",
+            "data": function(d) {
+                d.status = 'Approved'; // Only fetch approved records
+            }
+        },
         "columns": [
             { "data": "patient.pat_unique_id" },
             { "data": "patient.full_name" },

@@ -83,6 +83,9 @@ Route::get('/admin-report/export', [AdminReportController::class, 'exportAdminRe
 Route::get('/admin-report/export/csv', [AdminReportController::class, 'exportAdminReportCsv'])->name('admin.report.export.csv');
 Route::get('/doctor-report/export/csv/{doctorId}', [DoctorReportController::class, 'exportReportCsv'])->name('doctor.report.export.csv');
 Route::get('/doctor-report/export/csv', [DoctorReportController::class, 'exportLoggedInDoctorReportCsv'])->name('doctor.report.export.loggedin.csv');
+Route::get('/admin-report/export/pdf', [AdminReportController::class, 'exportAdminReportPdf'])->name('admin.report.export.pdf');
+Route::get('/doctor-report/export/pdf/{doctorId}', [DoctorReportController::class, 'exportReportPdf'])->name('doctor.report.export.pdf');
+Route::get('/user-report/export/pdf', [UserReportController::class, 'exportReportPdf'])->name('reports.export.pdf');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/messages', [MessageController::class, 'index'])->name('messages');

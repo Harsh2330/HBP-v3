@@ -23,6 +23,7 @@
 
                 <a href="{{ route('admin.report.export', ['start_date' => $startDate, 'end_date' => $endDate]) }}" class="btn btn-secondary bg-green-600 text-white py-2 px-4 rounded-md mb-4">Export to Excel</a>
                 <a href="{{ route('admin.report.export.csv', ['start_date' => $startDate, 'end_date' => $endDate]) }}" class="btn btn-secondary bg-yellow-600 text-white py-2 px-4 rounded-md mb-4">Export to CSV</a>
+                <a href="{{ route('admin.report.export.pdf', ['start_date' => $startDate, 'end_date' => $endDate]) }}" class="btn btn-secondary bg-red-600 text-white py-2 px-4 rounded-md mb-4">Export to PDF</a>
 
                 <h3 class="text-blue-600 font-bold text-xl mt-6">Summary Statistics</h3>
                 <p>Total Patients Registered: {{ $totalPatients ?? 'N/A' }}</p>

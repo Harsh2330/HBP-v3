@@ -225,9 +225,11 @@ class MedicalVisitController extends Controller
         return response()->json($visit);
     }
 
-    public function getData()
+    public function getData(Request $request)
     {
-        $query = MedicalVisit::with(['patient', 'doctor', 'nurse'])->select('medical_visits.*');
+        $query = MedicalVisit::with(['patient', 'doctor', 'nurse'])
+            ->where('is_approved', 'Approved') // Only fetch approved records
+            ->select('medical_visits.*');
         return DataTables::eloquent($query)
             ->addColumn('action', function($visit) {
                 return view('medical_visit.action', compact('visit'))->render();

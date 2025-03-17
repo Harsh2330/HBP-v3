@@ -29,6 +29,7 @@
                 </form>
                 <a href="{{ route('reports.export', ['patient_id' => $selectedPatientId, 'start_date' => $startDate, 'end_date' => $endDate]) }}" class="btn btn-secondary bg-green-600 text-white py-2 px-4 rounded-md">Export to Excel</a>
                 <a href="{{ route('reports.export.csv', ['patient_id' => $selectedPatientId, 'start_date' => $startDate, 'end_date' => $endDate]) }}" class="btn btn-secondary bg-yellow-600 text-white py-2 px-4 rounded-md">Export to CSV</a>
+                <a href="{{ route('reports.export.pdf', ['patient_id' => $selectedPatientId, 'start_date' => $startDate, 'end_date' => $endDate]) }}" class="btn btn-secondary bg-red-600 text-white py-2 px-4 rounded-md">Export to PDF</a>
                 @if($selectedPatientId && !empty($userVisits))
                 <h3 class="text-blue-600 font-bold text-xl mt-6">Patient Profile</h3>
                 <p>Name: {{ $patients->find($selectedPatientId)->full_name }}</p>

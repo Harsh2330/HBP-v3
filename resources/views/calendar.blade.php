@@ -135,7 +135,7 @@
                 var event = info.event;
                 var formData = {
                     _token: '{{ csrf_token() }}',
-                    visit_date: new Date(event.start.getTime() +24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+                    visit_date: new Date(event.start.getTime() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
                     time_slot: event.start.toISOString().slice(11, 16),
                     event_id: event.id // Include event ID
                 };
@@ -159,7 +159,7 @@
                 var event = info.event;
                 var formData = {
                     _token: '{{ csrf_token() }}',
-                    visit_date: new Date(event.start.getTime() +24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+                    visit_date: new Date(event.start.getTime() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
                     time_slot: event.start.toISOString().slice(11, 16),
                     event_id: event.id // Include event ID
                 };
@@ -179,28 +179,54 @@
                 });
             },
 
-            eventRender: function(info) {
-                var event = info.event;
-                var element = info.el;
-                element.classList.add('p-2', 'rounded-lg', 'shadow-md', 'hover:shadow-lg', 'transition-shadow', 'duration-300');
-                if (event.extendedProps.status === 'Approved') {
-                    element.classList.add('bg-success', 'text-white');
-                } else if (event.extendedProps.status === 'Pending') {
-                    element.classList.add('bg-warning', 'text-white');
-                } else {
-                    element.classList.add('bg-secondary', 'text-white');
-                }
-                // Add custom content to the event element
-                var content = `
-                <div class="d-flex align-items-center">
-                    <div class="flex-grow-1">
-                        <h5 class="mb-0">${event.title}</h5>
-                        <small>${event.extendedProps.status}</small>
-                    </div>
-                </div>
-            `;
-                element.innerHTML = content;
-            }
+            // eventRender: function(info) {
+            //     var event = info.event;
+            //     var element = info.el;
+            //     element.classList.add('p-2', 'rounded-lg', 'shadow-md', 'hover:shadow-lg', 'transition-shadow', 'duration-300');
+            //     if (event.extendedProps.status === 'Approved') {
+            //         element.style.backgroundColor = 'green';
+            //         element.style.color = 'white';
+            //     } else if (event.extendedProps.status === 'Pending') {
+            //         element.style.backgroundColor = 'green';
+            //         element.style.color = 'black'; // Ensure text is black
+            //     } else {
+            //         element.style.backgroundColor = 'gray';
+            //         element.style.color = 'white';
+            //     }
+            //     // Add custom content to the event element
+            //     var content = `
+            //     <div class="d-flex align-items-center">
+            //         <div class="flex-grow-1">
+            //             <h5 class="mb-0">${event.title}</h5>
+            //             <small>${event.extendedProps.status}</small>
+            //         </div>
+            //     </div>
+            // `;
+            //     element.innerHTML = content;
+            // }
+            eventContent: function(arg) {
+    let customHtml = document.createElement('div');
+    customHtml.classList.add('p-2', 'rounded-lg', 'shadow-md', 'hover:shadow-lg', 'transition-shadow', 'duration-300');
+
+    if (arg.event.extendedProps.status === 'Approved') {
+        customHtml.classList.add('bg-success', 'text-white');
+    } else if (arg.event.extendedProps.status === 'pending') {
+        customHtml.classList.add('bg-warning', 'text-dark'); // Ensuring black text color
+    } else {
+        customHtml.classList.add('bg-secondary', 'text-white');
+    }
+
+    customHtml.innerHTML = `
+        <div class="d-flex align-items-center">
+            <div class="flex-grow-1">
+                <h5 class="mb-0">${arg.event.title}</h5>
+                <small>${arg.event.extendedProps.status}</small>
+            </div>
+        </div>
+    `;
+    return { domNodes: [customHtml] };
+}
+
         });
         calendar.render();
 
