@@ -7,6 +7,7 @@ use App\Models\AuditLog; // Add this import
 use App\Models\User; // Add this import
 use Illuminate\Support\Facades\Auth; // Add this import
 use Carbon\Carbon; // Add this import
+use Yajra\DataTables\DataTables; // Add this import
 
 class RequestForVisitController extends Controller
 {
@@ -17,10 +18,19 @@ class RequestForVisitController extends Controller
         $this->middleware('permission:req-approve', ['only' => ['approve']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $medicalVisits = MedicalVisit::all(); // Fetch all medical visits
-        return view('request_for_visit.index', compact('medicalVisits'));
+        if ($request->ajax()) {
+            $data = MedicalVisit::with('patient')->where('is_approved', 'Pending')->get();
+            return DataTables::of($data)
+                ->addColumn('action', function($row){
+                    $btn = '<button class="btn btn-primary" data-toggle="modal" data-target="#approveModal-' . $row->id . '">Approve</button>';
+                    return $btn;
+                })
+                ->make(true);
+        }
+
+        return view('request_for_visit.index');
     }
 
     public function create()
