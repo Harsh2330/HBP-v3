@@ -95,6 +95,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/schedule-visit', [App\Http\Controllers\VisitController::class, 'scheduleVisit'])->name('schedule.visit');
 });
 
+Route::get('/manifest.json', function () {
+    return response()->file(public_path('manifest.json'));
+});
+
+Route::get('/service-worker.js', function () {
+    return response()->file(public_path('service-worker.js'));
+})->name('service-worker');
+
 Route::get('/test-email', [App\Http\Controllers\TestEmailController::class, 'sendTestEmail']);
 Route::post('/password/email', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 
