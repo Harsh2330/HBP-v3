@@ -25,16 +25,26 @@
         <div class="col-md-12">
             <div class="card shadow-lg transition-card">
                 <div class="card-body" style="background-color: #f8f9fa; border-left: 5px solid #36b9cc;">
-                    <h5 class="card-title" style="color: #36b9cc; font-weight: bold;">Select Patient</h5>
+                    <h5 class="card-title" style="color: #36b9cc; font-weight: bold;">Select Patient and Date Range</h5>
                     <form method="GET" action="{{ route('user.dashboard') }}">
-                        <div class="form-group">
-                            <select name="patient_id" class="form-control" onchange="this.form.submit()" style="font-size: 1.1em;">
-                                @foreach($patients as $patient)
-                                    <option value="{{ $patient->id }}" {{ $selectedPatientId == $patient->id ? 'selected' : '' }}>
-                                        {{ $patient->full_name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <select name="patient_id" class="form-control" onchange="this.form.submit()" style="font-size: 1.1em;">
+                                    @foreach($patients as $patient)
+                                        <option value="{{ $patient->id }}" {{ $selectedPatientId == $patient->id ? 'selected' : '' }}>
+                                            {{ $patient->full_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <select name="date_range" class="form-control" onchange="this.form.submit()" style="font-size: 1.1em;">
+                                    <option value="day" {{ $dateRange == 'day' ? 'selected' : '' }}>Day</option>
+                                    <option value="week" {{ $dateRange == 'week' ? 'selected' : '' }}>Week</option>
+                                    <option value="month" {{ $dateRange == 'month' ? 'selected' : '' }}>Month</option>
+                                    <option value="year" {{ $dateRange == 'year' ? 'selected' : '' }}>Year</option>
+                                </select>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -52,6 +62,35 @@
             </div>
         </div>
     </div>
+    @if($currentHealth)
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card shadow-lg transition-card">
+                <div class="card-body" style="background-color: #f8f9fa; border-left: 5px solid #e74a3b;">
+                    <h5 class="card-title" style="color: #e74a3b; font-weight: bold;">Current Health Status</h5>
+                    <ul style="font-size: 1.1em;">
+                        <li><strong>Sugar Level:</strong> {{ $currentHealth['sugar_level'] ?? 'N/A' }}</li>
+                        <li><strong>Heart Rate:</strong> {{ $currentHealth['heart_rate'] ?? 'N/A' }}</li>
+                        <li><strong>Temperature:</strong> {{ $currentHealth['temperature'] ?? 'N/A' }}</li>
+                        <li><strong>Oxygen Level:</strong> {{ $currentHealth['oxygen_level'] ?? 'N/A' }}</li>
+                    </ul>
+                    <p style="font-size: 1.2em; font-weight: bold; color: #4e73df;">
+                        Health Status: 
+                        <span style="color: 
+                            {{ $healthStatus == 'Healthy' ? '#1cc88a' : 
+                               ($healthStatus == 'Mild Concern' ? '#f6c23e' : 
+                               ($healthStatus == 'Moderate Concern' ? '#fd7e14' : 
+                               ($healthStatus == 'Severe Concern' ? '#e74a3b' : 
+                               ($healthStatus == 'Critical' ? '#d9534f' : 
+                               ($healthStatus == 'Too Sick' ? '#8b0000' : '#6c757d'))))) }};">
+                            {{ $healthStatus }}
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
     @endif
 </div>
 
@@ -69,95 +108,79 @@
 <script>
     @if($selectedPatientId && !empty($vitalsData))
     var ctx = document.getElementById('vitalsChart').getContext('2d');
-    var gradientBP = ctx.createLinearGradient(0, 0, 0, 400);
-    gradientBP.addColorStop(0, 'rgba(255, 99, 132, 0.2)');
-    gradientBP.addColorStop(1, 'rgba(255, 99, 132, 0)');
-
-    var gradientHR = ctx.createLinearGradient(0, 0, 0, 400);
-    gradientHR.addColorStop(0, 'rgba(54, 162, 235, 0.2)');
-    gradientHR.addColorStop(1, 'rgba(54, 162, 235, 0)');
-
-    var gradientTemp = ctx.createLinearGradient(0, 0, 0, 400);
-    gradientTemp.addColorStop(0, 'rgba(75, 192, 192, 0.2)');
-    gradientTemp.addColorStop(1, 'rgba(75, 192, 192, 0)');
-
     var vitalsChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: {!! json_encode($vitalsData['dates']) !!},
-            datasets: [{
-                label: 'Sugar Level',
-                data: {!! json_encode($vitalsData['SugarLevel']) !!},
-                borderColor: 'rgba(255, 99, 132, 1)',
-                backgroundColor: gradientBP,
-                borderWidth: 2,
-                pointBackgroundColor: 'rgba(255, 99, 132, 1)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(255, 99, 132, 1)',
-                tension: 0.4,
-                fill: true
-            }, {
-                label: 'Heart Rate',
-                data: {!! json_encode($vitalsData['heartRate']) !!},
-                borderColor: 'rgba(54, 162, 235, 1)',
-                backgroundColor: gradientHR,
-                borderWidth: 2,
-                pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
-                tension: 0.4,
-                fill: true
-            }, {
-                label: 'Temperature',
-                data: {!! json_encode($vitalsData['temperature']) !!},
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: gradientTemp,
-                borderWidth: 2,
-                pointBackgroundColor: 'rgba(75, 192, 192, 1)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(75, 192, 192, 1)',
-                tension: 0.4,
-                fill: true
-            },{
-                label: 'Oxygen Level',
-                data: {!! json_encode($vitalsData['oxygen']) !!},
-                borderColor: 'rgb(255, 170, 0)',
-                backgroundColor: gradientBP,
-                borderWidth: 2,
-                pointBackgroundColor: 'rgb(255, 170, 0)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgb(255, 170, 0)',
-                tension: 0.4,
-                fill: true
-            },]
+            labels: {!! json_encode($vitalsData['periods']) !!},
+            datasets: [
+                {
+                    label: 'Sugar Level',
+                    data: {!! json_encode($vitalsData['SugarLevel']) !!},
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                },
+                {
+                    label: 'Heart Rate',
+                    data: {!! json_encode($vitalsData['heartRate']) !!},
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                },
+                {
+                    label: 'Temperature',
+                    data: {!! json_encode($vitalsData['temperature']) !!},
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                },
+                {
+                    label: 'Oxygen Level',
+                    data: {!! json_encode($vitalsData['oxygen']) !!},
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                }
+            ]
         },
         options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                }
+            },
+            interaction: {
+                mode: 'nearest',
+                axis: 'x',
+                intersect: false
+            },
             scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: '{{ ucfirst($dateRange) }} View'
+                    }
+                },
                 y: {
                     beginAtZero: true,
                     grid: {
                         color: 'rgba(200, 200, 200, 0.2)'
-                    }
-                },
-                x: {
-                    grid: {
-                        color: 'rgba(200, 200, 200, 0.2)'
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    display: true,
-                    labels: {
-                        color: 'rgb(255, 99, 132)',
-                        font: {
-                            size: 14,
-                            weight: 'bold'
-                        }
                     }
                 }
             }

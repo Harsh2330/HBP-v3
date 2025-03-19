@@ -3,6 +3,23 @@
 @section('content')
 <div class="container mt-5">
     <h1 class="text-center mb-4 text-primary font-weight-bold">Medical Visits Calendar</h1>
+    
+    <!-- Filter and Search -->
+    <div class="mb-3 d-flex justify-content-between">
+        <div>
+            <label for="statusFilter" class="form-label">Filter by Status:</label>
+            <select id="statusFilter" class="form-control">
+                <option value="">All</option>
+                <option value="Approved">Approved</option>
+                <option value="pending">Pending</option>
+            </select>
+        </div>
+        <div>
+            <label for="searchPatient" class="form-label">Search by Patient:</label>
+            <input type="text" id="searchPatient" class="form-control" placeholder="Enter patient name">
+        </div>
+    </div>
+
     <div id="calendar" class="bg-white rounded-lg shadow p-4"></div>
 </div>
 
@@ -238,6 +255,33 @@
 
         });
         calendar.render();
+
+        // Filter events by status
+        document.getElementById('statusFilter').addEventListener('change', function() {
+            var selectedStatus = this.value;
+
+            calendar.getEvents().forEach(function(event) {
+                if (!selectedStatus || event.extendedProps.status === selectedStatus) {
+                    event.setProp('display', ''); // Show event
+                } else {
+                    event.setProp('display', 'none'); // Hide event
+                }
+            });
+        });
+
+        // Search events by patient name
+        document.getElementById('searchPatient').addEventListener('input', function() {
+            var searchQuery = this.value.toLowerCase();
+
+            calendar.getEvents().forEach(function(event) {
+                var patientName = event.title.toLowerCase();
+                if (!searchQuery || patientName.includes(searchQuery)) {
+                    event.setProp('display', ''); // Show event
+                } else {
+                    event.setProp('display', 'none'); // Hide event
+                }
+            });
+        });
 
         $('#visitForm').on('submit', function(e) {
             e.preventDefault();
