@@ -50,7 +50,7 @@ class MedicalVisitController extends Controller
             'primary_complaint' => 'required|string',
             'symptoms' => 'nullable|array',
             'is_emergency' => 'boolean',
-            'preferred_visit_date' => 'required|date',
+            'preferred_visit_date' => 'required|date|after:today',
             'preferred_time_slot' => 'required|string',
         ]);
         $patient = Patient::findOrFail($request->patient_id);
@@ -200,7 +200,7 @@ class MedicalVisitController extends Controller
     public function reschedule(Request $request, $id)
     {
         $request->validate([
-            'visit_date' => 'required|date',
+            'visit_date' => 'required|date|after:today', // Ensure the date is after today
             'time_slot' => 'required',
         ]);
 

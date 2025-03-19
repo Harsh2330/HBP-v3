@@ -140,6 +140,15 @@
                     event_id: event.id // Include event ID
                 };
 
+                // Validate the new date is after today
+                var today = new Date();
+                var newDate = new Date(formData.visit_date);
+                if (newDate <= today) {
+                    alert('The visit date must be after today.');
+                    info.revert(); // Revert to the original position
+                    return;
+                }
+
                 $.ajax({
                     url: '/medical_visit/' + event.id + '/reschedule',
                     method: 'PATCH',
