@@ -70,6 +70,63 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach($visits as $visit)
+                                    <tr>
+                                        <td>{{ $visit->patient->pat_unique_id }}</td>
+                                        <td>{{ $visit->patient->full_name }}</td>
+                                        <td>{{ $visit->preferred_visit_date }}</td>
+                                        <td>{{ $visit->preferred_time_slot }}</td>
+                                        <td>{{ $visit->is_approved ? 'Approved' : 'Pending' }}</td>
+                                        <td>
+                                            <button class="btn btn-primary" data-toggle="modal" data-target="#approveModal-{{ $visit->id }}">Approve</button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Modal for approving visits -->
+                                    <div class="modal fade" id="approveModal-{{ $visit->id }}" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel-{{ $visit->id }}" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="approveModalLabel-{{ $visit->id }}">Approve Medical Visit</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{{ route('medical_visit.approve', $visit->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <div class="form-group">
+                                                            <label for="visit_date">Visit Date</label>
+                                                            <input type="date" name="visit_date" id="visit_date" class="form-control" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="time_slot">Time Slot</label>
+                                                            <input type="time" name="time_slot" id="time_slot" class="form-control" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="doctor_id">Doctor</label>
+                                                            <select name="doctor_id" id="doctor_id-{{ $visit->id }}" class="form-control" required>
+                                                                @foreach($doctors as $doctor)
+                                                                <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="nurse_id">Nurse</label>
+                                                            <select name="nurse_id" id="nurse_id-{{ $visit->id }}" class="form-control" required>
+                                                                @foreach($nurses as $nurse)
+                                                                <option value="{{ $nurse->id }}">{{ $nurse->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-success mt-2">Approve</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -179,6 +236,18 @@
                 'color': 'black', // Change font color to black
                 'font-weight': 'bold' // Make text bold (optional)
             });
+
+        // Fetch and populate doctors and nurses when the modal is opened
+        $('body').on('show.bs.modal', '.modal', function () {
+            const modalId = $(this).attr('id');
+            const visitId = modalId.split('-')[1]; // Extract visit ID from modal ID
+
+            // Fetch doctors
+            fetchUsersWithRole('doctor', `doctor_id-${visitId}`);
+
+            // Fetch nurses
+            fetchUsersWithRole('nurse', `nurse_id-${visitId}`);
+        });
     });
 </script>
 @endsection

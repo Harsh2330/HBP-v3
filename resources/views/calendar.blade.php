@@ -221,7 +221,7 @@
             <div class="flex-grow-1">
                 <h5 class="mb-0">${arg.event.title}</h5>
                 <small>${arg.event.extendedProps.status}</small>
-            </div>
+            </div> 
         </div>
     `;
     return { domNodes: [customHtml] };

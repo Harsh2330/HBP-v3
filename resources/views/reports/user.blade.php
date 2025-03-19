@@ -67,21 +67,22 @@
                 </table>
 
                 <h3 class="text-blue-600 font-bold text-xl mt-6">Health Vitals Summary</h3>
-                <p>Latest Heart Rate: {{ $userVisits->last()->heart_rate ?? 'N/A' }}</p>
-                <p>Latest Sugar Level: {{ $userVisits->last()->sugar_level ?? 'N/A' }}</p>
-                <p>Latest Temperature: {{ $userVisits->last()->temperature ?? 'N/A' }}</p>
-                <p>Oxygen Level: {{ $userVisits->last()->oxygen_level ?? 'N/A' }}</p>
+                @php $lastVisit = $userVisits->last(); @endphp
+                <p>Latest Heart Rate: {{ $lastVisit ? $lastVisit->heart_rate : 'N/A' }}</p>
+                <p>Latest Sugar Level: {{ $lastVisit ? $lastVisit->sugar_level : 'N/A' }}</p>
+                <p>Latest Temperature: {{ $lastVisit ? $lastVisit->temperature : 'N/A' }}</p>
+                <p>Oxygen Level: {{ $lastVisit ? $lastVisit->oxygen_level : 'N/A' }}</p>
 
                 <h3 class="text-blue-600 font-bold text-xl mt-6">Current Treatment Plan</h3>
-                <p>Medications: {{ $userVisits->last()->medications_prescribed ?? 'N/A' }}</p>
-                <p>Ongoing Treatments: {{ $userVisits->last()->ongoing_treatments ?? 'N/A' }}</p>
-                <p>Procedures Done: {{ $userVisits->last()->procedures ?? 'N/A' }}</p>
-                <p>Doctor’s Recommendations: {{ $userVisits->last()->doctor_notes ?? 'N/A' }}</p>
+                <p>Medications: {{ $lastVisit ? $lastVisit->medications_prescribed : 'N/A' }}</p>
+                <p>Ongoing Treatments: {{ $lastVisit ? $lastVisit->ongoing_treatments : 'N/A' }}</p>
+                <p>Procedures Done: {{ $lastVisit ? $lastVisit->procedures : 'N/A' }}</p>
+                <p>Doctor’s Recommendations: {{ $lastVisit ? $lastVisit->doctor_notes : 'N/A' }}</p>
 
                 <h3 class="text-blue-600 font-bold text-xl mt-6">Next Steps & Follow-up</h3>
-                <p>Next Visit Date: {{ $userVisits->last()->preferred_visit_date ?? 'N/A' }}</p>
-                <p>Preferred Time Slot: {{ $userVisits->last()->preferred_time_slot ?? 'N/A' }}</p>
-                <p>Is Emergency Case?: {{ $userVisits->last()->is_emergency ? 'Yes' : 'No' }}</p>
+                <p>Next Visit Date: {{ $lastVisit ? $lastVisit->preferred_visit_date : 'N/A' }}</p>
+                <p>Preferred Time Slot: {{ $lastVisit ? $lastVisit->preferred_time_slot : 'N/A' }}</p>
+                <p>Is Emergency Case?: {{ $lastVisit ? ($lastVisit->is_emergency ? 'Yes' : 'No') : 'N/A' }}</p>
                 <p>Emergency Contact for Queries: {{ $patients->find($selectedPatientId)->emergency_contact_name ?? 'N/A' }}, {{ $patients->find($selectedPatientId)->emergency_contact_phone ?? 'N/A' }}</p>
 
                 <h3 class="text-blue-600 font-bold text-xl mt-6">Report Summary for Period</h3>

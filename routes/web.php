@@ -70,6 +70,7 @@ Route::prefix('patient')->name('patient.')->middleware(['auth'])->group(function
 
 // API Route
 Route::get('/api/users-with-role/{role}', [UserController::class, 'getUsersWithRole']);
+Route::get('/api/users-with-role/{role}', [RequestForVisitController::class, 'fetchUsersWithRole']);
 
 // Report Routes
 Route::get('/doctor/report/{doctorId}', [DoctorReportController::class, 'generateReport'])->name('doctor.report');

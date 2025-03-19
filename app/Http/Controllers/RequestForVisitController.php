@@ -8,6 +8,7 @@ use App\Models\User; // Add this import
 use Illuminate\Support\Facades\Auth; // Add this import
 use Carbon\Carbon; // Add this import
 use Yajra\DataTables\DataTables; // Add this import
+use App\Models\Role; // Add this import
 
 class RequestForVisitController extends Controller
 {
@@ -30,7 +31,16 @@ class RequestForVisitController extends Controller
                 ->make(true);
         }
 
-        return view('request_for_visit.index');
+        $visits = MedicalVisit::with('patient')->get(); // Fetch visits for the view
+        $doctors = User::whereHas('roles', function($query) {
+            $query->where('name', 'doctor');
+        })->get(['id', 'name']); // Fetch doctors
+
+        $nurses = User::whereHas('roles', function($query) {
+            $query->where('name', 'nurse');
+        })->get(['id', 'name']); // Fetch nurses
+
+        return view('request_for_visit.index', compact('visits', 'doctors', 'nurses')); // Pass $visits, $doctors, and $nurses to the view
     }
 
     public function create()
@@ -82,5 +92,14 @@ class RequestForVisitController extends Controller
         ]);
 
         return redirect()->route('request_for_visit.index')->with('success', 'Medical visit approved successfully.');
+    }
+
+    public function fetchUsersWithRole($role)
+    {
+        $users = User::whereHas('roles', function($query) use ($role) {
+            $query->where('name', $role);
+        })->get(['id', 'name']);
+
+        return response()->json($users);
     }
 }

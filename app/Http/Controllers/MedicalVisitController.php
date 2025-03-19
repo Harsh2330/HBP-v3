@@ -215,8 +215,11 @@ class MedicalVisitController extends Controller
             'description' => 'Rescheduled medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ') to ' . $visit->visit_date . ' at ' . $visit->time_slot,
         ]);
 
-        return redirect()->route('medical_visit.index')->with('success', 'Medical visit rescheduled successfully.');
-
+        return response()->json([
+            'success' => true,
+            'new_date' => $visit->visit_date,
+            'new_time' => $visit->time_slot,
+        ]);
     }
 
     public function getVisitDetails($id)
