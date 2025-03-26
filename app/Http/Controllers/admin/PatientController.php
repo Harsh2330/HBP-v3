@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth; // Add this import
 use App\DataTables\PatientDataTable; // Add this import
 use Yajra\DataTables\Facades\DataTables; // Add this import
 
+
 class PatientController extends Controller
 {         
     function __construct()
@@ -148,7 +149,11 @@ class PatientController extends Controller
 
     public function getData(Request $request)
     {
-        $patients = Patient::query();
+        if(Auth::user()->hasRole('Admin')){
+            $patients = Patient::query();
+        } else {
+            $patients = Patient::where('user_unique_id', auth()->id());
+        }
         return DataTables::of($patients)
             ->addColumn('actions', function ($patient) {
                 return view('patient.partials.actions', compact('patient'))->render();
