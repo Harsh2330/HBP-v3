@@ -38,7 +38,7 @@
                             <h3 class="text-primary font-weight-bold">Visit Details</h3>
                             <div class="form-group">
                                 <label for="preferred_visit_date">Preferred Visit Date</label>
-                                <input type="date" name="preferred_visit_date" id="preferred_visit_date" class="form-control" value="{{ old('preferred_visit_date') }}" required>
+                                <input type="date" name="preferred_visit_date" id="preferred_visit_date" class="form-control" value="{{ old('preferred_visit_date') }}" min="{{ \Carbon\Carbon::tomorrow()->toDateString() }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="preferred_time_slot">Preferred Time Slot</label>

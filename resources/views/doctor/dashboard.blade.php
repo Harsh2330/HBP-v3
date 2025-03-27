@@ -6,8 +6,8 @@
         <div class="col-md-6">
             <div class="card shadow-lg transition-card">
                 <div class="card-body" style="background-color: #f8f9fa; border-left: 5px solid #4e73df;">
-                    <h5 class="card-title" style="color: #4e73df; font-weight: bold;">Patients Summary</h5>
-                    <canvas id="patientChart"></canvas>
+                    <h5 class="card-title" style="color: #4e73df; font-weight: bold;">Visits Summary</h5>
+                    <canvas id="VisitChart"></canvas>
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
             </div>
         </div>
     </div>
-    <div class="row mt-4">
+    <!-- <div class="row mt-4">
         <div class="col-md-12">
             <div class="card shadow-lg transition-card">
                 <div class="card-body" style="background-color: #f8f9fa; border-left: 5px solid #6f42c1;">
@@ -50,7 +50,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="row mt-4">
         <div class="col-md-12">
             <div class="card shadow-lg transition-card">
@@ -86,7 +86,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <button class="btn btn-success" onclick="addPrescription()">Add Prescription</button>
+                    <!-- <button class="btn btn-success" onclick="addPrescription()">Add Prescription</button> -->
                 </div>
             </div>
         </div>
@@ -110,18 +110,20 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const ctx = document.getElementById("patientChart").getContext("2d");
+        const visitData = @json($visitData);
+        const ctx = document.getElementById("VisitChart").getContext("2d");
         new Chart(ctx, {
             type: "doughnut",
             data: {
-                labels: ["New Patients", "Old Patients", "Total Patients"],
+                labels: ["Pending", "Completed", "Cancelled"],
                 datasets: [{
-                    data: [30, 50, 80],
+                    data: [visitData.pending, visitData.completed, visitData.cancelled],
                     backgroundColor: ["#3498DB", "#E67E22", "#2ECC71"]
                 }]
             }
         });
 
+        const genderData = @json($genderData);
         const genderCtx = document.getElementById("genderChart").getContext("2d");
         new Chart(genderCtx, {
             type: "bar",
@@ -129,7 +131,7 @@
                 labels: ["Male", "Female", "Other"],
                 datasets: [{
                     label: "Number of Patients",
-                    data: [40, 35, 5],
+                    data: [genderData.male, genderData.female, genderData.other],
                     backgroundColor: ["#3498DB", "#E74C3C", "#9B59B6"]
                 }],
                 options: {

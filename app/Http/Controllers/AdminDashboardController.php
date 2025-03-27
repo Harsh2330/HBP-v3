@@ -19,7 +19,8 @@ class AdminDashboardController extends Controller
         $totalPatients = Patient::count();
         $totalMedicalVisits = MedicalVisit::count();
         $auditLogs = AuditLog::with('user')->latest()->take(10)->get();
+        $totalAdministrators = User::role('admin')->count();
 
-        return view('admin.dashboard', compact('totalUsers', 'totalDoctors', 'totalNurses', 'totalPatients', 'totalMedicalVisits', 'auditLogs'));
+        return view('admin.dashboard', compact('totalUsers', 'totalDoctors', 'totalNurses', 'totalPatients', 'totalMedicalVisits', 'auditLogs', 'totalAdministrators'));
     }
 }

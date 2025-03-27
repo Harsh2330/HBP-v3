@@ -81,7 +81,7 @@ section:nth-child(even){
     display: flex;
     align-items: center; 
     justify-content: space-between;
-    background: #fff;
+    background:#e0e8fdff;
 }
 .header .logo{
     font-size: 2.5rem;
@@ -471,15 +471,12 @@ section:nth-child(even){
     color: var(--green);
 } 
 /* Footer section End */
-
-
-
-
-
-
-
-
-
+.Container2{
+    background-color: rgba(133, 160, 227, 0.186); 
+    width: 100%;
+    border-radius: 10px;
+    padding: 40px;
+}
 
 /* media queries  */
 @media (max-width:991px){
@@ -511,6 +508,12 @@ section:nth-child(even){
         border: var(--border);
         background: #fff;
         transform: scale(0);
+        opacity: 0;
+        transform-origin: top right;
+        transition: none;
+    }
+
+    .header .navbar.active{
         opacity: 0;
         transform-origin: top right;
         transition: none;

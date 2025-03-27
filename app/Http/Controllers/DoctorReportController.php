@@ -6,19 +6,41 @@ use Illuminate\Http\Request;
 use App\Models\MedicalVisit;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DoctorReportExport;
+use App\Exports\DoctorReportCsvExport;
+use App\Services\PdfService;
 
 class DoctorReportController extends Controller
 {
-    public function generateReport($doctorId)
+    protected $pdfService;
+
+    public function __construct(PdfService $pdfService)
+    {
+        $this->pdfService = $pdfService;
+        $this->middleware('permission:doctor-report-list|doctor-report-create|doctor-report-export', ['only' => ['index', 'generateReport']]);
+        $this->middleware('permission:doctor-report-create', ['only' => ['generateReport']]);  
+        $this->middleware('permission:doctor-report-export', ['only' => ['exportReport', 'exportReportCsv']]); 
+    }
+
+    public function generateReport($doctorId, Request $request)
     {
         $doctor = User::find($doctorId);
-        $doctorVisits = MedicalVisit::where('doctor_id', $doctorId)->with(['patient', 'nurse'])->get();
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $query = MedicalVisit::where('doctor_id', $doctorId)->with(['patient', 'nurse']);
+        if ($startDate && $endDate) {
+            $query->whereBetween('visit_date', [$startDate, $endDate]);
+        }
+        $doctorVisits = $query->get();
+
         $summary = $this->getSummaryStatistics($doctorId);
         $vitalStats = $this->getVitalStatsSummary($doctorId);
         $treatments = $this->getTreatmentsAndProcedures($doctorId);
         $followUps = $this->getPendingFollowUps($doctorId);
 
-        return view('reports.doctor', compact('doctor', 'doctorVisits', 'summary', 'vitalStats', 'treatments', 'followUps'));
+        return view('reports.doctor', compact('doctor', 'doctorVisits', 'summary', 'vitalStats', 'treatments', 'followUps', 'startDate', 'endDate'));
     }
 
     public function generateLoggedInDoctorReport()
@@ -32,6 +54,67 @@ class DoctorReportController extends Controller
         $followUps = $this->getPendingFollowUps($doctorId);
 
         return view('reports.doctor', compact('doctor', 'doctorVisits', 'summary', 'vitalStats', 'treatments', 'followUps'));
+    }
+
+    public function exportReport(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        
+        return Excel::download(new DoctorReportExport($startDate, $endDate), 'doctor_report.xlsx');
+    }
+
+    public function exportLoggedInDoctorReport()
+    {
+        $doctorId = Auth::id();
+        return Excel::download(new DoctorReportExport($doctorId), 'doctor_report.xlsx');
+    }
+
+    public function exportReportCsv(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        
+        return Excel::download(new DoctorReportCsvExport($startDate, $endDate), 'doctor_report.csv');
+    }
+
+    public function exportLoggedInDoctorReportCsv()
+    {
+        $doctorId = Auth::id();
+        return Excel::download(new DoctorReportCsvExport($doctorId), 'doctor_report.csv');
+    }
+
+    public function exportReportPdf(Request $request, $doctorId)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        // Fetch the data for the report
+        $data = $this->generateReportData($doctorId, $startDate, $endDate);
+
+        // Generate the HTML for the report
+        $html = view('reports.doctor_pdf', $data)->render();
+
+        // Generate the PDF
+        return $this->pdfService->generatePdf($html);
+    }
+
+    private function generateReportData($doctorId, $startDate, $endDate)
+    {
+        $doctor = User::find($doctorId);
+
+        $query = MedicalVisit::where('doctor_id', $doctorId)->with(['patient', 'nurse']);
+        if ($startDate && $endDate) {
+            $query->whereBetween('visit_date', [$startDate, $endDate]);
+        }
+        $doctorVisits = $query->get();
+
+        $summary = $this->getSummaryStatistics($doctorId);
+        $vitalStats = $this->getVitalStatsSummary($doctorId);
+        $treatments = $this->getTreatmentsAndProcedures($doctorId);
+        $followUps = $this->getPendingFollowUps($doctorId);
+
+        return compact('doctor', 'doctorVisits', 'summary', 'vitalStats', 'treatments', 'followUps', 'startDate', 'endDate');
     }
 
     private function getSummaryStatistics($doctorId)

@@ -21,7 +21,7 @@
 
 <style>
     .animated-logo {
-        animation: float 3s ease-in-out infinite;
+        animation: float 3s ease-in-out infinite, slide-in 1s ease-out;
     }
 
     @keyframes float {
@@ -30,6 +30,15 @@
         }
         50% {
             transform: translateY(-10px);
+        }
+    }
+
+    @keyframes slide-in {
+        from {
+            transform: translateX(-100%);
+        }
+        to {
+            transform: translateX(0);
         }
     }
 

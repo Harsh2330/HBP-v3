@@ -5,12 +5,34 @@
     <h1 class="text-center mb-4 text-primary font-weight-bold">Detailed Medical Visit Report</h1>
     <div class="row">
         <div class="col-lg-12">
-            <div class="card shadow-lg transition-card">
+            <div class="card shadow-lg transition-card"></div>
                 <div class="card-body">
                     <h3 class="text-primary font-weight-bold">Doctor Information</h3>
                     <p>Doctor Name: {{ $doctor->name ?? 'N/A' }}</p>
                     <p>Doctor ID: {{ $doctor->id ?? 'N/A' }}</p>
                     <p>Specialization: {{ $doctor->specialty ?? 'N/A' }}</p>
+
+                    @php
+                        $startDate = $startDate ?? '';
+                        $endDate = $endDate ?? '';
+                    @endphp
+
+                    <form method="GET" action="{{ route('doctor.report', ['doctorId' => $doctor->id]) }}">
+                        <div class="mb-4">
+                            <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date:</label>
+                            <input type="date" name="start_date" class="form-control block w-full mt-1 rounded-md border-gray-300 shadow-sm" value="{{ $startDate }}">
+                        </div>
+                        <div class="mb-4">
+                            <label for="end_date" class="block text-sm font-medium text-gray-700">End Date:</label>
+                            <input type="date" name="end_date" class="form-control block w-full mt-1 rounded-md border-gray-300 shadow-sm" value="{{ $endDate }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary bg-blue-600 text-white py-2 px-4 rounded-md">Filter</button>
+                        <a href="{{ route('doctor.report', ['doctorId' => $doctor->id]) }}" class="btn btn-secondary bg-gray-600 text-white py-2 px-4 rounded-md">Clear Filter</a>
+                    </form>
+
+                    <a href="{{ route('doctor.report.export', ['doctorId' => $doctor->id, 'start_date' => $startDate, 'end_date' => $endDate]) }}" class="btn btn-secondary bg-green-600 text-white py-2 px-4 rounded-md mb-4">Export to Excel</a>
+                    <a href="{{ route('doctor.report.export.csv', ['doctorId' => $doctor->id, 'start_date' => $startDate, 'end_date' => $endDate]) }}" class="btn btn-secondary bg-yellow-600 text-white py-2 px-4 rounded-md mb-4">Export to CSV</a>
+                    <a href="{{ route('doctor.report.export.pdf', ['doctorId' => $doctor->id, 'start_date' => $startDate, 'end_date' => $endDate]) }}" class="btn btn-secondary bg-red-600 text-white py-2 px-4 rounded-md mb-4">Export to PDF</a>
 
                     <h3 class="text-primary font-weight-bold">Summary Statistics</h3>
                     <p>Total Patients Seen: {{ $summary->total_patients ?? 'N/A' }}</p>

@@ -11,6 +11,10 @@ use Illuminate\Validation\Rule;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Mail\VisitScheduleMail;
+use Illuminate\Support\Facades\Mail;
+use App\DataTables\MedicalVisitDataTable;
+use Yajra\DataTables\Facades\DataTables;
 
 class MedicalVisitController extends Controller
 {
@@ -26,29 +30,10 @@ class MedicalVisitController extends Controller
     }
 
     // Display a listing of the medical visits
-    public function index(Request $request)
+    public function index(MedicalVisitDataTable $dataTable)
     {
-        $query = MedicalVisit::query();
-
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->whereHas('patient', function ($q) use ($search) {
-                $q->where('pat_unique_id', 'like', "%{$search}%")
-                  ->orWhere('full_name', 'like', "%{$search}%");
-            })
-            ->orWhereHas('doctor', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-            })
-            ->orWhereHas('nurse', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-            })
-            ->orWhere('visit_date', 'like', "%{$search}%")
-            ->orWhere('is_approved', 'like', "%{$search}%");
-        }
-
-        $medicalVisits = $query->paginate(10);
-
-        return view('medical_visit.index', compact('medicalVisits'));
+        $doctors = User::role('Doctor')->get(); // Assuming you have a role 'Doctor'
+        return $dataTable->render('medical_visit.index', compact('doctors'));
     }
 
     public function create()
@@ -65,7 +50,7 @@ class MedicalVisitController extends Controller
             'primary_complaint' => 'required|string',
             'symptoms' => 'nullable|array',
             'is_emergency' => 'boolean',
-            'preferred_visit_date' => 'required|date',
+            'preferred_visit_date' => 'required|date|after:today',
             'preferred_time_slot' => 'required|string',
         ]);
         $patient = Patient::findOrFail($request->patient_id);
@@ -150,6 +135,9 @@ class MedicalVisitController extends Controller
         $visit->visit_date = Carbon::parse($request->input('visit_date'))->format('Y-m-d H:i:s');
         $visit->save();
 
+        // Send visit schedule mail
+        Mail::to($visit->patient->email)->send(new VisitScheduleMail($visit));
+
         AuditLog::create([
             'user_id' => Auth::id(),
             'action' => 'approve',
@@ -212,7 +200,7 @@ class MedicalVisitController extends Controller
     public function reschedule(Request $request, $id)
     {
         $request->validate([
-            'visit_date' => 'required|date',
+            'visit_date' => 'required|date|after:today', // Ensure the date is after today
             'time_slot' => 'required',
         ]);
 
@@ -227,12 +215,31 @@ class MedicalVisitController extends Controller
             'description' => 'Rescheduled medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ') to ' . $visit->visit_date . ' at ' . $visit->time_slot,
         ]);
 
-        return redirect()->route('medical_visit.index')->with('success', 'Visit rescheduled successfully.');
+        return response()->json([
+            'success' => true,
+            'new_date' => $visit->visit_date,
+            'new_time' => $visit->time_slot,
+        ]);
     }
 
     public function getVisitDetails($id)
     {
         $visit = MedicalVisit::with(['patient', 'doctor', 'nurse'])->findOrFail($id);
         return response()->json($visit);
+    }
+
+    public function getData(Request $request)
+    {
+        $query = MedicalVisit::with(['patient', 'doctor', 'nurse'])
+            ->where('is_approved', 'Approved') // Only fetch approved records
+            ->select('medical_visits.*');
+        return DataTables::eloquent($query)
+            ->addColumn('action', function($visit) {
+                return view('medical_visit.action', compact('visit'))->render();
+            })
+            ->editColumn('is_approved', function ($visit) {
+                return $visit->is_approved ? 'Approved' : 'Pending';
+            })
+            ->toJson();
     }
 }

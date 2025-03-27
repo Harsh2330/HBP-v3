@@ -7,6 +7,8 @@ use App\Models\AuditLog; // Add this import
 use App\Models\User; // Add this import
 use Illuminate\Support\Facades\Auth; // Add this import
 use Carbon\Carbon; // Add this import
+use Yajra\DataTables\DataTables; // Add this import
+use App\Models\Role; // Add this import
 
 class RequestForVisitController extends Controller
 {
@@ -17,10 +19,28 @@ class RequestForVisitController extends Controller
         $this->middleware('permission:req-approve', ['only' => ['approve']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $medicalVisits = MedicalVisit::all(); // Fetch all medical visits
-        return view('request_for_visit.index', compact('medicalVisits'));
+        if ($request->ajax()) {
+            $data = MedicalVisit::with('patient')->where('is_approved', 'Pending')->get();
+            return DataTables::of($data)
+                ->addColumn('action', function($row){
+                    $btn = '<button class="btn btn-primary" data-toggle="modal" data-target="#approveModal-' . $row->id . '">Approve</button>';
+                    return $btn;
+                })
+                ->make(true);
+        }
+
+        $visits = MedicalVisit::with('patient')->get(); // Fetch visits for the view
+        $doctors = User::whereHas('roles', function($query) {
+            $query->where('name', 'doctor');
+        })->get(['id', 'name']); // Fetch doctors
+
+        $nurses = User::whereHas('roles', function($query) {
+            $query->where('name', 'nurse');
+        })->get(['id', 'name']); // Fetch nurses
+
+        return view('request_for_visit.index', compact('visits', 'doctors', 'nurses')); // Pass $visits, $doctors, and $nurses to the view
     }
 
     public function create()
@@ -72,5 +92,14 @@ class RequestForVisitController extends Controller
         ]);
 
         return redirect()->route('request_for_visit.index')->with('success', 'Medical visit approved successfully.');
+    }
+
+    public function fetchUsersWithRole($role)
+    {
+        $users = User::whereHas('roles', function($query) use ($role) {
+            $query->where('name', $role);
+        })->get(['id', 'name']);
+
+        return response()->json($users);
     }
 }

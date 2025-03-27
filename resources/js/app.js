@@ -1,4 +1,7 @@
 import './bootstrap';
+import 'laravel-datatables-vite';
+
+
 
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
