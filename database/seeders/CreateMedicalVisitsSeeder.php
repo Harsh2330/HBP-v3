@@ -20,7 +20,7 @@ class CreateMedicalVisitsSeeder extends Seeder
         $doctors = User::role('Doctor')->get();
         $nurses = User::role('Nurse')->get();
 
-        for ($i = 0; $i < 1500; $i++) {
+        for ($i = 0; $i < 150; $i++) {
             $patient = $patients->random();
             $doctor = $doctors->random();
             $nurse = $nurses->random();

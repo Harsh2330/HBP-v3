@@ -25,7 +25,7 @@ class MedicalVisitDataTable extends DataTable
             ->addColumn('action', 'medicalvisit.action')
             ->setRowId('id')
             ->editColumn('is_approved', function ($visit) {
-                return $visit->is_approved ? 'Approved' : 'Pending';
+                return $visit->is_approved === 'Approved' ? 'Approved' : 'pending'; // Ensure correct mapping
             })
             ->editColumn('visit_date', function ($visit) {
                 return \Carbon\Carbon::parse($visit->visit_date)->format('d-m-Y');
