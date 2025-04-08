@@ -213,7 +213,8 @@ class MedicalVisitController extends Controller
         $events = $medicalVisits->map(function ($visit) {
             return [
                 'id' => $visit->id,
-                'title' => $visit->patient->full_name . ' - ' . $visit->patient->full_address,
+                'title' => $visit->patient->full_name,
+                // 'title' => $visit->patient->full_name . ' - ' . $visit->patient->full_address
                 'start' => $visit->visit_date ?? $visit->preferred_visit_date,
                 'status' => $visit->is_approved,
                 'backgroundColor' => $visit->is_approved === 'Approved' ? 'green' : ($visit->is_approved === 'Pending' ? 'orange' : 'yellow'),
