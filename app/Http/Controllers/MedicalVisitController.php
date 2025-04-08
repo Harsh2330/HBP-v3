@@ -243,11 +243,19 @@ class MedicalVisitController extends Controller
             'description' => 'Rescheduled medical visit (ID: ' . $visit->id . ') for patient: ' . $visit->patient->full_name . ' (ID: ' . $visit->patient->id . ') to ' . $visit->visit_date . ' at ' . $visit->time_slot,
         ]);
 
+         // Check if the request is AJAX
+    if ($request->ajax()) {
         return response()->json([
             'success' => true,
-            'new_date' => $visit->visit_date,
-            'new_time' => $visit->time_slot,
+            'message' => 'Visit rescheduled successfully.',
+            'visit_date' => $visit->visit_date,
+            'time_slot' => $visit->time_slot,
+            'redirect' => route('medical_visit.index'),
         ]);
+    }
+
+    // If normal form submission
+    return redirect()->route('medical_visit.index')->with('success', 'Medical visit rescheduled successfully.');
     }
 
     public function getVisitDetails($id)
