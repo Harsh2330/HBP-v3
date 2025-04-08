@@ -217,8 +217,8 @@ class MedicalVisitController extends Controller
                 // 'title' => $visit->patient->full_name . ' - ' . $visit->patient->full_address
                 'start' => $visit->visit_date ?? $visit->preferred_visit_date,
                 'status' => $visit->is_approved,
-                'backgroundColor' => $visit->is_approved === 'Approved' ? 'green' : ($visit->is_approved === 'Pending' ? 'orange' : 'yellow'),
-                'borderColor' => $visit->is_approved === 'Approved' ? 'green' : ($visit->is_approved === 'Pending' ? 'orange' : 'yellow')
+                'backgroundColor' => $visit->is_approved === 'Approved' ? 'green' : ($visit->is_approved === 'pending' ? 'orange' : 'yellow'),
+                'borderColor' => $visit->is_approved === 'Approved' ? 'green' : ($visit->is_approved === 'pending' ? 'orange' : 'yellow')
             ];
         });
 
@@ -266,22 +266,14 @@ class MedicalVisitController extends Controller
 
     public function getData(Request $request)
     {
-        $user = Auth::user();
-
-        if ($user->hasRole('Admin')) {
-            $query = MedicalVisit::with(['patient', 'doctor', 'nurse'])
-            ->select('medical_visits.*');
-        } else {
-            $query = MedicalVisit::with(['patient', 'doctor', 'nurse'])
-            ->where('created_by', $user->id)
-            ->select('medical_visits.*');
-        }
+        $query = MedicalVisit::with(['patient', 'doctor', 'nurse'])
+            ->select('medical_visits.*'); // Ensure the table name is correct
         return DataTables::eloquent($query)
-            ->addColumn('action', function($visit) {
+            ->addColumn('action', function ($visit) {
                 return view('medical_visit.action', compact('visit'))->render();
             })
             ->editColumn('is_approved', function ($visit) {
-                return $visit->is_approved ? 'Approved' : 'Pending';
+                return $visit->is_approved === 'Approved' ? 'Approved' : 'pending'; // Correctly map the value
             })
             ->toJson();
     }

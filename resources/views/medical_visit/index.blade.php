@@ -187,13 +187,36 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        $('#medical-visits-table').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "{{ route('medical_visits.data') }}",
+                "type": "GET"
+            },
+            "columns": [
+                { "data": "patient.pat_unique_id" },
+                { "data": "patient.full_name" },
+                { "data": "visit_date" },
+                { "data": "doctor.name" },
+                { "data": "nurse.name" },
+                { "data": "is_approved" }, // Ensure this column is mapped correctly
+                { "data": "medical_status" },
+                { "data": "action", "orderable": false, "searchable": false }
+            ]
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
     var table = $('#medical-visits-table').DataTable({
         "processing": true,
         "serverSide": true,
         "ajax": {
             "url": "{{ route('medical_visits.data') }}",
             "data": function(d) {
-                d.status = 'Approved'; // Only fetch approved records
+                d.status = 'pending'; // Only fetch approved records
             }
         },
         "columns": [
